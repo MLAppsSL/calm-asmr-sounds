@@ -32,12 +32,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The app runs without errors on a real iOS device and a real Android device (Expo Go is NOT used anywhere)
   4. Firebase project is initialized and the app connects to Auth, Firestore, and Storage without errors
   5. ESLint, Prettier, TypeScript strict, and Expo Router file-based routing are functional
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: EAS project setup, app.json with UIBackgroundModes, TypeScript + ESLint + Prettier
-- [ ] 01-02: Firebase project initialization and SDK integration (Auth, Firestore, Storage, Analytics)
-- [ ] 01-03: Zustand store scaffolding (audioStore, favoritesStore, authStore, uiStore) and Expo Router shell
+- [ ] 01-01-PLAN.md — Install dependencies, configure app.json (UIBackgroundModes + all plugins), eas.json, TypeScript + ESLint + Prettier toolchain, lint-staged + Husky, .env.example
+- [ ] 01-02-PLAN.md — Firebase project setup (human checkpoint for config files), src/lib/firebase.ts RNFB service module
+- [ ] 01-03-PLAN.md — Full Expo Router route skeleton (11 route files) and 4 Zustand stores (audioStore, authStore, favoritesStore, uiStore) + shared types
 
 ### Phase 2: Audio Engine
 **Goal**: Users can tap a sound and hear it play — including when the screen is locked or the app is backgrounded — with loop, timer, and fade behavior verified on real devices
