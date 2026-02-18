@@ -32,12 +32,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The app runs without errors on a real iOS device and a real Android device (Expo Go is NOT used anywhere)
   4. Firebase project is initialized and the app connects to Auth, Firestore, and Storage without errors
   5. ESLint, Prettier, TypeScript strict, and Expo Router file-based routing are functional
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [ ] 01-01-PLAN.md — Install dependencies, configure app.json (UIBackgroundModes + all plugins), eas.json, TypeScript + ESLint + Prettier toolchain, lint-staged + Husky, .env.example
 - [ ] 01-02-PLAN.md — Firebase project setup (human checkpoint for config files), src/lib/firebase.ts RNFB service module
 - [ ] 01-03-PLAN.md — Full Expo Router route skeleton (11 route files) and 4 Zustand stores (audioStore, authStore, favoritesStore, uiStore) + shared types
+- [ ] 01-04-PLAN.md — EAS Development Build trigger (iOS + Android), install on real devices, verify app launches and Firebase connects without errors (phase gate)
 
 ### Phase 2: Audio Engine
 **Goal**: Users can tap a sound and hear it play — including when the screen is locked or the app is backgrounded — with loop, timer, and fade behavior verified on real devices
@@ -150,7 +151,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 0/4 | Not started | - |
 | 2. Audio Engine | 0/3 | Not started | - |
 | 3. Core UI | 0/3 | Not started | - |
 | 4. Favorites | 0/3 | Not started | - |
