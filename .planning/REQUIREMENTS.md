@@ -89,41 +89,41 @@
 
 ## Traceability
 
-*Populated by roadmapper.*
+*Populated by roadmapper — 2026-02-18*
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUDIO-01 | — | Pending |
-| AUDIO-02 | — | Pending |
-| AUDIO-03 | — | Pending |
-| AUDIO-04 | — | Pending |
-| AUDIO-05 | — | Pending |
-| AUDIO-06 | — | Pending |
-| LIB-01 | — | Pending |
-| LIB-02 | — | Pending |
-| LIB-03 | — | Pending |
-| LIB-04 | — | Pending |
-| VIS-01 | — | Pending |
-| VIS-02 | — | Pending |
-| VIS-03 | — | Pending |
-| FAV-01 | — | Pending |
-| FAV-02 | — | Pending |
-| FAV-03 | — | Pending |
-| SET-01 | — | Pending |
-| SET-02 | — | Pending |
-| SET-03 | — | Pending |
-| AUTH-01 | — | Pending |
-| AUTH-02 | — | Pending |
-| AUTH-03 | — | Pending |
-| AUTH-04 | — | Pending |
-| ONBRD-01 | — | Pending |
-| ANLX-01 | — | Pending |
+| AUDIO-01 | Phase 2 | Pending |
+| AUDIO-02 | Phase 2 | Pending |
+| AUDIO-03 | Phase 2 | Pending |
+| AUDIO-04 | Phase 2 | Pending |
+| AUDIO-05 | Phase 6 | Pending |
+| AUDIO-06 | Phase 6 | Pending |
+| LIB-01 | Phase 3 | Pending |
+| LIB-02 | Phase 3 | Pending |
+| LIB-03 | Phase 3 | Pending |
+| LIB-04 | Phase 6 | Pending |
+| VIS-01 | Phase 3 | Pending |
+| VIS-02 | Phase 3 | Pending |
+| VIS-03 | Phase 7 | Pending |
+| FAV-01 | Phase 4 | Pending |
+| FAV-02 | Phase 4 | Pending |
+| FAV-03 | Phase 5 | Pending |
+| SET-01 | Phase 3 | Pending |
+| SET-02 | Phase 4 | Pending |
+| SET-03 | Phase 4 | Pending |
+| AUTH-01 | Phase 5 | Pending |
+| AUTH-02 | Phase 5 | Pending |
+| AUTH-03 | Phase 5 | Pending |
+| AUTH-04 | Phase 6 | Pending |
+| ONBRD-01 | Phase 3 | Pending |
+| ANLX-01 | Phase 7 | Pending |
 
 **Coverage:**
 - v1 requirements: 25 total
-- Mapped to phases: 0
-- Unmapped: 25 ⚠️ (will be resolved by roadmapper)
+- Mapped to phases: 25
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-18*
-*Last updated: 2026-02-18 after initial definition*
+*Last updated: 2026-02-18 — traceability populated by roadmapper*
