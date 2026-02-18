@@ -50,12 +50,12 @@ Plans:
   3. Audio continues playing when the user switches to another app on Android
   4. Loop mode plays the sound on repeat until the user manually stops it
   5. The timer (1, 2, or 3 minutes) stops audio automatically when it reaches zero
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: AudioService singleton (expo-av 16), Audio.setAudioModeAsync config, silent mode and background audio setup
-- [ ] 02-02: Static sound catalog (config/sounds.ts), Firebase Storage URL resolution, local caching via expo-file-system, audio compression at 64-96 kbps
-- [ ] 02-03: Timer service, loop mode, audio fade in/out utility, audioStore integration
+- [ ] 02-01-PLAN.md — expo-audio install, AudioService singleton with setAudioModeAsync background config, crossfade (700ms), toggle-off instant stop
+- [ ] 02-02-PLAN.md — Static sound catalog (src/config/sounds.ts), SoundCacheService: Firebase Storage URL resolution + permanent local cache via expo-file-system/legacy documentDirectory
+- [ ] 02-03-PLAN.md — audioStore timer timestamp fields (timerStartedAt/timerDurationMs), TimerService with AppState-aware countdown and fade-then-stop, app/_layout.tsx wiring + real-device verification checkpoint
 
 ### Phase 3: Core UI
 **Goal**: The app is fully navigable — users can browse sounds, play them, enter fullscreen immersive mode, see category backgrounds, and configure dark mode — in under 3 taps from launch
@@ -152,7 +152,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/4 | Not started | - |
-| 2. Audio Engine | 0/3 | Not started | - |
+| 2. Audio Engine | 0/3 | Planned | - |
 | 3. Core UI | 0/3 | Not started | - |
 | 4. Favorites | 0/3 | Not started | - |
 | 5. Auth and Cloud Sync | 0/3 | Not started | - |
