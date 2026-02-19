@@ -85,12 +85,12 @@ Plans:
   3. Favorites are still present after closing and relaunching the app
   4. User can set a default timer duration in Settings that pre-fills for every new session
   5. The Settings screen is reachable in one tap and shows all preference controls
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: LocalFavoritesAdapter (AsyncStorage), FavoritesService with adapter interface, favoritesStore (Zustand)
-- [ ] 04-02: FavoriteButton component, Favorites screen, favoritesStore persistence across restarts
-- [ ] 04-03: Settings screen (complete: dark mode toggle, default timer, placeholder for future account section)
+- [ ] 04-01-PLAN.md — favoritesStore upgrade (Favorite[] + persist + _hasHydrated), uiStore defaultTimerDuration + system dark mode, LocalFavoritesAdapter
+- [ ] 04-02-PLAN.md — FavoriteButton component (spring animation), heart on SoundCard + player, timer pre-fill and coupling
+- [ ] 04-03-PLAN.md — Favorites screen (FlatList + illustrated empty state), Settings Session Duration wired to uiStore, phase checkpoint
 
 ### Phase 5: Auth and Cloud Sync
 **Goal**: Users can optionally create an account to sync favorites across devices — and any favorites saved anonymously are migrated to their account on first login with no data loss
