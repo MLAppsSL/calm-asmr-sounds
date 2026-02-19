@@ -68,12 +68,12 @@ Plans:
   4. Tapping a sound enters the Player screen; tapping the fullscreen button hides all UI and shows only the ambient video background and audio
   5. Each sound category shows its corresponding ambient video loop as the playback background
   6. Dark mode is on by default and can be toggled in Settings
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: Sound Library screen (FlatList, SoundCard, category filter tabs) and Expo Router navigation shell
-- [ ] 03-02: Player screen (controls, timer display, loop toggle, volume slider) and Fullscreen Immersive Mode (status bar hidden, keep-awake, fade transitions)
-- [ ] 03-03: Ambient video backgrounds per category (VIS-02), dark mode theme (uiStore, SET-01), onboarding screen (ONBRD-01), Settings screen scaffold
+- [ ] 03-01-PLAN.md — Install Phase 3 libraries, uiStore, sound manifest (17 sounds), SoundCard + CategorySection components, navigation shell (root Stack, 4-tab frosted bar, library screen)
+- [ ] 03-02-PLAN.md — Player screen (ambient video, CircularProgressArc, BottomControlPill) and Fullscreen Immersive Mode (status bar hidden, keep-awake, tap-to-restore)
+- [ ] 03-03-PLAN.md — Onboarding 2-screen flow (Welcome + Quiet Mode shell) with AsyncStorage detection, Settings screen with functional dark mode toggle
 
 ### Phase 4: Favorites
 **Goal**: Users can save sounds as favorites and retrieve them instantly — with no account required — and their favorites survive app restarts
