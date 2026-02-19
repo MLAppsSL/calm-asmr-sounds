@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Session Complete</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-dark": "#05070a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @keyframes subtle-drift {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(2%, 2%) scale(1.05); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        .animate-drift {
+            animation: subtle-drift 15s ease-in-out infinite;
+        }
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display antialiased overflow-hidden selection:bg-primary/30 selection:text-white h-screen w-screen text-white">
+<div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+<div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] animate-drift">
+<div class="absolute top-1/4 left-1/4 w-[60vw] h-[60vw] rounded-full bg-indigo-600/10 blur-[120px]"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[70vw] h-[70vw] rounded-full bg-blue-500/10 blur-[140px]"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] rounded-full bg-slate-400/5 blur-[100px]"></div>
+</div>
+</div>
+<div class="relative z-10 flex h-full w-full flex-col justify-between px-8">
+<div class="flex w-full items-center justify-end pt-12">
+<button class="flex h-12 w-12 items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-xl border border-white/10">
+<span class="material-symbols-outlined text-white/70" style="font-size: 22px;">close</span>
+</button>
+</div>
+<div class="flex flex-1 flex-col items-center justify-center space-y-8">
+<div class="flex h-20 w-20 items-center justify-center rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl">
+<span class="material-symbols-outlined text-white/40" style="font-size: 32px; font-variation-settings: 'wght' 200;">
+                spa
+            </span>
+</div>
+<div class="text-center space-y-4">
+<h1 class="text-5xl font-extralight tracking-tight text-white/90 sm:text-6xl">
+                Breathe out
+            </h1>
+<p class="text-lg font-light text-white/40 tracking-widest uppercase text-xs">
+                3 Minutes of Calm
+            </p>
+</div>
+</div>
+<div class="pb-16 pt-8 w-full max-w-sm mx-auto">
+<div class="flex flex-col gap-4">
+<button class="w-full h-16 flex items-center justify-center rounded-2xl bg-white text-background-dark font-medium text-lg transition-transform active:scale-[0.98] shadow-lg">
+                Done
+            </button>
+<button class="w-full h-16 flex items-center justify-center gap-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-white/60" style="font-size: 20px;">replay</span>
+<span class="font-light text-white/80">Repeat session</span>
+</button>
+</div>
+<div class="mt-10 flex justify-center">
+<div class="h-1 w-32 rounded-full bg-white/10"></div>
+</div>
+</div>
+</div>
+
+</body></html>

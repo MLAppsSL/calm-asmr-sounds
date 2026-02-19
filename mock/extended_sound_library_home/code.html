@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>02 Sound Library (Unified)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#8b5cf6",
+                        "charcoal": "#0f1115",
+                        "card-bg": "#1a1c22",
+                        "premium-glow": "#8b5cf6",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "card": "24px",
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .premium-border {
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2), inset 0 0 0 1px rgba(139, 92, 246, 0.4);
+        }
+        .frosted-nav {
+            background: rgba(26, 28, 34, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .sound-card-image {
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-charcoal text-white font-display antialiased selection:bg-primary/30">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-32">
+<header class="flex flex-col gap-6 px-6 pt-10 pb-4 sticky top-0 z-30 bg-charcoal/80 backdrop-blur-md">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-2xl font-semibold tracking-tight text-white leading-tight">Library</h1>
+<p class="text-[13px] text-slate-400 font-medium">Find your instant calm</p>
+</div>
+<div class="h-10 w-10 rounded-full bg-card-bg flex items-center justify-center overflow-hidden border border-white/5 shadow-inner">
+<span class="material-symbols-outlined text-slate-300">person</span>
+</div>
+</div>
+<div class="w-full">
+<div class="flex w-full items-center rounded-2xl h-12 bg-white/5 border border-white/10 focus-within:border-primary/50 transition-all px-4">
+<span class="material-symbols-outlined text-slate-500 text-xl">search</span>
+<input class="flex w-full bg-transparent border-none text-white focus:ring-0 placeholder:text-slate-500 px-3 text-sm font-normal" placeholder="Search sounds..."/>
+</div>
+</div>
+</header>
+<section class="flex flex-col pt-4">
+<div class="px-6 pb-4 flex justify-between items-center">
+<h3 class="text-lg font-medium text-white/90">Nature</h3>
+<button class="text-[13px] font-medium text-primary">View all</button>
+</div>
+<div class="flex overflow-x-auto gap-4 px-6 pb-4 no-scrollbar snap-x snap-mandatory">
+<div class="flex flex-col gap-3 min-w-[156px] snap-start group cursor-pointer">
+<div class="relative w-full aspect-square rounded-card overflow-hidden bg-card-bg border border-white/5 transition-transform active:scale-95 shadow-lg">
+<img alt="Rain" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-dxJidabPj0fPFGFGL8Pm1k3qdjQfGiYift4RWOxsdr7WHk6yHtAicpI5LUiVY6yRWXp2elxNLmtfN7pi2FgYKzIRFYb9rUGwPJ7JSwkjUUeD4e3Y-4j0N3dD23V4Zamywis9MDiWgsjMTaEuwe41ntGBhlY-ERPTPdGPIh8EY3gHjYXzlQn748xg5tbf0pxQdYo246t8daIMk_i2hTvH3n_jCGdFNsXehYQuLv4hS5n-OCK8IfDiQx7iGryHVQ2Gu7VKSQ6kQGY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl text-white/90 opacity-0 group-hover:opacity-100 transition-opacity">play_arrow</span>
+</div>
+<div class="absolute bottom-4 right-4 flex gap-0.5 items-end h-3">
+<div class="w-1 bg-primary rounded-full h-2"></div>
+<div class="w-1 bg-primary rounded-full h-3"></div>
+<div class="w-1 bg-primary rounded-full h-2"></div>
+</div>
+</div>
+<div class="px-1">
+<p class="text-white text-[15px] font-medium">Heavy Rain</p>
+<p class="text-slate-400 text-[12px]">Tropical storm</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 min-w-[156px] snap-start group cursor-pointer">
+<div class="relative w-full aspect-square rounded-card overflow-hidden bg-card-bg premium-border transition-transform active:scale-95 shadow-lg">
+<img alt="Forest" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoxPDKWaGknCBCQgCaNYIa58ZnSCfhh8_seTgu8azKHPALftPyaIXFBIzN0pgKtWU3LeiNRDP8SDytgenHOzt9hbo9AI0ydF3JC3XHUbqmXEWOfU-pr_oRbQ8Ky95dLmkM5SV7bkdleGDxfBBMSVKDX6ooCGEC50Do-7AqeIJISALGh2lFFl2NRMzBY8Pl4sH-pXinyu4b2dODQ6uzUs0whlIpdKcgp5uxBEbND4rPgcA3_YOLqyLGYGdm6yN_8_N79haQt7kJqzo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent"></div>
+<div class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 flex items-center gap-1 shadow-[0_0_12px_rgba(139,92,246,0.5)]">
+<span class="text-[10px] font-bold text-primary-color tracking-wider uppercase text-white">Pro</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-white text-[15px] font-medium">Evergreen</p>
+<p class="text-slate-400 text-[12px]">Morning birds</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 min-w-[156px] snap-start group cursor-pointer">
+<div class="relative w-full aspect-square rounded-card overflow-hidden bg-card-bg border border-white/5 transition-transform active:scale-95 shadow-lg">
+<img alt="Ocean" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK-84nKBRuNt7l9qrHVhrLrmlu55bseTv21bbjebeTWgA0mFHzfRfkqmriYNwaSapW2AWCMtSWzYYswz5X8MSD5hCPk4R5FvjbQHLe-lE9R7qWz-xqAW_7BKGvWRNYlDa-9pu26uGnhE5IpEOXikV-tSn2Za_UbKH7ql-hpXSbDz_vY6Zhqx7CU8iVrO7as1X4-Ako6P61QW8A0ST58YIioUx8H3_0sNlQG2ASnDAONj_pLrHBnTNFeaXC1LBzhw0yBxIAgY0WaFs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent"></div>
+</div>
+<div class="px-1">
+<p class="text-white text-[15px] font-medium">Deep Ocean</p>
+<p class="text-slate-400 text-[12px]">Rolling waves</p>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col pt-8">
+<div class="px-6 pb-4 flex justify-between items-center">
+<h3 class="text-lg font-medium text-white/90">Ambient</h3>
+<button class="text-[13px] font-medium text-primary">View all</button>
+</div>
+<div class="grid grid-cols-2 gap-4 px-6">
+<div class="flex flex-col gap-3 group cursor-pointer">
+<div class="relative w-full aspect-square rounded-card overflow-hidden bg-card-bg premium-border shadow-lg">
+<img alt="Lo-fi" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0yU7bju1qbXxwle1R9OQ8JX1w3_Fj9gFjAL1_DDOZHKSSzEW8jHpBSzlQGBB1HkiggSqwNSmCmPaaAcNJKxfYVWdJoKjDREmGKGpBs76HGCfr944La098Uvp4Lnrj9EbB-F-EitsXoNARgQO_NchDyYlVR52EGGlRiAzpY6Yqg9V2HWaFzWzuB2b-vC5r8I-pD-XhfenRiDRIKtenAib2OAQKqfqlk0vaF4bL8djVJzSPk2jwFsuySwrm3K_XIQYdKgIvaoV2hb8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent"></div>
+<div class="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+<span class="material-symbols-outlined text-[18px] text-white" style="font-variation-settings: 'FILL' 1">lock</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-white text-[15px] font-medium">Vinyl Static</p>
+<p class="text-slate-400 text-[12px]">Analog warmth</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group cursor-pointer">
+<div class="relative w-full aspect-square rounded-card overflow-hidden bg-card-bg border border-white/5 shadow-lg">
+<img alt="White noise" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBZfwXTd6BRw7Q0FxBeBG1j2isbhMfBwo4gOesHdOeZG-BM5WMhKE7VAS6rFlZ7jpR_UHItIKnp81nRHoGlcj9i_CzVrytXwZJEpI16pTnCJouEcU_WR8atWRbrIzHgn1kawi2fNfG51j3sFs5fcd_aBqc5O5FutKWZy19R44FqhMd_Fdmh2YddHGPf5mDmocieolHXZAfVtk3RF3y8UmTb3s0IO7EJd6rQmXhr3vaJ6Tiyt08BAzMIvOQAOgMdi2ArWCp2CkolV0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent"></div>
+</div>
+<div class="px-1">
+<p class="text-white text-[15px] font-medium">Pure White</p>
+<p class="text-slate-400 text-[12px]">Static focus</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group cursor-pointer">
+<div class="relative w-full aspect-square rounded-card overflow-hidden bg-card-bg border border-white/5 shadow-lg">
+<img alt="Cafe" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZxTLkorqu6PB6MPcEq0zrlzUwUrENw9fVlBfy4uzb84gQ1Zd5mAwagaHDxrAFjlDto2JJvkvrlO8w-a6n5rHBmqWc4PCKID0nD40fAKYmVQKEZyWOmbQ2BkjWhrg5obAmghQIDyhlyBPY8lglDjl2t0rms3lQbzz-6CzX9MbYrjnAnqbzAgrxhA7EDFIBTRE7-RNX_OlMqabfUT1NCClT1wMj1b1-N8pRd0Rc_C_rFVMQabcMPccsNTRvzuKYi59eJVLgE2Ct4XQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent"></div>
+<div class="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-full bg-amber-500/20 backdrop-blur-md border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+<span class="material-symbols-outlined text-[18px] text-amber-200" style="font-variation-settings: 'FILL' 1">lock</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-white text-[15px] font-medium">Paris Cafe</p>
+<p class="text-slate-400 text-[12px]">Gentle chatter</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group cursor-pointer">
+<div class="relative w-full aspect-square rounded-card overflow-hidden bg-card-bg premium-border shadow-lg">
+<img alt="Train" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6z94ssgVfhrwrIGVxmU0RVImFZSPNlpYruNC2dLIMvhOjI-Y9IUl9IWl8fIkWqX_AaDKmr6_skhXMT7RvDJLNzhpf6hdK8wJXNelLAhzLaZXwkiTSg3VO6BMIGPLolxDQp_N1UYOWBvRseSZd123it5IV__Q0XCNCZ98cW8heZhIEO9iMH1wGQQqMsWjCkGzZE9iPKXiSHb8Qn83kNotVWZy_9NwoUy8M4lbPWCCnMV5nmiQd84PZdd7kld3pZDJztMW34Po5KYk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent"></div>
+<div class="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 flex items-center gap-1 shadow-[0_0_12px_rgba(139,92,246,0.5)]">
+<span class="text-[10px] font-bold tracking-wider uppercase text-white">Pro</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-white text-[15px] font-medium">Night Train</p>
+<p class="text-slate-400 text-[12px]">Rhythmic tracks</p>
+</div>
+</div>
+</div>
+</section>
+<nav class="fixed bottom-8 left-6 right-6 h-16 frosted-nav rounded-[24px] flex items-center justify-around shadow-2xl border border-white/10 z-50">
+<button class="flex flex-col items-center gap-1 p-2 text-primary">
+<span class="material-symbols-outlined text-[26px]" style="font-variation-settings: 'FILL' 1">home</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[26px]">graphic_eq</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[26px]">favorite</span>
+</button>
+<button class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[26px]">settings</span>
+</button>
+</nav>
+</div>
+
+</body></html>

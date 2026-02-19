@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding Welcome</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "navy-deep": "#0A0E17",
+                        "charcoal": "#1C1C1E",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --bg-gradient: linear-gradient(180deg, #0A0E17 0%, #161B22 100%);
+        }
+        body {
+            min-height: 100dvh;
+            background: var(--bg-gradient);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display text-white antialiased overflow-hidden selection:bg-white/10">
+<div class="relative flex h-[100dvh] w-full flex-col overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-[#0A0E17] via-[#111827] to-[#1C1C1E] z-0"></div>
+<div class="absolute top-[-10%] left-[-10%] w-[120%] h-[60%] bg-[radial-gradient(circle_at_center,_rgba(30,58,138,0.15)_0%,_transparent_70%)] z-0"></div>
+<div class="relative z-10 flex h-full w-full flex-col items-center justify-between px-8 py-16">
+<div class="flex flex-col items-center justify-center pt-12">
+<div class="relative flex items-center justify-center">
+<div class="absolute w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+<div class="w-24 h-24 relative flex items-center justify-center">
+<div class="w-full h-full bg-center bg-no-repeat bg-contain" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDO35xj9m5a6bVxwcHevAJli1Ch8R-iS-5f4_38od6llWSZXWCI91knGbGKjusY6Ld5173YqC0LZLS5euTQJJbjz7M4YXABoxUGPd0Ag-0U1_glMOhp9BklxcNXbWzgo9vphOf8ND5oVjs3iF7Bw42-DmmMHDIvKHFrcdi8rKqG1EzwLLpuZDltUxCNGsOTKsu6oO9RMIfk8VuPQCfeZV1HUwogRvDd54HaxQUDUH_R1QmqCr8b0IoK5EyUtqEX04e5lHi2JfM3eZ8"); filter: brightness(1.5) contrast(1.1);'>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center text-center space-y-4">
+<h1 class="text-white text-4xl font-light tracking-tight leading-tight">
+                    Find your calm<br/><span class="font-extralight text-white/80">in a minute</span>
+</h1>
+<p class="text-white/40 text-sm font-light tracking-[0.2em] uppercase">
+                    Ultra-short sounds
+                </p>
+</div>
+<div class="w-full flex flex-col items-center gap-8">
+<button class="group relative flex w-full max-w-xs cursor-pointer items-center justify-center overflow-hidden rounded-full h-16 transition-all duration-500 active:scale-[0.97]">
+<div class="absolute inset-0 bg-white/[0.08] backdrop-blur-2xl border border-white/20 rounded-full"></div>
+<div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<span class="relative text-white text-lg font-normal tracking-wide">Begin</span>
+</button>
+<div class="h-2"></div>
+</div>
+</div>
+</div>
+
+</body></html>

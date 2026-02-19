@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>08 Authentication (Unified)</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFFFFF",
+                        "accent": "#135bec",
+                        "background-dark": "#0a0c10",
+                        "surface-dark": "rgba(255, 255, 255, 0.03)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            background-color: #0a0c10;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .input-glow:focus-within {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display antialiased text-white">
+<div class="relative flex min-h-screen w-full flex-col overflow-hidden bg-background-dark">
+<div class="absolute -top-[10%] -left-[10%] w-[60%] h-[40%] bg-accent/10 rounded-full blur-[120px]"></div>
+<div class="absolute -bottom-[5%] -right-[5%] w-[50%] h-[30%] bg-accent/5 rounded-full blur-[100px]"></div>
+<div class="relative z-10 flex w-full shrink-0 flex-col items-center pt-20 pb-10 px-6">
+<div class="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full glass-effect mb-8">
+<div class="absolute inset-0 bg-center bg-cover opacity-40 mix-blend-overlay" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD3uXo0MTq1RQAxeW7eWgdXtTpE8VfP--TvdpoLFz-Yvw7Nk4WJMDJjVGI4Yp5sYpW77ELKY7nhlO2Nh87KLWZfVLZK0qtwF3liM5j5ecX4o2JuoLZkjSYlssDxBLP4fvJ7DlvnZKboiBVWZwoihz0yCXm8UG1VXRutGkk_EqX3C6WqeQyiEc3x9A6RtuUt6iUlyHQm-QV5nmx5SMFIta8IofXwDEocKrjpyCR4ax_E5OKsgOyUC9hlf_1FamIM3BEK_Po9M2ZwuRs");'></div>
+<span class="material-symbols-outlined relative z-10 text-4xl text-white/90 font-light">self_improvement</span>
+</div>
+<div class="text-center space-y-2">
+<h1 class="text-3xl font-semibold tracking-tight">Begin your journey</h1>
+<p class="text-sm font-light text-white/50">Enter your details to find your calm</p>
+</div>
+</div>
+<div class="relative z-10 flex w-full max-w-[420px] grow flex-col gap-6 px-8 mx-auto pb-12">
+<div class="flex flex-col gap-4">
+<div class="glass-effect input-glow flex h-14 w-full items-center gap-3 rounded-xl px-4 transition-all duration-300">
+<span class="material-symbols-outlined text-white/30 text-[20px]">mail</span>
+<input class="flex w-full bg-transparent text-[15px] font-light text-white placeholder:text-white/20 focus:outline-none focus:ring-0 border-none p-0" placeholder="Email address" type="email"/>
+</div>
+<div class="glass-effect input-glow flex h-14 w-full items-center gap-3 rounded-xl px-4 transition-all duration-300">
+<span class="material-symbols-outlined text-white/30 text-[20px]">lock</span>
+<input class="flex w-full bg-transparent text-[15px] font-light text-white placeholder:text-white/20 focus:outline-none focus:ring-0 border-none p-0" placeholder="Password" type="password"/>
+<button class="text-white/30 hover:text-white transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+</div>
+<div class="flex justify-end">
+<a class="text-xs font-medium text-white/40 hover:text-white transition-colors" href="#">Forgot Password?</a>
+</div>
+</div>
+<div class="flex flex-col gap-4 pt-2">
+<button class="flex h-14 w-full items-center justify-center rounded-xl bg-white text-[15px] font-semibold text-background-dark transition-all active:scale-[0.98] hover:bg-white/90 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+                    Sign In
+                </button>
+<p class="text-center text-[13px] font-light text-white/40">
+                    New to the app? 
+                    <a class="text-white hover:underline font-medium ml-1" href="#">Create account</a>
+</p>
+</div>
+<div class="flex w-full items-center gap-4 py-4">
+<div class="h-[1px] grow bg-white/10"></div>
+<span class="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/20">OR</span>
+<div class="h-[1px] grow bg-white/10"></div>
+</div>
+<button class="group flex h-14 w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-transparent text-[15px] font-medium text-white/70 hover:bg-white/5 hover:text-white transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px] text-white/30 group-hover:text-white/60 transition-colors">person_outline</span>
+                Continue as Guest
+            </button>
+</div>
+<div class="relative z-10 mt-auto pb-10 flex flex-col items-center gap-1 opacity-20">
+<div class="h-1 w-1 rounded-full bg-white"></div>
+<div class="h-1 w-1 rounded-full bg-white"></div>
+<div class="h-1 w-1 rounded-full bg-white"></div>
+</div>
+</div>
+
+</body></html>

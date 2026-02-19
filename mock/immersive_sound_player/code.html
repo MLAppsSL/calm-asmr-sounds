@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Active Player (Unified)</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ffffff",
+              "background-dark": "#0a0c10",
+              "glass-white": "rgba(255, 255, 255, 0.08)",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {
+                "DEFAULT": "0.5rem", 
+                "lg": "1rem", 
+                "xl": "1.5rem", 
+                "2xl": "2rem",
+                "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .frosted-glass {
+                @apply bg-white/5 backdrop-blur-2xl border border-white/10;
+            }
+            .delicate-icon {
+                font-variation-settings: 'wght' 200, 'opsz' 24;
+            }
+            .soft-glow {
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+            }
+        }
+        body {
+            min-height: 100dvh;
+            background-color: #000;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display antialiased overflow-hidden h-screen w-full selection:bg-white/20 selection:text-white">
+<div class="relative w-full h-full flex flex-col justify-between text-white overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Cinematic moody rain on window" class="w-full h-full object-cover scale-110 brightness-75 contrast-[1.1]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe0C1_wm0Dni9FtEFeDlJ2wSmvlEkzMJ846TSEherE5dpr7J3tX7X6WSlmOpqWFsgojTt4mjI5TMbYwf9Tr7MVbNB59dbqbGtwXOnxh_kHnszOJcDdZD2gRrXCklB5Gt5OtXBu-J0SND1WEQCbaHnF1XuuMZ2KXwnGyspMH1_spbRLiG5T_INCZuxo6YHrjSpV2vEmuBmsTNRN02LhjXfYQzXs69fkDuNkXvBrgAi7IxeUDJYu1Q8pZcwbCo-Bd5ZZLtNRw4bTXRI"/>
+<div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80"></div>
+<div class="absolute inset-0 bg-black/20"></div>
+</div>
+<div class="relative z-20 w-full px-6 pt-16 flex justify-between items-center">
+<button class="w-10 h-10 flex items-center justify-center rounded-full frosted-glass transition-transform active:scale-90">
+<span class="material-symbols-outlined delicate-icon text-white/90">expand_more</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-[0.3em] text-white/40 font-medium">Now Playing</span>
+<span class="text-sm font-light text-white/80">Rainy Night</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full frosted-glass transition-transform active:scale-90">
+<span class="material-symbols-outlined delicate-icon text-white/90">more_horiz</span>
+</button>
+</div>
+<div class="relative z-10 flex flex-col items-center justify-center flex-grow px-8 gap-12">
+<div class="text-center space-y-2">
+<h1 class="text-3xl font-light tracking-tight text-white drop-shadow-sm">Rainy Night</h1>
+<p class="text-white/40 text-xs font-light tracking-widest uppercase">Deep Sleep • 03:00</p>
+</div>
+<div class="relative flex items-center justify-center">
+<svg class="w-72 h-72 -rotate-90" viewBox="0 0 100 100">
+<circle class="text-white/10" cx="50" cy="50" fill="none" r="46" stroke="currentColor" stroke-width="0.5"></circle>
+<circle class="soft-glow text-white/80" cx="50" cy="50" fill="none" r="46" stroke="currentColor" stroke-dasharray="289" stroke-dashoffset="120" stroke-linecap="round" stroke-width="0.8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-24 h-24 rounded-full frosted-glass flex items-center justify-center shadow-2xl transition-all hover:bg-white/10 active:scale-95">
+<span class="material-symbols-outlined text-4xl text-white delicate-icon ml-1">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-2xl font-extralight tracking-[0.2em] text-white/90">01:42</span>
+</div>
+</div>
+<div class="relative z-20 w-full px-8 pb-16">
+<div class="flex items-center justify-between max-w-sm mx-auto frosted-glass rounded-full px-8 py-4">
+<button class="text-white/50 hover:text-white transition-colors active:scale-90">
+<span class="material-symbols-outlined delicate-icon text-2xl">loop</span>
+</button>
+<button class="text-white/50 hover:text-white transition-colors active:scale-90">
+<span class="material-symbols-outlined delicate-icon text-2xl">airplay</span>
+</button>
+<button class="text-white/50 hover:text-white transition-colors active:scale-90">
+<span class="material-symbols-outlined delicate-icon text-2xl">favorite</span>
+</button>
+<button class="text-white/50 hover:text-white transition-colors active:scale-90">
+<span class="material-symbols-outlined delicate-icon text-2xl">fullscreen</span>
+</button>
+</div>
+</div>
+</div>
+
+</body></html>

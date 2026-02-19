@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding Permissions</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f13ec",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#191022",
+                        "surface-dark": "#2a1f36",
+                        "text-secondary": "#ab9db9",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Toggle Switch Animation */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #7f13ec;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #7f13ec;
+        }
+        .toggle-checkbox:checked + .toggle-label:before {
+            transform: translateX(100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased selection:bg-primary/30">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto shadow-2xl">
+<!-- Top Bar -->
+<div class="flex items-center p-6 justify-between z-10">
+<button class="text-white/80 hover:text-white transition-colors flex size-10 items-center justify-center rounded-full active:bg-white/10">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<div class="flex gap-1">
+<div class="h-1.5 w-1.5 rounded-full bg-white/20"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-primary"></div>
+<div class="h-1.5 w-1.5 rounded-full bg-white/20"></div>
+</div>
+<div class="size-10"></div> <!-- Spacer for balance -->
+</div>
+<!-- Main Content Scrollable Area -->
+<div class="flex-1 flex flex-col items-center px-6 pt-2 pb-6">
+<!-- Hero Illustration -->
+<div class="w-full relative aspect-[4/3] mb-8 rounded-3xl overflow-hidden shadow-[0_0_40px_-10px_rgba(127,19,236,0.3)]">
+<!-- Abstract calming visual -->
+<div class="absolute inset-0 bg-gradient-to-br from-[#2a1f36] to-[#0f0a14]"></div>
+<div class="absolute inset-0 opacity-60 mix-blend-overlay bg-cover bg-center" data-alt="Abstract flowing dark purple liquid waves representing deep calm and silence" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDGV-v-HVACmS3xoL3bcjnQH52U5FLqLk2YnDvxvIA_1GkK4TY87TPGQVcW8AlN9swI0qQXtAYnDfUAdYX_P091uBj9tkcH7tVbIGF7qBDH-F3Q0nV8Un6M7bJ3noXC4cCjf4-L0GbT1rrXrC9gHmlqIFkxDlPXod-pdTdlJbJOHL_DOSihZ2qpYp07KWDvEVuI6sp1Tx7aBLp8gSmoqhOcu88N01fK8MKXRWxrCQAkbhbObeLUOdE3fzMRRXHWAhf3dKkd1FJDZY0');">
+</div>
+<!-- Floating Icon Badge -->
+<div class="absolute bottom-6 left-6 size-14 bg-background-dark/80 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
+<span class="material-symbols-outlined text-primary text-3xl">do_not_disturb_on</span>
+</div>
+</div>
+<!-- Typography -->
+<div class="w-full mb-8">
+<h1 class="text-3xl md:text-4xl font-light text-white mb-3 tracking-tight">Enable <span class="text-primary font-normal">Quiet Mode</span></h1>
+<p class="text-text-secondary text-base leading-relaxed font-light">
+                    To ensure your 3-minute calm isn't broken, allow us to silence notifications only while you listen.
+                </p>
+</div>
+<!-- Permission Action Panel -->
+<div class="w-full mb-auto">
+<div class="group relative flex items-center justify-between gap-4 rounded-3xl border border-white/5 bg-surface-dark/50 p-5 transition-all active:scale-[0.99]">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined">notifications_off</span>
+</div>
+<div class="flex flex-col">
+<p class="text-white text-base font-medium leading-tight">Quiet Mode</p>
+<p class="text-text-secondary text-sm font-light mt-1">Silence interruptions</p>
+</div>
+</div>
+<!-- Custom Toggle -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-14 h-8 bg-surface-dark border border-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary peer-checked:border-primary shadow-inner"></div>
+</label>
+</div>
+<div class="mt-4 px-2 flex items-start gap-2">
+<span class="material-symbols-outlined text-text-secondary text-xs mt-0.5">info</span>
+<p class="text-xs text-text-secondary/60 font-light">
+                        We only activate this when you start a session and automatically disable it when you finish.
+                    </p>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="flex flex-col gap-3 px-6 pb-8 pt-4 bg-gradient-to-t from-background-dark via-background-dark to-transparent">
+<button class="relative w-full flex items-center justify-center overflow-hidden rounded-full h-14 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all text-white text-base font-semibold tracking-wide shadow-[0_0_20px_-5px_rgba(127,19,236,0.5)]">
+<span class="relative z-10">Continue</span>
+<div class="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+</button>
+<button class="w-full flex items-center justify-center rounded-full h-12 bg-transparent text-text-secondary hover:text-white text-sm font-medium transition-colors">
+                Not now
+            </button>
+</div>
+</div>
+</body></html>
