@@ -6,7 +6,7 @@
 <domain>
 ## Phase Boundary
 
-Premium sounds are locked server-side via Firestore Security Rules — no premium URL is ever returned to a non-premium user. The UI surfaces lock indicators for premium sounds and routes free users to a RevenueCat native paywall. After purchase, all premium features unlock immediately with no app restart. Auth and the sound catalog are already in place from prior phases.
+Premium sounds are locked server-side via Supabase RLS — no premium URL is ever returned to a non-premium user. The UI surfaces lock indicators for premium sounds and routes free users to a RevenueCat native paywall. After purchase, all premium features unlock immediately with no app restart. Auth and the sound catalog are already in place from prior phases.
 
 </domain>
 

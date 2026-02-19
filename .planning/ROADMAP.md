@@ -114,7 +114,7 @@ Plans:
 **Depends on**: Phase 5
 **Requirements**: AUTH-04, LIB-04, AUDIO-05, AUDIO-06
 **Success Criteria** (what must be TRUE):
-  1. Premium sound URLs are never returned to a non-premium user by Firestore — they cannot be accessed by inspecting network traffic
+  1. Premium sound URLs are never returned to a non-premium user by Supabase RLS — they cannot be accessed by inspecting network traffic
   2. Premium sounds are visible in the library with a clear lock indicator but cannot be played without a subscription
   3. Tapping a locked sound shows the RevenueCat paywall screen without interrupting any active playback
   4. After completing a purchase, Infinity mode (no time limit) and custom timer duration unlock immediately with no app restart required
