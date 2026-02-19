@@ -119,12 +119,12 @@ Plans:
   3. Tapping a locked sound shows the RevenueCat paywall screen without interrupting any active playback
   4. After completing a purchase, Infinity mode (no time limit) and custom timer duration unlock immediately with no app restart required
   5. The paywall never appears during fullscreen immersive mode
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 06-01: Freemium data model (free/premium flag in sounds catalog, Firestore Security Rules restricting premium URL field to isPremium users)
-- [ ] 06-02: RevenueCat integration (react-native-purchases), paywall screen, PremiumGate wrapper component
-- [ ] 06-03: Infinity mode (AUDIO-05) and custom timer duration (AUDIO-06) gated behind premium entitlement check
+- [ ] 06-01-PLAN.md — RevenueCat SDK setup (react-native-purchases), isPremium in authStore, PremiumService + usePremiumStatus hook, Supabase sounds table RLS migration, RevenueCat webhook Edge Function
+- [ ] 06-02-PLAN.md — Premium lock indicators (LockBadge, PremiumGate), openPaywall() helper, sound catalog premium flags, paywall entry points in library/favorites/settings, human verification checkpoint
+- [ ] 06-03-PLAN.md — Infinity mode (AUDIO-05) and custom timer duration (AUDIO-06) gated behind isPremium in audioStore and player screen
 
 ### Phase 7: Polish, DND, and Analytics
 **Goal**: The app passes accessibility, performance, and analytics checks — and is submitted to TestFlight and Play Store internal testing
@@ -156,5 +156,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Core UI | 0/3 | Not started | - |
 | 4. Favorites | 0/3 | Not started | - |
 | 5. Auth and Cloud Sync | 0/3 | Planned | - |
-| 6. Freemium and Monetization | 0/3 | Not started | - |
+| 6. Freemium and Monetization | 0/3 | Planned | - |
 | 7. Polish, DND, and Analytics | 0/4 | Not started | - |
