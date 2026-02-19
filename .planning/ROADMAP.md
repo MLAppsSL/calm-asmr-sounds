@@ -102,12 +102,12 @@ Plans:
   3. After logging in, favorites saved while anonymous appear in the cloud account (no duplicates, no data lost)
   4. Favorites sync instantly across two devices signed into the same account
   5. Firestore Security Rules block any user from reading another user's favorites or data
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: Firebase Auth integration (email/password + anonymous auth), authStore, Firestore Security Rules for user data isolation
-- [ ] 05-02: CloudFavoritesAdapter (Firestore), FavoritesService adapter swap on login, Firestore offline persistence
-- [ ] 05-03: Anonymous-to-cloud migration (FavoritesService.migrateLocalToCloud with deduplication, linkWithCredential flow)
+- [ ] 05-01-PLAN.md — Firebase Auth foundation: initializeAuth + RN persistence, AuthContext, root layout auth+onboarding gate, auth modal screen, Firestore security rules
+- [ ] 05-02-PLAN.md — Firestore sync layer: FavoritesService (read/write/migrate), useFavoritesSync hook, wire hook into root layout
+- [ ] 05-03-PLAN.md — Auth UI surface: Settings auth section (sign in/out), Favorites sync nudge + cloud indicator, phase checkpoint
 
 ### Phase 6: Freemium and Monetization
 **Goal**: Premium sounds are locked server-side with no bypass possible — and users who want to unlock them reach a fully functional RevenueCat paywall and can complete a real in-app purchase
@@ -155,6 +155,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Audio Engine | 0/3 | Planned | - |
 | 3. Core UI | 0/3 | Not started | - |
 | 4. Favorites | 0/3 | Not started | - |
-| 5. Auth and Cloud Sync | 0/3 | Not started | - |
+| 5. Auth and Cloud Sync | 0/3 | Planned | - |
 | 6. Freemium and Monetization | 0/3 | Not started | - |
 | 7. Polish, DND, and Analytics | 0/4 | Not started | - |
