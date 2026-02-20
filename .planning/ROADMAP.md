@@ -136,13 +136,13 @@ Plans:
   3. A 15-minute foreground playback session on iOS shows zero memory growth in Xcode Instruments
   4. All interactive elements meet WCAG AA contrast ratio (minimum 4.5:1) in dark mode
   5. The app build installs on TestFlight (iOS) and Play Store internal testing (Android) with no crashes on launch
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 07-01: Do Not Disturb toggle (in-session, platform-specific: iOS Focus API / Android NotificationManager)
-- [ ] 07-02: Firebase Analytics event logging (logEvent wrappers for all KPI events, ANLX-01)
-- [ ] 07-03: Accessibility audit (WCAG AA dark mode contrast), memory profiling (Xcode Instruments), Android foreground service notification validation
-- [ ] 07-04: TestFlight beta submission and Play Store internal testing submission
+- [ ] 07-01-PLAN.md — Platform-gated in-session DND/Quiet Session implementation (Android full DND + iOS partial Quiet Session fallback)
+- [ ] 07-02-PLAN.md — Typed Firebase Analytics instrumentation for all ANLX-01 KPI events via RN Firebase
+- [ ] 07-03-PLAN.md — Release quality gates: WCAG AA contrast tests, iOS memory profiling, and DND/analytics QA runbook + checkpoint
+- [ ] 07-04-PLAN.md — EAS build/submit pipeline to TestFlight and Play internal testing with install smoke-test checkpoint
 
 ## Progress
 

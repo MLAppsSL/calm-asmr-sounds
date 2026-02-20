@@ -79,7 +79,7 @@ Sound catalog is static in `config/sounds.ts` for MVP — no Firestore round-tri
 1. Audio Service (singleton) — manages the one active Sound object; prevents conflicts, memory leaks, and audio overlap
 2. Timer Service — JS countdown with 1s intervals; stop signal driven by audio object's onPlaybackStatusUpdate callback
 3. Favorites Service (adapter pattern) — delegates to LocalFavoritesAdapter (AsyncStorage) or CloudFavoritesAdapter (Firestore) based on auth state; merges on login
-4. Auth & Access Service — Firebase Auth state, premium tier lookup from Firestore user document
+4. Auth & Access Service — Firebase Auth state, premium tie/gsdr lookup from Firestore user document
 5. Zustand stores (audioStore, favoritesStore, authStore, uiStore) — source of truth for all UI state; services mutate stores directly
 6. PremiumGate component — wrapper that checks authStore.isPremium; lock overlay vs real content; premium logic never in screens
 
