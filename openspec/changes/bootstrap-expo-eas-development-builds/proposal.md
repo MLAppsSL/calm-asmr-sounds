@@ -5,7 +5,7 @@ Phase 1 cannot proceed on Expo Go because the app depends on native capabilities
 ## What Changes
 
 - Add the Expo native build dependencies required for development builds, including `expo-dev-client`, `expo-router`, React Native Firebase modules, `expo-build-properties`, `expo-av`, AsyncStorage, and Zustand.
-- Configure `app.json` for EAS development builds with the agreed Phase 1 app identity and platform fields, deep linking, Expo Router plugin support, typed routes enabled, background audio capability, Firebase native config file references, and the required config plugins for RNFB, `expo-av`, and the planned iOS Podfile patch.
+- Configure `app.json` for EAS development builds with the agreed Phase 1 app identity and platform fields, deep linking, Expo Router plugin support, typed routes enabled, background audio capability, Firebase native config file references, the RNFB config plugins actually exposed by the installed packages (`@react-native-firebase/app` and `@react-native-firebase/auth`), and the planned iOS Podfile patch.
 - Create `eas.json` with the exact Phase 1 `cli`, `build`, and `submit` structure for `development`, `preview`, and `production` profiles so the project can produce installable internal and release builds.
 - Lock in the baseline TypeScript, ESLint, Prettier, Husky, and lint-staged setup so formatting and lint failures are blocked before commit, including the exact `package.json` scripts, staged-file commands, `tsconfig` structure, ESLint flat-config composition, and VS Code workspace settings agreed in Phase 1.
 - Add the committed developer workspace files and environment template needed by later phases, including `.vscode/settings.json`, `.env.example`, and `.gitignore` updates for local env files.
@@ -13,11 +13,13 @@ Phase 1 cannot proceed on Expo Go because the app depends on native capabilities
 ## Capabilities
 
 ### New Capabilities
+
 - `native-build-foundation`: The project can produce EAS development and release builds with the native Expo and Firebase configuration required for background audio and future device testing.
 - `tooling-guardrails`: The project enforces the agreed TypeScript, linting, formatting, and pre-commit checks for the Expo scaffold.
 - `environment-template`: The project provides a committed `.env.example` template and gitignore behavior for all public configuration keys used across planned phases.
 
 ### Modified Capabilities
+
 None.
 
 ## Impact

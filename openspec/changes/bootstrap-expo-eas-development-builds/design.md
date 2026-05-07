@@ -9,12 +9,14 @@ The planning set contains conflicting audio-library notes, but this change now r
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Produce a clean Expo scaffold that can be turned into an EAS Development Build with all required native plugins declared in config, including the Expo Router plugin baseline expected by later phases.
 - Establish the three EAS build profiles needed for internal development, QA preview, and production release.
 - Enforce the agreed quality baseline through TypeScript, Expo ESLint, Prettier, Husky, and lint-staged.
 - Commit the shared environment template and workspace settings that later phases rely on.
 
 **Non-Goals:**
+
 - Implement audio playback behavior, caching, or timer logic.
 - Initialize Firebase service modules or validate a live Firebase project connection.
 - Create product UI, route placeholders, or Zustand stores beyond dependency installation.
@@ -23,6 +25,7 @@ The planning set contains conflicting audio-library notes, but this change now r
 ## Decisions
 
 ### Use EAS Development Builds as the only supported dev runtime
+
 The project will install and configure `expo-dev-client` and define a dedicated `development` profile in `eas.json`.
 
 Rationale: Expo Go cannot host the native modules and Info.plist changes required by RNFB and background audio. Treating development builds as the default removes ambiguity before later phases add more native dependencies.
@@ -31,6 +34,7 @@ Alternative considered: Continue using Expo Go for early UI work.
 Rejected because it would hide integration problems until much later and cannot represent the required native behavior.
 
 ### Use `expo-av` on Expo SDK 54 for the bootstrap audio baseline
+
 The scaffold will install `expo-av` rather than `expo-audio` because the project is intentionally staying on Expo SDK 54 for stability, and the current planning research does not treat `expo-audio` as production-ready on that SDK line.
 
 Rationale: This keeps the foundation aligned with the more conservative stack decision already documented in planning research and avoids bootstrapping the project on an audio package whose maturity is still in question for the chosen SDK.
@@ -39,14 +43,16 @@ Alternative considered: Use `expo-audio` immediately because it is the newer API
 Rejected because the current project baseline is Expo SDK 54, not the newer SDK line where `expo-audio` is expected to become the default path.
 
 ### Configure native app capabilities in `app.json` through config plugins
-The Expo config will declare the Phase 1 identity and platform baseline in `app.json`: `name: "Calm Sounds"`, `slug: "calm-asmr-sounds"`, `version: "1.0.0"`, `orientation: "portrait"`, `userInterfaceStyle: "dark"`, `ios.supportsTablet: false`, `ios.bundleIdentifier: "com.calmsounds.app"`, `android.package: "com.calmsounds.app"`, `android.adaptiveIcon.foregroundImage: "./assets/images/adaptive-icon.png"`, `android.adaptiveIcon.backgroundColor: "#000000"`, plus the deep-linking scheme, the `expo-router` plugin, typed routes enabled through `experiments.typedRoutes`, `UIBackgroundModes: ["audio"]`, Firebase service file paths, all RNFB plugins, `expo-build-properties` with `useFrameworks: static`, and the planned extra Podfile patch plugin needed for RNFB iOS compatibility on Expo SDK 54.
 
-Rationale: Phase 1 requires native behavior to be reproducible from configuration alone, without manual ios/android edits. Using config plugins keeps the project aligned with Expo-managed EAS workflows, preserves the routing baseline expected by later phases, and the extra Podfile patch closes the known RNFB iOS build gap that `useFrameworks: static` does not solve by itself.
+The Expo config will declare the Phase 1 identity and platform baseline in `app.json`: `name: "Calm Sounds"`, `slug: "calm-asmr-sounds"`, `version: "1.0.0"`, `orientation: "portrait"`, `userInterfaceStyle: "dark"`, `ios.supportsTablet: false`, `ios.bundleIdentifier: "com.calmsounds.app"`, `android.package: "com.calmsounds.app"`, `android.adaptiveIcon.foregroundImage: "./assets/images/adaptive-icon.png"`, `android.adaptiveIcon.backgroundColor: "#000000"`, plus the deep-linking scheme, the `expo-router` plugin, typed routes enabled through `experiments.typedRoutes`, `UIBackgroundModes: ["audio"]`, Firebase service file paths, the RNFB config plugins actually provided by the chosen modules (`@react-native-firebase/app` and `@react-native-firebase/auth`), `expo-build-properties` with `useFrameworks: static`, and the planned extra Podfile patch plugin needed for RNFB iOS compatibility on Expo SDK 54.
+
+Rationale: Phase 1 requires native behavior to be reproducible from configuration alone, without manual ios/android edits. Using config plugins keeps the project aligned with Expo-managed EAS workflows, preserves the routing baseline expected by later phases, and the extra Podfile patch closes the known RNFB iOS build gap that `useFrameworks: static` does not solve by itself. Only the modules that actually ship Expo config plugins should appear in `app.json`; the remaining RNFB packages are still installed and linked natively through the app-level Firebase integration.
 
 Alternative considered: Defer some plugin declarations until the related feature phase.
 Rejected because missing native declarations cannot be delivered safely via OTA and would undermine the foundation phase gate.
 
 ### Keep developer tooling strict enough to block low-quality commits, but not fully strict in TypeScript
+
 The project will use `strict: false`, `strictNullChecks: true`, `noImplicitAny: true`, and the `@/*` path alias to `src/*`, while keeping the agreed Expo lint defaults with Prettier integrated into both editor and pre-commit workflows.
 
 Rationale: The planning docs explicitly call for moderate strictness rather than full `strict: true`. This captures the most important null-safety baseline, keeps implicit-any usage from spreading in the initial scaffold, and standardizes the import path pattern later phases already expect.
@@ -55,6 +61,7 @@ Alternative considered: Enable full strict TypeScript or defer lint-staged until
 Rejected because full strictness exceeds the stated decision, and delaying commit-time guardrails would make later cleanup more expensive.
 
 ### Preserve the exact Phase 1 package and formatting guardrails
+
 The scaffold will expose `prepare: "husky"`, `lint: "expo lint"`, and `lint:fix: "expo lint --fix"` scripts in `package.json`, configure `lint-staged` so staged `*.ts` and `*.tsx` files run `eslint --max-warnings=0 --fix` and `prettier --write`, and store the agreed `.prettierrc` fields (`semi`, `singleQuote`, `trailingComma`, `printWidth`, `tabWidth`, `bracketSameLine`).
 
 Rationale: The remaining foundation plans assume not just that linting and formatting exist, but that commits are blocked on warnings for staged TypeScript files and that formatting remains stable across contributors and future generated scaffolds.
@@ -63,6 +70,7 @@ Alternative considered: Leave script names, staged-file commands, and formatting
 Rejected because that would allow materially different scaffolds to satisfy the change while drifting from the locked Phase 1 implementation contract.
 
 ### Preserve the exact Phase 1 config-file structure where it is already settled
+
 The scaffold will keep `eas.json` aligned with the agreed `cli.version`, `cli.appVersionSource`, per-profile `env.APP_VARIANT`, `production.autoIncrement`, and `submit.production` entries; `tsconfig.json` will extend `expo/tsconfig.base` and include Expo's typed environment files; `eslint.config.js` will use the flat Expo config plus Prettier integration and ignore `dist/`, `node_modules/`, and `.expo/`; `.vscode/settings.json` will set Prettier as the default formatter and enable explicit ESLint fixes on save; and `.gitignore` will include `.env`, `*.local`, `.expo/`, `node_modules/`, and `dist/` while leaving Firebase native config files available to commit later.
 
 Rationale: These file shapes are not incidental formatting choices. Later plans and verification steps already assume this exact baseline, so leaving them underspecified would recreate the same drift this change is meant to prevent.
@@ -71,6 +79,7 @@ Alternative considered: Specify only high-level outcomes and let the implementat
 Rejected because several later plan checks are written against these concrete fields and paths, so a looser contract would still create reconciliation work before Phase 1 could be applied confidently.
 
 ### Commit a full `.env.example` now and keep real values local
+
 The repository will document all 13 `EXPO_PUBLIC_` keys already known across Firebase, RevenueCat, and Unity Ads, while `.env` remains gitignored.
 
 Rationale: Later phases depend on a stable env key contract even before all services are activated. Committing the template early reduces naming drift across phases.
@@ -79,6 +88,7 @@ Alternative considered: Add only the Firebase keys for Phase 1.
 Rejected because the project planning explicitly wants the cross-phase env template established in the foundation work.
 
 ### Keep Firebase native config files as a later human checkpoint
+
 The Expo config will reference `google-services.json` and `GoogleService-Info.plist`, but this bootstrap change does not assume those files already exist in the repository. Supplying them remains a blocking human checkpoint in the next foundation plan.
 
 Rationale: The files come from Firebase Console project setup and cannot be generated safely inside this change. Keeping that boundary explicit avoids pretending the repository is already ready for RNFB runtime verification.
