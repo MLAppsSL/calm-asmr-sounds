@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "prepare": "husky",
+    "test": "node --test",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix"
   },
