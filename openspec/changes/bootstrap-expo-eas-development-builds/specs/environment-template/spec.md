@@ -12,4 +12,4 @@ The project SHALL keep `.env` gitignored while preserving `.env.example` as a co
 
 #### Scenario: Local secret values are excluded from version control
 - **WHEN** a developer inspects `.gitignore`
-- **THEN** `.env` is ignored and `.env.example` remains available as the committed reference template
+- **THEN** `.env`, `*.local`, `.expo/`, `node_modules/`, and `dist/` are ignored, `.env.example` remains available as the committed reference template, and `google-services.json` and `GoogleService-Info.plist` are not ignored
