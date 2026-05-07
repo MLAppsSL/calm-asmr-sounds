@@ -21,25 +21,36 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node.js
-        if: ${{ hashFiles('package.json') != '' }}
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Node.js without cache
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') == '' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      - name: Install dependencies from lockfile
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') != '' }}
+        run: npm ci
+
       - name: Install dependencies
-        if: ${{ hashFiles('package.json') != '' }}
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') == '' }}
         run: npm install
 
       - name: TypeScript check
-        if: ${{ hashFiles('package.json') != '' && hashFiles('tsconfig.json') != '' }}
+        if: ${{ hashFiles('package.json') != '' }}
         run: npx tsc --noEmit
 
       - name: ESLint check
-        if: ${{ hashFiles('package.json') != '' && hashFiles('eslint.config.js') != '' }}
+        if: ${{ hashFiles('package.json') != '' }}
         run: npx eslint .
 
       - name: Prettier check
-        if: ${{ hashFiles('package.json') != '' && hashFiles('.prettierrc') != '' && hashFiles('src/**') != '' }}
+        if: ${{ hashFiles('package.json') != '' && hashFiles('src/**') != '' }}
         run: npx prettier src --check
 
       - name: lint-staged check
