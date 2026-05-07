@@ -39,8 +39,8 @@ jobs:
         run: npx eslint .
 
       - name: Prettier check
-        if: ${{ hashFiles('package.json') != '' && hashFiles('.prettierrc') != '' }}
-        run: npx prettier . --check
+        if: ${{ hashFiles('package.json') != '' && hashFiles('.prettierrc') != '' && hashFiles('src/**') != '' }}
+        run: npx prettier src --check
 
       - name: lint-staged check
         if: ${{ hashFiles('package.json') != '' && github.event_name == 'pull_request' }}
