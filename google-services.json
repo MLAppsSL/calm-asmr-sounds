@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "108798798487",
+    "project_id": "calm-asmr-sounds",
+    "storage_bucket": "calm-asmr-sounds.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108798798487:android:3846cde4f8f0d9fb1b97d2",
+        "android_client_info": {
+          "package_name": "com.calmsounds.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDggIhv4MU0yprc8mB2tu8GrYUr4R9VfGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
