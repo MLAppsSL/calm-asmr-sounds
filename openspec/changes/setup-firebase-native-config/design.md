@@ -27,12 +27,30 @@ There is also a small contradiction in the source plan: the frontmatter lists on
 
 ### Use a hard human gate before any repo-side implementation
 
-The change will require the human to create the Firebase project, enable the required products, place `google-services.json` and `GoogleService-Info.plist` at the project root, and populate local `.env` values before implementation proceeds.
+The change will require the human to create the Firebase project, enable the required products, place `google-services.json` and `GoogleService-Info.plist` at the project root, commit those real native config files to the repository, and populate local `.env` values before implementation proceeds.
 
 Rationale: RNFB reads the native files at build time and those files originate from Firebase Console. Continuing without them would produce an apply flow that cannot be verified and would encourage fake placeholders.
 
 Alternative considered: Let implementation create `src/lib/firebase.ts` first and defer the rest.
 Rejected because the source plan explicitly defines a blocking human checkpoint and says apply must resume only after the native files and `.env` are ready.
+
+### Commit the native Firebase config files to the repository
+
+The real `google-services.json` and `GoogleService-Info.plist` files will be committed once downloaded and placed at the project root; they are not treated as local-only secrets and must remain available in the worktree for reproducible RNFB builds.
+
+Rationale: These files contain client app configuration that is bundled into the mobile app anyway, while keeping them committed removes onboarding ambiguity and ensures every developer and CI environment builds against the same Firebase project configuration.
+
+Alternative considered: Keep the native config files uncommitted or add them to `.gitignore`.
+Rejected because that would make a required build input invisible to version control and would contradict the repository's choice to leave these file names unignored.
+
+### Require real, complete native Firebase config values
+
+The human checkpoint will treat the native files as valid only when `google-services.json` contains a non-empty `project_info.project_id`, `GoogleService-Info.plist` contains a non-empty `PROJECT_ID`, and any other Firebase-required values in those files are present with the real values downloaded from Firebase Console for this app.
+
+Rationale: File presence alone is not enough for RNFB to work. A partially copied, blank, or hand-edited config file would satisfy a weak existence check while still failing native Firebase initialization at build or runtime.
+
+Alternative considered: Validate only that the files exist.
+Rejected because the change is meant to block on a real Firebase-ready checkpoint, not on placeholder files with missing required fields.
 
 ### Keep `src/lib/firebase.ts` as a minimal RNFB re-export module
 
@@ -64,20 +82,20 @@ Rejected because the plan marks the work as non-autonomous and blocking.
 ## Risks / Trade-offs
 
 - [Human setup is error-prone] -> Mitigation: keep the guide short, include exact bundle/package identifiers, and require local verification commands before resuming apply.
-- [The native files contain sensitive project-specific configuration] -> Mitigation: require real downloaded files from Firebase Console and avoid generating or fabricating placeholders in the repository.
+- [The native files contain project-specific client configuration] -> Mitigation: commit only the real downloaded files intended for the app, require non-empty project identifiers and other Firebase-required values, and keep actual secrets limited to local `.env`, service accounts, and backend credentials.
 - [The `.env` requirement is easy to overlook because it is gitignored] -> Mitigation: call out the contradiction from the source plan and make `.env` checks part of the blocking gate.
 - [Future contributors may reintroduce JS SDK initialization] -> Mitigation: document the RNFB auto-initialization rule and the `initializeApp()` prohibition in both design and tasks.
 
 ## Migration Plan
 
 1. Complete the Firebase Console setup manually.
-2. Place `google-services.json` and `GoogleService-Info.plist` at the project root.
+2. Place `google-services.json` and `GoogleService-Info.plist` at the project root and commit them.
 3. Copy the seven Firebase web config values into local `.env` from `.env.example`.
 4. Resume implementation only after the checkpoint is verified.
 5. Create `src/lib/firebase.ts` as the RNFB re-export module.
 6. Run `npx tsc --noEmit` and the file presence checks from the plan.
 
-Rollback strategy: remove `src/lib/firebase.ts` and revert the native config files from the worktree if the Firebase setup needs to be redone, while keeping `.env` local and uncommitted.
+Rollback strategy: remove `src/lib/firebase.ts` and revert the committed native config files from the worktree if the Firebase setup needs to be redone, while keeping `.env` local and uncommitted.
 
 ## Open Questions
 

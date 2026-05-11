@@ -4,7 +4,7 @@ The Phase 1 foundation already references Firebase native configuration in `app.
 
 ## What Changes
 
-- Add a blocking human checkpoint for Firebase Console setup, native config file placement at the project root, and local `.env` population from `.env.example`.
+- Add a blocking human checkpoint for Firebase Console setup, committed native config file placement at the project root, and local `.env` population from `.env.example`.
 - Add a Firebase service module at `src/lib/firebase.ts` that re-exports RNFB `auth`, `firestore`, `storage`, and `analytics` without calling `initializeApp()`.
 - Convert the Phase 1 Firebase-native-file follow-up from a planned note into an explicit requirement that must be satisfied before implementation can continue.
 - Document the contradiction in the source plan that `.env` must be populated locally even though it is not listed in `files_modified`, and treat that as human-only setup rather than a committed repository change.
@@ -22,6 +22,6 @@ The Phase 1 foundation already references Firebase native configuration in `app.
 
 ## Impact
 
-- Affected files: `src/lib/firebase.ts`, `google-services.json`, `GoogleService-Info.plist`, local `.env`, and new OpenSpec change artifacts under `openspec/changes/setup-firebase-native-config/`
+- Affected files: committed `src/lib/firebase.ts`, `google-services.json`, `GoogleService-Info.plist`, local `.env`, and new OpenSpec change artifacts under `openspec/changes/setup-firebase-native-config/`
 - Affected systems: Firebase Console project setup, RNFB native initialization, TypeScript import surface for app code, and the human checkpoint workflow before implementation
 - Dependencies and constraints: existing `@react-native-firebase/*` packages from `01-01`, native file references already declared in `app.json`, and the requirement to avoid `initializeApp()` because of the RNFB dual-package hazard
