@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.calmsounds.app</string>
+	<string>com.mlapps.calmsounds</string>
 	<key>PROJECT_ID</key>
 	<string>calm-asmr-sounds</string>
 	<key>STORAGE_BUCKET</key>
@@ -17,7 +17,7 @@
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_APPINVITE_ENABLED</key>
 	<true></true>
 	<key>IS_GCM_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:108798798487:ios:a6087e825ec7775d1b97d2</string>
+	<string>1:108798798487:ios:a374a30328cdf5cc1b97d2</string>
 </dict>
 </plist>

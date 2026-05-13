@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:108798798487:android:3846cde4f8f0d9fb1b97d2",
+        "mobilesdk_app_id": "1:108798798487:android:c6246b9ac4db65431b97d2",
         "android_client_info": {
-          "package_name": "com.calmsounds.app"
+          "package_name": "com.mlapps.calmsounds"
         }
       },
       "oauth_client": [],

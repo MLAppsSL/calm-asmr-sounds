@@ -22,6 +22,6 @@ The Phase 1 foundation already references Firebase native configuration in `app.
 
 ## Impact
 
-- Affected files: committed `src/lib/firebase.ts`, `google-services.json`, `GoogleService-Info.plist`, local `.env`, and new OpenSpec change artifacts under `openspec/changes/setup-firebase-native-config/`
+- Affected files: committed `src/lib/firebase.ts`, `google-services.json`, `GoogleService-Info.plist`, local `.env`, and archived OpenSpec change artifacts under `openspec/changes/archive/2026-05-11-setup-firebase-native-config/`
 - Affected systems: Firebase Console project setup, RNFB native initialization, TypeScript import surface for app code, and the human checkpoint workflow before implementation
 - Dependencies and constraints: existing `@react-native-firebase/*` packages from `01-01`, native file references already declared in `app.json`, and the requirement to avoid `initializeApp()` because of the RNFB dual-package hazard
