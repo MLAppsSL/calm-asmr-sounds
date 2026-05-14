@@ -55,20 +55,20 @@ Alternatives considered:
 
 - Adding future-phase logic now, such as persistence or Firebase coupling. Rejected because that would cross phase boundaries and introduce unverified behavior before dependent features are ready.
 
-### Shared types live in `src/types/index.ts`
+### Shared types live in `src/shared/domain/types/index.ts`
 
 Common types such as `Sound`, `SoundCategory`, `TimerDuration`, and `User` will be defined centrally so the initial route shell and stores share the same domain vocabulary from the start.
 
 The initial type and store contract is intentionally exact, not illustrative, because later phases extend these files in place. This change locks the Phase 1 baseline to the plan:
 
-- `src/types/index.ts` exports `SoundCategory` as `'rain' | 'fire' | 'forest' | 'ocean' | 'wind' | 'white-noise'`
-- `src/types/index.ts` exports `TimerDuration` as `60 | 120 | 180`
-- `src/types/index.ts` exports `Sound` with `id`, `title`, `category`, `durationSeconds`, `isPremium`, `storageUrl`, and `thumbnailUrl`
-- `src/types/index.ts` exports `User` with `uid`, `email`, and `isAnonymous`
-- `src/stores/audioStore.ts` exports `useAudioStore` with `currentSoundId`, `isPlaying`, `isLooping`, `timerSeconds`, `volume`, setter actions, and `reset`
-- `src/stores/authStore.ts` exports `useAuthStore` with `user`, `isLoading`, and setter actions
-- `src/stores/favoritesStore.ts` exports `useFavoritesStore` with `favoriteIds`, `addFavorite`, `removeFavorite`, `isFavorite`, and `setFavorites`
-- `src/stores/uiStore.ts` exports `useUIStore` with `isDarkMode`, `hasSeenOnboarding`, `isImmersiveMode`, `isPlayerVisible`, and setter actions
+- `src/shared/domain/types/index.ts` exports `SoundCategory` as `'rain' | 'fire' | 'forest' | 'ocean' | 'wind' | 'white-noise'`
+- `src/shared/domain/types/index.ts` exports `TimerDuration` as `60 | 120 | 180`
+- `src/shared/domain/types/index.ts` exports `Sound` with `id`, `title`, `category`, `durationSeconds`, `isPremium`, `storageUrl`, and `thumbnailUrl`
+- `src/shared/domain/types/index.ts` exports `User` with `uid`, `email`, and `isAnonymous`
+- `src/shared/domain/stores/audioStore.ts` exports `useAudioStore` with `currentSoundId`, `isPlaying`, `isLooping`, `timerSeconds`, `volume`, setter actions, and `reset`
+- `src/shared/domain/stores/authStore.ts` exports `useAuthStore` with `user`, `isLoading`, and setter actions
+- `src/shared/domain/stores/favoritesStore.ts` exports `useFavoritesStore` with `favoriteIds`, `addFavorite`, `removeFavorite`, `isFavorite`, and `setFavorites`
+- `src/shared/domain/stores/uiStore.ts` exports `useUIStore` with `isDarkMode`, `hasSeenOnboarding`, `isImmersiveMode`, `isPlayerVisible`, and setter actions
 
 Alternatives considered:
 

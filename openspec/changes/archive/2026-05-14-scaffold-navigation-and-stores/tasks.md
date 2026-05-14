@@ -12,11 +12,11 @@
 
 ## 3. Shared Types And Stores
 
-- [x] 3.1 Add `src/types/index.ts` exporting `SoundCategory` as `'rain' | 'fire' | 'forest' | 'ocean' | 'wind' | 'white-noise'`, `TimerDuration` as `60 | 120 | 180`, `Sound` with `id`, `title`, `category`, `durationSeconds`, `isPremium`, `storageUrl`, and `thumbnailUrl`, and `User` with `uid`, `email`, and `isAnonymous`.
-- [x] 3.2 Implement `src/stores/audioStore.ts` exporting `useAudioStore` with `currentSoundId`, `isPlaying`, `isLooping`, `timerSeconds`, `volume`, `setCurrentSound`, `setIsPlaying`, `setIsLooping`, `setTimer`, `setVolume`, and `reset`.
-- [x] 3.3 Implement `src/stores/authStore.ts` exporting `useAuthStore` with `user: User | null`, `isLoading`, `setUser`, and `setLoading`, with startup defaults suitable for pre-auth app launch.
-- [x] 3.4 Implement `src/stores/favoritesStore.ts` exporting `useFavoritesStore` with `favoriteIds`, `addFavorite`, `removeFavorite`, `isFavorite`, and `setFavorites`, with no persistence or remote sync behavior yet.
-- [x] 3.5 Implement `src/stores/uiStore.ts` exporting `useUIStore` with `isDarkMode`, `hasSeenOnboarding`, `isImmersiveMode`, `isPlayerVisible`, `setDarkMode`, `setHasSeenOnboarding`, `setImmersiveMode`, and `setPlayerVisible`, with dark mode enabled by default.
+- [x] 3.1 Add `src/shared/domain/types/index.ts` exporting `SoundCategory` as `'rain' | 'fire' | 'forest' | 'ocean' | 'wind' | 'white-noise'`, `TimerDuration` as `60 | 120 | 180`, `Sound` with `id`, `title`, `category`, `durationSeconds`, `isPremium`, `storageUrl`, and `thumbnailUrl`, and `User` with `uid`, `email`, and `isAnonymous`.
+- [x] 3.2 Implement `src/shared/domain/stores/audioStore.ts` exporting `useAudioStore` with `currentSoundId`, `isPlaying`, `isLooping`, `timerSeconds`, `volume`, `setCurrentSound`, `setIsPlaying`, `setIsLooping`, `setTimer`, `setVolume`, and `reset`.
+- [x] 3.3 Implement `src/shared/domain/stores/authStore.ts` exporting `useAuthStore` with `user: User | null`, `isLoading`, `setUser`, and `setLoading`, with startup defaults suitable for pre-auth app launch.
+- [x] 3.4 Implement `src/shared/domain/stores/favoritesStore.ts` exporting `useFavoritesStore` with `favoriteIds`, `addFavorite`, `removeFavorite`, `isFavorite`, and `setFavorites`, with no persistence or remote sync behavior yet.
+- [x] 3.5 Implement `src/shared/domain/stores/uiStore.ts` exporting `useUIStore` with `isDarkMode`, `hasSeenOnboarding`, `isImmersiveMode`, `isPlayerVisible`, `setDarkMode`, `setHasSeenOnboarding`, `setImmersiveMode`, and `setPlayerVisible`, with dark mode enabled by default.
 - [x] 3.6 Document `useShallow` guidance in each scaffold store for future components that select multiple store values.
 
 ## 4. Verification

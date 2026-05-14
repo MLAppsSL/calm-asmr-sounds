@@ -22,7 +22,7 @@ None.
 
 ## Impact
 
-- Affected code: `app/_layout.tsx`, `app/player.tsx`, `app/(tabs)/*`, `app/(onboarding)/*`, `app/(auth)/*`, `src/stores/*`, and `src/types/index.ts`
+- Affected code: `app/_layout.tsx`, `app/player.tsx`, `app/(tabs)/*`, `app/(onboarding)/*`, `app/(auth)/*`, `src/shared/domain/stores/*`, and `src/shared/domain/types/index.ts`
 - Affected systems: Expo Router route resolution, placeholder app navigation, and shared client-side state shape
 - Dependencies already in scope: `expo-router` and `zustand`
 - No external API or backend contract changes
