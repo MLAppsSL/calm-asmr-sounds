@@ -1,10 +1,11 @@
 ## 1. Human Checkpoint
 
-- [x] 1.1 Create or open the Firebase project in Firebase Console, enable Google Analytics, and register the iOS app with bundle ID `com.calmsounds.app` and the Android app with package `com.calmsounds.app`
-- [x] 1.2 Download `GoogleService-Info.plist` and `google-services.json`, place both files at the project root beside `app.json`, and keep them as committed repository files
+- [x] 1.1 Create or open the Firebase project in Firebase Console, enable Google Analytics, register the iOS app with bundle ID `com.mlapps.calmsounds` and the Android app with package `com.mlapps.calmsounds`, and keep the committed native config files aligned with the intended Firebase app identities
+- [x] 1.2 Download `GoogleService-Info.plist` and `google-services.json` from Firebase Console, place both files at the project root beside `app.json`, and keep them as committed repository files without hand-editing generated Firebase values
 - [x] 1.3 Enable Firebase Authentication providers `Email/Password` and `Anonymous`, then create Firestore and Storage in test mode using the same region
 - [x] 1.4 Copy the seven `EXPO_PUBLIC_FIREBASE_*` values from Firebase Console into local `.env` using `.env.example` as the template
 - [x] 1.5 Verify the checkpoint locally with the plan commands, confirm the native files are intended to stay tracked in git, and if either native file is missing, malformed, missing a non-empty project ID (`project_info.project_id` in `google-services.json`, `PROJECT_ID` in `GoogleService-Info.plist`), missing any other Firebase-required value, or if `.env` lacks the seven Firebase values, STOP and notify the user instead of continuing apply
+- [ ] 1.6 Restrict the committed Firebase API keys in Google Cloud before treating these tracked native files as public-safe: apply an iOS bundle ID restriction for the plist `API_KEY`, and an Android app restriction with package name plus SHA-1/SHA-256 signing certificate fingerprints for `google-services.json` `api_key[0].current_key`, both for `com.mlapps.calmsounds`
 
 ## 2. Repository Implementation
 

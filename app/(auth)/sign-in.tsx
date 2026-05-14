@@ -1,5 +1,5 @@
-import { SignInPlaceholderScreen } from '@/app-shell/ui/views/SignInPlaceholderScreen';
+import { FirebaseAuthTestScreen } from '@/app-shell/ui/views/FirebaseAuthTestScreen';
 
 export default function SignInRoute() {
-  return <SignInPlaceholderScreen />;
+  return <FirebaseAuthTestScreen />;
 }
