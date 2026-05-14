@@ -9,7 +9,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.calmsounds.app",
+      "bundleIdentifier": "com.mlapps.calmsounds",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "UIBackgroundModes": ["audio"]
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.calmsounds.app",
+      "package": "com.mlapps.calmsounds",
       "googleServicesFile": "./google-services.json"
     },
     "plugins": [
@@ -39,6 +39,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b4619c36-c87c-49a0-8063-bbb1bdf9159b"
+      }
     }
   }
 }

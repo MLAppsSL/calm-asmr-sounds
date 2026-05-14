@@ -1,13 +1,4 @@
-## ADDED Requirements
-
-### Requirement: The repository documents all planned public environment keys
-
-The project SHALL commit a `.env.example` file that lists all 13 known `EXPO_PUBLIC_` keys required across Firebase, RevenueCat, and Unity Ads with empty values.
-
-#### Scenario: The committed env template covers every planned key
-
-- **WHEN** a developer inspects `.env.example`
-- **THEN** the file contains the seven Firebase keys, two RevenueCat keys, and four Unity Ads keys with blank assignments
+## MODIFIED Requirements
 
 ### Requirement: Real local environment values remain uncommitted
 
