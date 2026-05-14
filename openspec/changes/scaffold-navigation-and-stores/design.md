@@ -57,7 +57,18 @@ Alternatives considered:
 
 ### Shared types live in `src/types/index.ts`
 
-Common types such as `Sound`, `SoundCategory`, and `TimerDuration` will be defined centrally so the initial route shell and stores share the same domain vocabulary from the start.
+Common types such as `Sound`, `SoundCategory`, `TimerDuration`, and `User` will be defined centrally so the initial route shell and stores share the same domain vocabulary from the start.
+
+The initial type and store contract is intentionally exact, not illustrative, because later phases extend these files in place. This change locks the Phase 1 baseline to the plan:
+
+- `src/types/index.ts` exports `SoundCategory` as `'rain' | 'fire' | 'forest' | 'ocean' | 'wind' | 'white-noise'`
+- `src/types/index.ts` exports `TimerDuration` as `60 | 120 | 180`
+- `src/types/index.ts` exports `Sound` with `id`, `title`, `category`, `durationSeconds`, `isPremium`, `storageUrl`, and `thumbnailUrl`
+- `src/types/index.ts` exports `User` with `uid`, `email`, and `isAnonymous`
+- `src/stores/audioStore.ts` exports `useAudioStore` with `currentSoundId`, `isPlaying`, `isLooping`, `timerSeconds`, `volume`, setter actions, and `reset`
+- `src/stores/authStore.ts` exports `useAuthStore` with `user`, `isLoading`, and setter actions
+- `src/stores/favoritesStore.ts` exports `useFavoritesStore` with `favoriteIds`, `addFavorite`, `removeFavorite`, `isFavorite`, and `setFavorites`
+- `src/stores/uiStore.ts` exports `useUIStore` with `isDarkMode`, `hasSeenOnboarding`, `isImmersiveMode`, `isPlayerVisible`, and setter actions
 
 Alternatives considered:
 
@@ -67,5 +78,7 @@ Alternatives considered:
 
 - [Risk] Placeholder screens in `src/` add more files than the original file list implied. -> Mitigation: keep them minimal, colocate them under a single app-shell feature area, and treat them as implementation support for the already-decided route-only architecture.
 - [Risk] Early store field names may constrain later phases. -> Mitigation: restrict this change to broadly stable contract fields only and avoid speculative feature-specific detail.
+- [Risk] A spec that names only broad store categories can drift from the locked Phase 1 plan. -> Mitigation: encode the exact field and export contract for the initial types and stores in the OpenSpec requirements and tasks.
 - [Risk] Expo Router can fail at runtime if any route file lacks a default export or navigator names drift from file paths. -> Mitigation: require explicit route-file existence, default exports, and exact tab/modal structure in the specs and tasks.
 - [Risk] The scaffold may accidentally grow into real feature work. -> Mitigation: explicitly exclude side effects, persistence, auth flows, and playback logic from this change.
+- [Risk] Verification instructions can become misleading if they assume Expo Go or generic ESLint commands. -> Mitigation: verify with `npx tsc --noEmit`, `npm run lint`, and `npm run start`, and treat route-resolution checks as development-build or Metro validation rather than Expo Go validation.

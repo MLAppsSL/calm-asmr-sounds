@@ -7,7 +7,8 @@ The project SHALL define a complete Phase 1 Expo Router route graph with `app/_l
 #### Scenario: Route files exist for the initial app shell
 
 - **WHEN** a developer inspects the `app/` directory after applying this change
-- **THEN** the project contains exactly the root layout, three tab routes, two onboarding routes, three auth routes, and the player route required for the Phase 1 scaffold
+- **THEN** the project contains the root layout, three tab routes, two onboarding routes, three auth routes, and the player route required for the Phase 1 scaffold
+- **AND** later phases may add additional routes without violating this scaffold requirement as long as these required Phase 1 routes remain present
 
 ### Requirement: Root navigation preserves the agreed navigator boundaries
 
@@ -52,5 +53,6 @@ The placeholder screens rendered from `src/` SHALL provide valid default-rendere
 
 #### Scenario: All scaffolded routes resolve to placeholder screens
 
-- **WHEN** the app launches after this change and Expo Router resolves the declared routes
+- **WHEN** the developer starts the project with `npm run start` and opens the scaffold in the project's supported development runtime
+- **AND** the developer does not rely on Expo Go because this project uses native Firebase modules and `expo-dev-client`
 - **THEN** every scaffolded route renders a valid placeholder screen instead of failing because a screen implementation is missing
