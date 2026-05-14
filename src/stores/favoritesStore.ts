@@ -21,5 +21,5 @@ export const useFavoritesStore = create<FavoritesState>()((set, get) => ({
       favoriteIds: state.favoriteIds.filter((favoriteId) => favoriteId !== id),
     })),
   isFavorite: (id) => get().favoriteIds.includes(id),
-  setFavorites: (ids) => set({ favoriteIds: ids }),
+  setFavorites: (ids) => set({ favoriteIds: Array.from(new Set(ids)) }),
 }));
