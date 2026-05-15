@@ -14,13 +14,16 @@ import {
 
 import { getApps } from '@react-native-firebase/app';
 
-import { auth } from '@/lib/firebase';
+import { auth, firestore, storage } from '@/lib/firebase';
 
 export function FirebaseAuthTestScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isBusy, setIsBusy] = useState(false);
+  const [nativeAppStatus, setNativeAppStatus] = useState('Checking native Firebase app...');
   const [currentUserText, setCurrentUserText] = useState('No authenticated user');
+  const [firestoreStatus, setFirestoreStatus] = useState('Not run yet');
+  const [storageStatus, setStorageStatus] = useState('Not run yet');
   const [configError, setConfigError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,12 +34,18 @@ export function FirebaseAuthTestScreen() {
           : 'No default native Firebase app is available in this build. Rebuild and reinstall the development client after changing app identifiers or Firebase config files.';
 
       setConfigError(baseMessage);
+      setNativeAppStatus('No default native Firebase app');
       setCurrentUserText('Firebase native app not initialized');
 
       return;
     }
 
     try {
+      setNativeAppStatus(
+        `Native Firebase app ready (${getApps().length} app${getApps().length === 1 ? '' : 's'})`,
+      );
+
+      void auth().currentUser;
       const unsubscribe = auth().onAuthStateChanged((user) => {
         if (!user) {
           setCurrentUserText('No authenticated user');
@@ -48,12 +57,15 @@ export function FirebaseAuthTestScreen() {
       });
 
       setConfigError(null);
+      setFirestoreStatus('Ready to test');
+      setStorageStatus('Ready to test');
 
       return unsubscribe;
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Unknown Firebase initialization error';
       setConfigError(message);
+      setNativeAppStatus('Firebase initialization failed');
       setCurrentUserText('Firebase native app not initialized');
       return;
     }
@@ -85,18 +97,84 @@ export function FirebaseAuthTestScreen() {
     return false;
   }
 
+  async function runSmokeCheck(
+    label: 'Firestore' | 'Storage',
+    setStatus: (value: string) => void,
+    action: () => void,
+  ) {
+    if (configError) {
+      Alert.alert('Firebase config issue', configError);
+      return;
+    }
+
+    try {
+      setIsBusy(true);
+      setStatus(`${label} check running...`);
+      action();
+      setStatus(`${label} reachable`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : `Unknown ${label} error`;
+      setStatus(`${label} failed: ${message}`);
+      Alert.alert(`${label} Check Failed`, message);
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>Firebase Auth Test</Text>
+        <Text style={styles.title}>Firebase Device Check</Text>
         <Text style={styles.subtitle}>
-          Use this screen to verify the native Firebase config can create and authenticate users.
+          Use this screen to verify the native Firebase app, Auth, Firestore, and Storage from a
+          real iOS or Android development client.
         </Text>
+
+        <View style={styles.statusCard}>
+          <Text style={styles.statusLabel}>Native app status</Text>
+          <Text style={styles.statusValue}>{nativeAppStatus}</Text>
+        </View>
 
         <View style={styles.statusCard}>
           <Text style={styles.statusLabel}>Current session</Text>
           <Text style={styles.statusValue}>{currentUserText}</Text>
         </View>
+
+        <View style={styles.statusCard}>
+          <Text style={styles.statusLabel}>Firestore check</Text>
+          <Text style={styles.statusValue}>{firestoreStatus}</Text>
+        </View>
+
+        <Pressable
+          disabled={isBusy}
+          onPress={() => {
+            void runSmokeCheck('Firestore', setFirestoreStatus, () => {
+              const ref = firestore().collection('test');
+              void ref;
+            });
+          }}
+          style={[styles.button, styles.secondaryButton, isBusy && styles.buttonDisabled]}
+        >
+          <Text style={styles.secondaryButtonText}>Run Firestore check</Text>
+        </Pressable>
+
+        <View style={styles.statusCard}>
+          <Text style={styles.statusLabel}>Storage check</Text>
+          <Text style={styles.statusValue}>{storageStatus}</Text>
+        </View>
+
+        <Pressable
+          disabled={isBusy}
+          onPress={() => {
+            void runSmokeCheck('Storage', setStorageStatus, () => {
+              const ref = storage().ref('test');
+              void ref;
+            });
+          }}
+          style={[styles.button, styles.secondaryButton, isBusy && styles.buttonDisabled]}
+        >
+          <Text style={styles.secondaryButtonText}>Run Storage check</Text>
+        </Pressable>
 
         {configError ? (
           <View style={styles.errorCard}>
