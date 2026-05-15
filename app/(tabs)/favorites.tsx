@@ -1,4 +1,4 @@
-import { FavoritesPlaceholderScreen } from '@/app-shell/ui/views/FavoritesPlaceholderScreen';
+import { FavoritesPlaceholderScreen } from '../../src/app-shell/ui/views/FavoritesPlaceholderScreen';
 
 export default function FavoritesRoute() {
   return <FavoritesPlaceholderScreen />;
