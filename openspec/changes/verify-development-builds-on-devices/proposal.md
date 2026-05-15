@@ -5,14 +5,15 @@ The foundation work already configures Expo, EAS, and React Native Firebase for 
 ## What Changes
 
 - Add a real-device verification capability that requires successful EAS `development` builds for both iOS and Android before the foundation phase is considered complete.
-- Require a documented smoke-test flow that verifies app launch, Firebase native initialization, and Firestore and Storage reachability from an installed development build.
+- Require a documented smoke-test flow that verifies app launch, Firebase native initialization, explicit Firestore and Storage checks, and iOS background-audio registration from an installed development build.
+- Require `README.md` to be updated as part of implementation so the repository's verification instructions match the Phase 1 device-build contract.
 - Extend the temporary Firebase verification surface and review documentation so the repository can prove more than Auth alone during device testing.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `device-build-verification`: Defines the required EAS build outputs, real-device install checks, and runtime smoke-test expectations for Phase 1 development builds.
+- `device-build-verification`: Defines the required EAS build outputs, real-device install checks, runtime smoke-test expectations, and iOS background-audio verification for Phase 1 development builds.
 
 ### Modified Capabilities
 
@@ -22,5 +23,5 @@ The foundation work already configures Expo, EAS, and React Native Firebase for 
 ## Impact
 
 - Affected files: `README.md`, Firebase verification UI/routes, possible shared Firebase helpers, and new OpenSpec specs under `openspec/changes/verify-development-builds-on-devices/specs/`
-- Affected systems: EAS Build workflow, internal device installation flow, real-device QA checklist, and RNFB runtime verification for Auth, Firestore, and Storage
+- Affected systems: EAS Build workflow, Metro-backed Expo development client installation flow, real-device QA checklist, RNFB runtime verification for Auth, Firestore, and Storage, and iOS background-audio verification
 - Dependencies: existing EAS `development` profile, committed Firebase native config files, and physical iOS and Android devices for the blocking verification step

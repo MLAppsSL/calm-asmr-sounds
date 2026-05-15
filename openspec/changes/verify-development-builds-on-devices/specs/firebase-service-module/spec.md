@@ -12,4 +12,4 @@ The project SHALL provide `src/lib/firebase.ts` as the shared RNFB import surfac
 #### Scenario: Verification flow uses the shared Firebase module
 
 - **WHEN** a temporary device-verification screen or helper performs Firebase smoke checks
-- **THEN** it imports the RNFB services from `src/lib/firebase.ts` rather than creating a parallel Firebase access path
+- **THEN** it imports the RNFB services from `src/lib/firebase.ts` rather than creating a parallel Firebase access path, including explicit Firestore and Storage actions triggered from that verification surface
