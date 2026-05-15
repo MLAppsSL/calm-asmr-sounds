@@ -13,9 +13,10 @@ import {
 } from 'react-native';
 
 import { getApps } from '@react-native-firebase/app';
+
 import { auth } from '@/lib/firebase';
 
-export default function HomeScreen() {
+export function FirebaseAuthTestScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isBusy, setIsBusy] = useState(false);
