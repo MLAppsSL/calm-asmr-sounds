@@ -2,7 +2,7 @@
 
 ## Firebase Config Review Guide
 
-This repo includes a temporary auth test screen at `app/index.tsx` so reviewers can verify that the native Firebase configuration is working on a real Android or iOS development build.
+This repo includes a temporary auth test screen at `app/(auth)/sign-in.tsx` so reviewers can verify that the native Firebase configuration is working on a real Android or iOS development build.
 
 ### What this test proves
 
@@ -44,11 +44,23 @@ npx expo start --tunnel
 ### Run the Firebase check
 
 1. Open the installed development build on the mobile device.
-2. Open the root screen, which is the temporary Firebase auth test surface.
-3. Enter an email and password.
-4. Tap `Create account` or `Sign in`.
-5. Optionally tap `Sign in anonymously` to verify anonymous auth as well.
-6. Confirm the on-screen session state updates with the authenticated user information.
+2. Deep link to the auth test screen from the project root:
+
+```bash
+npx uri-scheme open "calm-sounds://sign-in" --android
+```
+
+For iOS, use:
+
+```bash
+npx uri-scheme open "calm-sounds://sign-in" --ios
+```
+
+3. Confirm the app opens `app/(auth)/sign-in.tsx`, which is the temporary Firebase auth test surface.
+4. Enter an email and password.
+5. Tap `Create account` or `Sign in`.
+6. Optionally tap `Sign in anonymously` to verify anonymous auth as well.
+7. Confirm the on-screen session state updates with the authenticated user information.
 
 ### Verify in Firebase Console
 
