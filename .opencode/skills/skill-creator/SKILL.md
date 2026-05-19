@@ -5,7 +5,7 @@ license: MIT
 compatibility: No external CLI required.
 metadata:
   author: local
-  version: "1.0"
+  version: '1.0'
 ---
 
 Create a new OpenCode skill from a short description.
@@ -33,7 +33,6 @@ When a paired command exists or is created for this workflow, that command shoul
    Match the repository's tone and file structure instead of inventing a new format.
 
 3. **Determine the skill name and location**
-
    - Use the provided skill name when available.
    - Otherwise derive a concise kebab-case name from the description.
    - Create the skill at `.opencode/skills/<skill-name>/SKILL.md`.
@@ -73,11 +72,13 @@ When a paired command exists or is created for this workflow, that command shoul
 **Output**
 
 After creation, summarize:
+
 - Skill name and path
 - What the skill is for in one sentence
 - Any paired command path, if created
 
 **Guardrails**
+
 - Reuse the existing `.opencode` file style
 - Keep instructions concrete and executable
 - Do not create extra files beyond the requested skill and optional command

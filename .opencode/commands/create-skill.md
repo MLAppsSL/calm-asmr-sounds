@@ -31,7 +31,6 @@ This command should delegate to the `skill-creator` skill and use that skill as 
    Match the repository's established format and tone.
 
 4. **Choose the skill name**
-
    - Use the provided name when explicit.
    - Otherwise derive a concise kebab-case name from the description.
 
@@ -57,6 +56,7 @@ This command should delegate to the `skill-creator` skill and use that skill as 
    - what the new skill does
 
 **Guardrails**
+
 - Delegate to `skill-creator` instead of inventing a separate workflow here
 - Reuse the existing `.opencode` conventions in this repository
 - Keep the generated skill narrowly scoped and practical
