@@ -36,6 +36,55 @@ Expected artifacts:
 
 Install both builds on real devices. If you need platform-specific commands instead, run `npx eas-cli build --platform ios --profile development` and `npx eas-cli build --platform android --profile development` separately.
 
+### Android build guide
+
+If you only need the Android development build, use this flow:
+
+1. Trigger the Android build:
+
+```bash
+npx eas-cli build --platform android --profile development
+```
+
+2. Wait for the build to finish on EAS, then open the Android build page from the printed URL or from `https://expo.dev`.
+3. Download the generated `.apk` artifact.
+4. Install the APK on the target Android device or emulator.
+
+If you already have `adb` configured, install from the command line with:
+
+```bash
+adb install -r "/path/to/your-build.apk"
+```
+
+If you are installing on a real Android phone without `adb`, transfer the APK to the device, open it from the Files or Downloads app, allow `Install unknown apps` for that app if prompted, and complete the install.
+
+If you are installing on an Android emulator, launch the emulator first and confirm it is visible to `adb`:
+
+```bash
+adb devices
+```
+
+Expected output includes a connected entry such as `emulator-5554 device`.
+
+5. Open the installed `Calm Sounds` app once so the development client is registered on the device.
+6. Start Metro from the project root:
+
+```bash
+npm run start
+```
+
+If LAN networking does not work, use tunnel mode instead:
+
+```bash
+npm run start -- --tunnel
+```
+
+7. Open the installed app again and connect it to the running Metro server.
+
+For some setups the app will connect automatically after launch. If it does not, use the development client home screen to fetch local development servers or open the project URL shown by Metro.
+
+8. After the bundle loads, confirm the app launches without a crash or red screen before running the Firebase verification flow.
+
 ### Start the app bundle server
 
 Run Metro from the project root. This Phase 1 verification does not require a Metro-free standalone launch because the `development` profile is an Expo development client.
