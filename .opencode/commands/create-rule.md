@@ -32,7 +32,6 @@ This command should delegate to the `rule-creator` skill and use that skill as t
    Match the repository's established format and tone.
 
 4. **Choose the rule name**
-
    - Use the provided name when explicit.
    - Otherwise derive a concise kebab-case name from the description.
 
@@ -64,6 +63,7 @@ This command should delegate to the `rule-creator` skill and use that skill as t
    - that `AGENTS.md` was updated with the rule link
 
 **Guardrails**
+
 - Delegate to `rule-creator` instead of inventing a separate workflow here
 - Reuse the existing `.opencode` conventions in this repository
 - Keep the generated rule narrowly scoped and practical
