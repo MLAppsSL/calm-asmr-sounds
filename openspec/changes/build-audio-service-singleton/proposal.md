@@ -21,6 +21,6 @@ None.
 
 ## Impact
 
-- Affected files: `src/services/AudioService.ts`, `app/_layout.tsx`, and new OpenSpec artifacts under `openspec/changes/build-audio-service-singleton/`
+- Affected files: `src/shared/data/services/AudioService.ts`, `app/_layout.tsx`, and new OpenSpec artifacts under `openspec/changes/build-audio-service-singleton/`
 - Affected systems: `expo-av` player lifecycle management, app-wide audio session configuration, background playback behavior, and future timer/player UI integrations that depend on `AudioService`
 - Dependencies: existing Expo development-build foundation, `UIBackgroundModes` already configured in `app.json`, and `expo-av` as the playback library for this phase

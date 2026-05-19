@@ -30,11 +30,11 @@ Rationale: the latest reviewed OpenSpec foundation change selected `expo-av` for
 Alternative considered: switch this slice to `expo-audio` because earlier pre-build planning preferred it.
 Rejected because those earlier plans predate the reviewed OpenSpec foundation decision. Changing libraries now would create a cross-spec conflict and expand this slice from audio-engine implementation into audio-library migration.
 
-### Keep `AudioService` as a module-lifetime singleton class in `src/services/AudioService.ts`
+### Keep `AudioService` as a module-lifetime singleton class in `src/shared/data/services/AudioService.ts`
 
-The change should export one shared `AudioService` instance backed by private mutable player state instead of a React hook or a factory that creates per-screen players.
+The change should export one shared `AudioService` instance from `src/shared/data/services/AudioService.ts`, backed by private mutable player state instead of a React hook or a factory that creates per-screen players.
 
-Rationale: background audio and navigation-stable playback require a lifecycle that is independent from route mounts. A class instance also keeps crossfade timers, active player references, and current sound identity in one place.
+Rationale: background audio and navigation-stable playback require a lifecycle that is independent from route mounts. A class instance also keeps crossfade timers, active player references, and current sound identity in one place. Placing the service under `src/shared/data/services/` also keeps the implementation aligned with the repository's vertical-slice rule for shared application code instead of introducing a new top-level `src/services/` folder.
 
 Alternative considered: build playback directly inside the player screen with route-local `expo-av` sound instances.
 Rejected because that lifecycle is tied to React rendering and would make playback teardown too easy to trigger accidentally during navigation.
@@ -94,7 +94,7 @@ Rejected because the current plan only commits to the playback engine, and store
 ## Migration Plan
 
 1. Confirm the existing `expo-av` dependency and build the playback engine on that baseline without introducing a second audio library.
-2. Create `src/services/AudioService.ts` with singleton lifecycle, one-time initialization, play, `fadeOut(durationMs)`, stop, and crossfade behavior.
+2. Create `src/shared/data/services/AudioService.ts` with singleton lifecycle, one-time initialization, play, `fadeOut(durationMs)`, stop, and crossfade behavior.
 3. Update `app/_layout.tsx` to call `AudioService.initialize()` once at app startup.
 4. Run local lint and targeted verification for the new service module.
 5. Leave timer integration, sound caching, and device verification for the next Phase 2 slices that already own those responsibilities, while preserving the timer-facing `fadeOut(durationMs)` hook in the engine API.
