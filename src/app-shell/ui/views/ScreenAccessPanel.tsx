@@ -12,6 +12,10 @@ const screenLinks = [
 ] as const;
 
 export function ScreenAccessPanel() {
+  if (!__DEV__) {
+    return null;
+  }
+
   return (
     <View style={styles.panel}>
       <Text style={styles.label}>Screen access</Text>

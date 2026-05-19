@@ -7,6 +7,15 @@ module.exports = defineConfig([
   ...expoConfig,
   prettierConfig,
   {
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
+  },
+  {
     plugins: { prettier: prettierPlugin },
     rules: {
       'prettier/prettier': 'error',
