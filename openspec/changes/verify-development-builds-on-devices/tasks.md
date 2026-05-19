@@ -19,8 +19,9 @@
 
 ## 4. EAS And Device Checkpoint
 
-- [ ] 4.1 Trigger EAS `development` builds for iOS and Android and capture whether each build finishes successfully with an installable artifact URL.
-- [ ] 4.2 Install the resulting iOS and Android development builds on real devices, connect Metro as required by the Expo development client, and confirm the app launches without crash or red screen before any deeper smoke test.
-- [ ] 4.3 Run the temporary verification flow on both devices and confirm Auth, Firestore, and Storage are reachable without `app not initialized` errors.
-- [ ] 4.4 Verify on iOS that the installed build registers background audio support from `UIBackgroundModes: ["audio"]` as required by the Phase 1 gate.
-- [ ] 4.5 Record the outcome in `.planning/phases/01-foundation/01-04-SUMMARY.md`, and if either build or device check fails, stop and report the failure instead of marking Phase 1 complete.
+- Note: Android verification succeeded on emulator and real device. iOS verification is currently blocked because no iOS device is available and the iOS build could not be completed in the current environment.
+- [ ] 4.1 Trigger EAS `development` builds for iOS and Android and capture whether each build finishes successfully with an installable artifact URL. (Android done; iOS build not currently testable.)
+- [ ] 4.2 Install the resulting iOS and Android development builds on real devices, connect Metro as required by the Expo development client, and confirm the app launches without crash or red screen before any deeper smoke test. (Android done; iOS device verification blocked.)
+- [ ] 4.3 Run the temporary verification flow on both devices and confirm Auth, Firestore, and Storage are reachable without `app not initialized` errors. (Android Firestore verified; iOS verification blocked.)
+- [ ] 4.4 Verify on iOS that the installed build registers background audio support from `UIBackgroundModes: ["audio"]` as required by the Phase 1 gate. (Blocked pending iOS build and device access.)
+- [x] 4.5 Record the outcome in `.planning/phases/01-foundation/01-04-SUMMARY.md`, and if either build or device check fails, stop and report the failure instead of marking Phase 1 complete.
