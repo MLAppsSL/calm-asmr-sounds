@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { ScreenAccessPanel } from './ScreenAccessPanel';
+
 type ScaffoldPlaceholderScreenProps = {
   title: string;
   subtitle?: string;
@@ -10,6 +12,7 @@ export function ScaffoldPlaceholderScreen({ title, subtitle }: ScaffoldPlacehold
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+      <ScreenAccessPanel />
     </View>
   );
 }

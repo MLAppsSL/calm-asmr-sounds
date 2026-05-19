@@ -16,6 +16,8 @@ import { getApps } from '@react-native-firebase/app';
 
 import { auth, firestore, storage } from '@/lib/firebase';
 
+import { ScreenAccessPanel } from './ScreenAccessPanel';
+
 export function FirebaseAuthTestScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -129,6 +131,8 @@ export function FirebaseAuthTestScreen() {
           Use this screen to verify the native Firebase app, Auth, Firestore, and Storage from a
           real iOS or Android development client.
         </Text>
+
+        <ScreenAccessPanel />
 
         <View style={styles.statusCard}>
           <Text style={styles.statusLabel}>Native app status</Text>
