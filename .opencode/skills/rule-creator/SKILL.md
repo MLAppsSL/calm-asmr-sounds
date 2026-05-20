@@ -5,7 +5,7 @@ license: MIT
 compatibility: No external CLI required.
 metadata:
   author: local
-  version: "1.0"
+  version: '1.0'
 ---
 
 Create a new OpenCode rule from a short description.
@@ -34,7 +34,6 @@ When a paired command exists or is created for this workflow, that command shoul
    Match the repository's tone and structure instead of inventing a new format.
 
 3. **Determine the rule name and location**
-
    - Use the provided rule name when available.
    - Otherwise derive a concise kebab-case name from the description.
    - Create the rule under `.opencode/rules/<rule-name>.md` unless the repository clearly uses a different local naming pattern.
@@ -47,7 +46,7 @@ When a paired command exists or is created for this workflow, that command shoul
    - the effective rule that must be respected
    - any short notes needed to remove ambiguity
 
-    Prefer direct wording over long policy text.
+   Prefer direct wording over long policy text.
 
 5. **Add the rule to `AGENTS.md`**
 
@@ -84,15 +83,16 @@ When a paired command exists or is created for this workflow, that command shoul
 
 9. **Report what was created**
 
-    Summarize:
-    - rule name
-    - created file paths
-    - what the new rule does
-    - that `AGENTS.md` was updated with the rule link
+   Summarize:
+   - rule name
+   - created file paths
+   - what the new rule does
+   - that `AGENTS.md` was updated with the rule link
 
 **Output**
 
 After creation, summarize:
+
 - Rule name and path
 - What the rule applies to in one sentence
 - The main requirement it enforces
@@ -100,6 +100,7 @@ After creation, summarize:
 - Any paired command path, if created
 
 **Guardrails**
+
 - Reuse the existing `.opencode` file style
 - Keep the rule concrete and enforceable
 - Ask the user directly when the requested rule is vague or contradictory
