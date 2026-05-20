@@ -174,9 +174,7 @@ class AudioServiceClass {
         }
       }
 
-      if (transitionStillOwnsState || completed) {
-        cleanup.push(this.applyAudioMode(false));
-      }
+      cleanup.push(this.applyAudioMode(false));
 
       await Promise.allSettled(cleanup);
     }
@@ -220,7 +218,7 @@ class AudioServiceClass {
 
     if (this.animationResolve) {
       const resolve = this.animationResolve;
-      this.animationResolve = null;
+      this.clearAnimationCallbacks();
       resolve(false);
     }
   }
@@ -233,38 +231,48 @@ class AudioServiceClass {
 
     const animationId = this.animationId;
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.animationResolve = resolve;
       const startedAt = Date.now();
 
       const tick = async () => {
-        if (this.animationId !== animationId) {
-          return;
-        }
+        try {
+          if (this.animationId !== animationId) {
+            return;
+          }
 
-        const elapsed = Date.now() - startedAt;
-        const progress = Math.min(elapsed / durationMs, 1);
+          const elapsed = Date.now() - startedAt;
+          const progress = Math.min(elapsed / durationMs, 1);
 
-        await onFrame(progress);
+          await onFrame(progress);
 
-        if (this.animationId !== animationId) {
-          return;
-        }
+          if (this.animationId !== animationId) {
+            return;
+          }
 
-        if (progress >= 1) {
+          if (progress >= 1) {
+            this.animationTimer = null;
+            this.clearAnimationCallbacks();
+            resolve(true);
+            return;
+          }
+
+          this.animationTimer = setTimeout(() => {
+            void tick();
+          }, ANIMATION_STEP_MS);
+        } catch (error) {
           this.animationTimer = null;
-          this.animationResolve = null;
-          resolve(true);
-          return;
+          this.clearAnimationCallbacks();
+          reject(error);
         }
-
-        this.animationTimer = setTimeout(() => {
-          void tick();
-        }, ANIMATION_STEP_MS);
       };
 
       void tick();
     });
+  }
+
+  private clearAnimationCallbacks() {
+    this.animationResolve = null;
   }
 
   private async applyAudioMode(allowMixing: boolean) {
