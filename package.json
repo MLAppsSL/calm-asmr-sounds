@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "prepare": "husky",
-    "test": "node --test --experimental-strip-types --loader ./src/shared/data/services/tests/AudioService.test.loader.mjs",
+    "test": "node --test --loader ./src/shared/data/services/tests/AudioService.test.loader.mjs",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix"
   },
