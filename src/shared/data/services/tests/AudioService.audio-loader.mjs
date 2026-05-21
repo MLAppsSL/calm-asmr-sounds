@@ -6,7 +6,7 @@ export async function resolve(specifier, context, defaultResolve) {
   if (specifier === 'expo-av') {
     return {
       shortCircuit: true,
-      url: new URL('./AudioService.test.stub.mjs', import.meta.url).href,
+      url: new URL('./AudioService.audio-stub.mjs', import.meta.url).href,
     };
   }
 
