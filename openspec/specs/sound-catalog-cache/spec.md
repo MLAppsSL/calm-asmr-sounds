@@ -21,7 +21,7 @@ The app SHALL define a shared static sound catalog at `src/shared/data/catalogs/
 
 ### Requirement: SoundConfig has a stable exported contract
 
-The app SHALL export a `SoundConfig` type from `src/shared/data/catalogs/sounds.ts` with the fields `id`, `title`, `category`, `storageRef`, `isPremium`, `defaultTimerSeconds`, and `thumbnailUrl`. `SoundConfig` MUST reuse the shared sound-category and timer types, and it MUST remain separate from any domain shape that depends on resolved playback URLs.
+The app SHALL export a `SoundConfig` type from `src/shared/data/catalogs/sounds.ts` with the fields `id`, `title`, `category`, `storageRef`, `isPremium`, `defaultTimerSeconds`, and `thumbnailUrl`. `SoundConfig` MUST reuse the shared sound-category and timer types, `thumbnailUrl` MUST allow `string | null`, and the type MUST remain separate from any domain shape that depends on resolved playback URLs.
 
 #### Scenario: SoundConfig exposes the agreed field names
 
@@ -56,6 +56,11 @@ The app SHALL expose a shared `SoundCacheService` that resolves a catalog sound 
 - **WHEN** `SoundCacheService.getLocalUri(sound)` is called for a sound that is not yet cached locally
 - **THEN** the service resolves the Firebase Storage download URL, downloads the file into `documentDirectory`, and returns the resulting stable local `file://` URI for playback
 
+#### Scenario: Cached files use a stable sound-ID path
+
+- **WHEN** `SoundCacheService` computes the local cache path for a catalog sound
+- **THEN** it stores the file under `documentDirectory/sounds/{soundId}.mp3` instead of deriving the local filename from `storageRef`
+
 ### Requirement: SoundCacheService exposes first-play download state and avoids duplicate downloads
 
 The app SHALL allow callers to observe whether a sound is currently being downloaded for first play via a caller-readable loading-state API, and concurrent requests for the same sound MUST reuse the same in-flight download work instead of starting duplicate Firebase downloads.
@@ -69,6 +74,15 @@ The app SHALL allow callers to observe whether a sound is currently being downlo
 
 - **WHEN** multiple callers request the same uncached sound before the first download finishes
 - **THEN** the service waits on the same in-flight download result and creates only one Firebase download for that sound
+
+### Requirement: Validation coverage stays with the shared service test area for this slice
+
+The app SHALL place focused validation for this slice under `src/shared/data/services/tests/`, and catalog contract assertions MAY live there alongside cache-service tests even though the catalog source file lives under `src/shared/data/catalogs/`.
+
+#### Scenario: Catalog assertions use the existing shared service test area
+
+- **WHEN** this slice adds automated validation for `SoundConfig`, `SOUNDS`, `SOUNDS_BY_ID`, or `SOUNDS_BY_CATEGORY`
+- **THEN** those assertions may be implemented under `src/shared/data/services/tests/` rather than requiring a separate catalog-specific test folder
 
 ### Requirement: SoundCacheService fails safely on download problems
 
