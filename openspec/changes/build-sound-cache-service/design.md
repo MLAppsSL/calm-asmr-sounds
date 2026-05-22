@@ -35,7 +35,7 @@ Rejected because that would introduce a second structural convention into the co
 
 The catalog should export a `SoundConfig` type plus `SOUNDS`, `SOUNDS_BY_ID`, and `SOUNDS_BY_CATEGORY`, with every sound mapped to a Firebase Storage path rather than a download URL. `SoundConfig` should be a shared catalog type that reuses the existing category and timer types but intentionally does not extend the current `Sound` interface directly, because the existing domain `Sound` shape uses `storageUrl` and `durationSeconds` while this slice needs `storageRef` and `defaultTimerSeconds`.
 
-The `SoundConfig` contract should be treated as stable for later slices and should explicitly include `id`, `title`, `category`, `storageRef`, `isPremium`, `defaultTimerSeconds`, and `thumbnailUrl`.
+The `SoundConfig` contract should be treated as stable for later slices and should explicitly include `id`, `title`, `category`, `storageRef`, `isPremium`, `defaultTimerSeconds`, and `thumbnailUrl`. In this slice, `thumbnailUrl` should remain `string | null` because the catalog needs the field shape now while Phase 3 still owns filling in real artwork values later.
 
 This slice should treat `SoundConfig` as catalog-source data only. Code added in `02-02` should avoid introducing ad hoc conversions or treating `SoundConfig` as the universal runtime sound model. Later slices that combine catalog data with cache results or playback/session state should do so through one explicit mapping boundary instead of spreading conversion logic across screens, stores, and services.
 
@@ -61,7 +61,7 @@ Rejected because that weakens the original plan and makes later UI expectations 
 
 ### Use `documentDirectory` with a stable `sounds/` subdirectory for permanent cache storage
 
-The cache service should store downloaded files under `FileSystem.documentDirectory` inside a dedicated `sounds/` folder and treat those files as permanent until uninstall.
+The cache service should store downloaded files under `FileSystem.documentDirectory` inside a dedicated `sounds/` folder and treat those files as permanent until uninstall. Local cache filenames should use the stable pattern `sounds/{soundId}.mp3` instead of being derived from `storageRef`.
 
 Rationale: the phase requirement explicitly locks cache persistence across app restarts. `documentDirectory` matches that contract, while `cacheDirectory` does not.
 
@@ -85,6 +85,15 @@ Rationale: the phase requirement says first-play loading state must be available
 
 Alternative considered: rely only on awaiting `getLocalUri(sound)` with no explicit service state, or add a full observable/store integration now.
 Rejected because the first option gives later UI no shared loading source, while the second would over-expand this slice into broader state architecture.
+
+### Keep test coverage in the existing shared service test area
+
+Automated validation added by this slice should live under `src/shared/data/services/tests/`, including lightweight catalog assertions when needed, instead of introducing a separate `src/shared/data/catalogs/tests/` folder during this phase.
+
+Rationale: the current repository already places shared data-service tests there, and this slice is primarily a cache-service delivery slice with a small static catalog module alongside it. Keeping tests in one existing location avoids adding a second testing convention for a narrow phase.
+
+Alternative considered: require a separate test folder colocated under `src/shared/data/catalogs/` for the catalog module.
+Rejected because the source plan already scopes test changes under `src/shared/data/services/tests/`, and splitting test locations here would add process overhead without improving the contract.
 
 ### Add `expo-file-system` to `package.json` if it is not already installed
 
