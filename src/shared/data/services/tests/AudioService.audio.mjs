@@ -76,3 +76,37 @@ test('fadeOut rejects frame errors instead of hanging', async () => {
 
   assert.equal(sound.unloadCalls, 1);
 });
+
+test('switching sounds preserves a fully faded outgoing volume', async () => {
+  await AudioService.play('rain', 'file://rain.mp3');
+
+  const originalSound = __getExpoAvMockState().sounds[0];
+
+  await AudioService.fadeOut(0);
+  await AudioService.play('waves', 'file://waves.mp3');
+
+  assert.ok(originalSound.setVolumeCalls.every((volume) => volume === 0));
+});
+
+test('cancelled crossfade restores the outgoing sound volume', async () => {
+  await AudioService.play('rain', 'file://rain.mp3');
+
+  const originalSound = __getExpoAvMockState().sounds[0];
+
+  await AudioService.fadeOut(0);
+
+  const switchPromise = AudioService.play('waves', 'file://waves.mp3');
+
+  await new Promise((resolve) => {
+    setTimeout(resolve, 80);
+  });
+
+  await Promise.all([switchPromise, AudioService.fadeOut(1)]);
+
+  const state = __getExpoAvMockState();
+  const incomingSound = state.sounds[1];
+
+  assert.equal(originalSound.volume, 0);
+  assert.equal(originalSound.unloadCalls, 0);
+  assert.equal(incomingSound.unloadCalls, 1);
+});

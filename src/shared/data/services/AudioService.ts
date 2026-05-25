@@ -122,6 +122,7 @@ class AudioServiceClass {
 
     const outgoing = this.activeSound;
     const outgoingSoundId = this.activeSoundId;
+    const outgoingStartingVolume = this.activeVolume;
     let incoming: SoundInstance | null = null;
     let completed = false;
 
@@ -138,7 +139,7 @@ class AudioServiceClass {
 
       completed = await this.runAnimation(CROSSFADE_DURATION_MS, async (progress) => {
         const incomingVolume = progress;
-        const outgoingVolume = 1 - progress;
+        const outgoingVolume = outgoingStartingVolume * (1 - progress);
 
         await Promise.allSettled([
           createdIncoming.setVolumeAsync(incomingVolume),
@@ -169,8 +170,8 @@ class AudioServiceClass {
           this.activeSound = outgoing;
           this.outgoingSound = null;
           this.activeSoundId = outgoingSoundId;
-          this.activeVolume = 1;
-          cleanup.push(outgoing.setVolumeAsync(1));
+          this.activeVolume = outgoingStartingVolume;
+          cleanup.push(outgoing.setVolumeAsync(outgoingStartingVolume));
         }
       }
 
