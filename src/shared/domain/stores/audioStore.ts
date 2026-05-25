@@ -1,16 +1,24 @@
 import { create } from 'zustand';
 
+type TimerDurationMs = 60000 | 120000 | 180000;
+
 type AudioState = {
   currentSoundId: string | null;
   isPlaying: boolean;
   isLooping: boolean;
   timerSeconds: number | null;
+  timerStartedAt: number | null;
+  timerDurationMs: TimerDurationMs;
   volume: number;
   setCurrentSound: (id: string | null) => void;
   setIsPlaying: (playing: boolean) => void;
   setIsLooping: (looping: boolean) => void;
   setTimer: (seconds: number | null) => void;
   setVolume: (volume: number) => void;
+  startTimer: (durationMs: TimerDurationMs) => void;
+  resetTimer: () => void;
+  stopTimer: () => void;
+  setTimerDuration: (durationMs: TimerDurationMs) => void;
   reset: () => void;
 };
 
@@ -19,6 +27,8 @@ const initialState = {
   isPlaying: false,
   isLooping: false,
   timerSeconds: 60,
+  timerStartedAt: null,
+  timerDurationMs: 60000 as TimerDurationMs,
   volume: 1.0,
 };
 
@@ -31,5 +41,21 @@ export const useAudioStore = create<AudioState>()((set) => ({
   setIsLooping: (looping) => set({ isLooping: looping }),
   setTimer: (seconds) => set({ timerSeconds: seconds }),
   setVolume: (volume) => set({ volume }),
+  startTimer: (durationMs) =>
+    set({
+      timerDurationMs: durationMs,
+      timerStartedAt: Date.now(),
+    }),
+  resetTimer: () =>
+    set((state) => ({
+      timerDurationMs: state.timerDurationMs,
+      timerStartedAt: Date.now(),
+    })),
+  stopTimer: () => set({ timerStartedAt: null }),
+  setTimerDuration: (durationMs) =>
+    set((state) => ({
+      timerDurationMs: durationMs,
+      timerStartedAt: state.timerStartedAt === null ? null : Date.now(),
+    })),
   reset: () => set(initialState),
 }));
