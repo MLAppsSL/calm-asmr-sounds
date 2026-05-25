@@ -30,7 +30,7 @@ When an active timer reaches zero, `TimerService` SHALL fade the current audio o
 
 ### Requirement: Switching sounds resets the active timer duration
 
-When playback switches to a different sound while a timer is active, the timer runtime MUST restart the countdown from the currently selected duration instead of continuing the elapsed time from the previous sound.
+When playback switches to a different sound while a timer is active, the timer runtime MUST restart the countdown from the currently selected duration instead of continuing the elapsed time from the previous sound. In this slice, that restart MUST be triggered by the caller flow for the sound switch rather than by `TimerService` inferring sound-change events on its own.
 
 #### Scenario: Sound switch restarts countdown from selected duration
 

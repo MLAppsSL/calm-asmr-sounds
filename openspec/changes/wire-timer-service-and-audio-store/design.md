@@ -64,7 +64,7 @@ Rejected because that would spread runtime timer concerns across unrelated layer
 
 ### Keep timer reset on sound switch as an explicit shared contract
 
-Switching to a different sound should reset the active timer back to the currently selected duration by calling the store's `resetTimer()` behavior rather than continuing from the old elapsed time.
+Switching to a different sound should reset the active timer back to the currently selected duration by calling the store's `resetTimer()` behavior rather than continuing from the old elapsed time. This slice should treat that restart as caller-owned behavior in the sound-switch flow instead of adding sound-change detection inside `TimerService`.
 
 Rationale: this is a locked product rule in the source phase plan, and later UI slices need to rely on it explicitly instead of inferring it from general timer actions.
 
