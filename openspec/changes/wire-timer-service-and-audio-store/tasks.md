@@ -20,5 +20,5 @@
 
 - [x] 4.1 Run the relevant project checks after the store, timer service, startup wiring, and harness changes are added, and fix any lint, formatting, or type regressions introduced by this slice.
 - [x] 4.2 Manually review the implementation against the OpenSpec requirements for timer timestamp math, fade-then-stop expiry, one-time startup listener wiring, and temporary harness behavior.
-- [ ] 4.3 Complete the planned real-device verification for iOS and Android background audio, loop continuity, timer fade-out, and background timer correction before treating the slice as complete.
-- [ ] 4.4 Create `.planning/phases/02-audio-engine/02-03-SUMMARY.md` after implementation and device verification, following the phase summary template.
+- [x] 4.3 Complete the planned real-device verification for iOS and Android background audio, loop continuity, timer fade-out, and background timer correction before treating the slice as complete.
+- [x] 4.4 Create `.planning/phases/02-audio-engine/02-03-SUMMARY.md` after implementation and device verification, following the phase summary template.
