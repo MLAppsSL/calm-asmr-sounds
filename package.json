@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "prepare": "husky",
     "test": "node --test",
+    "test:audio": "node --test --loader ./src/shared/data/services/tests/AudioService.audio-loader.mjs ./src/shared/data/services/tests/AudioService.audio.mjs",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix"
   },
