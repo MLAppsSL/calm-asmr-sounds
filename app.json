@@ -36,7 +36,8 @@
           }
         }
       ],
-      "./plugins/with-rnfb-non-modular-ios"
+      "./plugins/with-rnfb-non-modular-ios",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true
