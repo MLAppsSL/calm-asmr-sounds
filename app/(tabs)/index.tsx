@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
-import { SOUNDS } from '@/shared/data/catalogs/sounds';
+import { SOUNDS_BY_ID } from '@/shared/data/catalogs/sounds';
 import { AudioService } from '@/shared/data/services/AudioService';
 import { SoundCacheService } from '@/shared/data/services/SoundCacheService';
 import { TimerService } from '@/shared/data/services/TimerService';
-import { useAudioStore } from '@/shared/domain/stores/audioStore';
+import { type TimerDurationMs, useAudioStore } from '@/shared/domain/stores/audioStore';
 
-const PRIMARY_SOUND = SOUNDS[0];
-const SECONDARY_SOUND = SOUNDS[6];
+const PRIMARY_SOUND = SOUNDS_BY_ID['rain-01'];
+const SECONDARY_SOUND = SOUNDS_BY_ID['ocean-01'];
 const PRODUCTION_TIMER_MS = 60000;
 const PRODUCTION_TIMER_SECONDS = 60;
 const FAST_VERIFY_TIMER_MS = 10000;
@@ -25,49 +26,73 @@ function getSelectedDurationMs(timerSeconds: number | null) {
   return 60000 as const;
 }
 
-function getRemainingSeconds(timerStartedAt: number | null, timerDurationMs: number) {
+function getRemainingSeconds(
+  timerStartedAt: number | null,
+  timerDurationMs: number,
+  nowMs: number,
+) {
   if (timerStartedAt === null) {
     return 0;
   }
 
-  const remainingMs = Math.max(0, timerDurationMs - (Date.now() - timerStartedAt));
+  const remainingMs = Math.max(0, timerDurationMs - (nowMs - timerStartedAt));
 
   return Math.ceil(remainingMs / 1000);
 }
 
 export default function LibraryRoute() {
-  const currentSoundId = useAudioStore((state) => state.currentSoundId);
-  const isPlaying = useAudioStore((state) => state.isPlaying);
-  const timerDurationMs = useAudioStore((state) => state.timerDurationMs);
-  const timerSeconds = useAudioStore((state) => state.timerSeconds);
-  const timerStartedAt = useAudioStore((state) => state.timerStartedAt);
-  const setCurrentSound = useAudioStore((state) => state.setCurrentSound);
-  const setIsPlaying = useAudioStore((state) => state.setIsPlaying);
-  const setTimer = useAudioStore((state) => state.setTimer);
-  const setTimerDuration = useAudioStore((state) => state.setTimerDuration);
+  const {
+    currentSoundId,
+    isPlaying,
+    timerDurationMs,
+    timerSeconds,
+    timerStartedAt,
+    setCurrentSound,
+    setIsPlaying,
+    setTimer,
+    setTimerDuration,
+  } = useAudioStore(
+    useShallow((state) => ({
+      currentSoundId: state.currentSoundId,
+      isPlaying: state.isPlaying,
+      timerDurationMs: state.timerDurationMs,
+      timerSeconds: state.timerSeconds,
+      timerStartedAt: state.timerStartedAt,
+      setCurrentSound: state.setCurrentSound,
+      setIsPlaying: state.setIsPlaying,
+      setTimer: state.setTimer,
+      setTimerDuration: state.setTimerDuration,
+    })),
+  );
   const [statusMessage, setStatusMessage] = useState('Ready for timer and audio verification.');
   const [isBusy, setIsBusy] = useState(false);
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
+    setNow(Date.now());
+
+    if (timerStartedAt === null) {
+      return;
+    }
+
     const intervalId = setInterval(() => {
       setNow(Date.now());
-    }, 250);
+    }, 1000);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [timerStartedAt]);
 
-  const remainingSeconds = getRemainingSeconds(timerStartedAt, timerDurationMs);
+  const remainingSeconds = getRemainingSeconds(timerStartedAt, timerDurationMs, now);
   const timerIsRunning = timerStartedAt !== null;
 
-  async function playSound(soundId: string, timerMs: number, selectedSeconds: number | null) {
-    const sound = SOUNDS.find((entry) => entry.id === soundId);
+  async function prepareSoundPlayback(soundId: string, selectedSeconds: number | null) {
+    const sound = SOUNDS_BY_ID[soundId];
 
     if (!sound) {
       setStatusMessage(`Unable to find catalog sound ${soundId}.`);
-      return;
+      return null;
     }
 
     setIsBusy(true);
@@ -77,7 +102,7 @@ export default function LibraryRoute() {
 
       if (!localUri) {
         setStatusMessage(`Failed to prepare ${sound.title} for playback.`);
-        return;
+        return null;
       }
 
       if (!isPlaying || currentSoundId !== sound.id) {
@@ -91,14 +116,29 @@ export default function LibraryRoute() {
         setTimer(selectedSeconds);
       }
 
-      TimerService.start(timerMs as 60000 | 120000 | 180000);
-      setStatusMessage(`Playing ${sound.title} with a ${Math.ceil(timerMs / 1000)}-second timer.`);
+      return sound;
     } catch (error) {
       setStatusMessage(`Playback failed for ${sound.title}.`);
       console.error('Harness playback failed.', error);
+      return null;
     } finally {
       setIsBusy(false);
     }
+  }
+
+  async function playSound(
+    soundId: string,
+    timerMs: TimerDurationMs,
+    selectedSeconds: number | null,
+  ) {
+    const sound = await prepareSoundPlayback(soundId, selectedSeconds);
+
+    if (!sound) {
+      return;
+    }
+
+    TimerService.start(timerMs);
+    setStatusMessage(`Playing ${sound.title} with a ${Math.ceil(timerMs / 1000)}-second timer.`);
   }
 
   async function handlePrimaryPlay() {
@@ -138,7 +178,16 @@ export default function LibraryRoute() {
   }
 
   async function handleShortTimer() {
-    await playSound(PRIMARY_SOUND.id, FAST_VERIFY_TIMER_MS, PRODUCTION_TIMER_SECONDS);
+    const sound = await prepareSoundPlayback(PRIMARY_SOUND.id, PRODUCTION_TIMER_SECONDS);
+
+    if (!sound) {
+      return;
+    }
+
+    // This harness needs an explicit dev-only fast path to verify expiry without weakening the
+    // production timer API.
+    TimerService.startVerification(FAST_VERIFY_TIMER_MS);
+    setStatusMessage(`Playing ${sound.title} with a ${FAST_VERIFY_TIMER_MS / 1000}-second timer.`);
   }
 
   function handleStopTimer() {
