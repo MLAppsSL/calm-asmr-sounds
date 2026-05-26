@@ -27,7 +27,7 @@ The player SHALL treat the `soundId` route param as the primary source for the a
 
 ### Requirement: The player handles invalid or missing sound identity explicitly
 
-If neither the route params nor the shared playback state resolve to a valid sound in the player metadata source, the player SHALL render a minimal unavailable state with a clear path back to the library instead of substituting a different sound silently.
+If neither the route params nor the shared playback state resolve to a valid sound in the player metadata source, the player SHALL render a minimal unavailable state with short explanatory copy and a clear path back to the library instead of substituting a different sound silently.
 
 #### Scenario: Invalid player entry does not render the wrong sound
 
@@ -66,6 +66,12 @@ The player SHALL present a circular progress arc around the central play or paus
 - **WHEN** the player renders while the current sound is playing or paused
 - **THEN** the central control shows the corresponding play or pause icon state
 - **AND** activating the control updates the shared playback state used by the player flow
+
+#### Scenario: Shared playback state wiring uses the existing store contract
+
+- **WHEN** the player implements play or pause and loop interactions in Phase `03-02`
+- **THEN** those interactions use the existing shared audio-store fields and setters already available to the app
+- **AND** the slice does not require a broader audio-store API redesign to satisfy the player contract
 
 #### Scenario: Progress ring supports the Phase 3 presentation contract
 

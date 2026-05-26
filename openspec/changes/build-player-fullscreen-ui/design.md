@@ -25,20 +25,31 @@ This slice also sits at the intersection of several runtime concerns already pre
 
 ## Decisions
 
-### Place player UI under `src/player/ui/components/` and keep `app/player.tsx` as the composition boundary
+### Keep `app/player.tsx` as the required Expo Router entry point, place reusable player UI under `src/player/ui/components/`, and reserve `ui/views/` for future screen-scale player views only
 
-The implementation should create a `src/player/` feature slice and place the reusable UI pieces at:
+The implementation should keep `app/player.tsx` as the required Expo Router route entry point for the player screen, and it should create a `src/player/` feature slice for the reusable UI pieces at:
 
 - `src/player/ui/components/VideoBackground.tsx`
 - `src/player/ui/components/CircularProgressArc.tsx`
 - `src/player/ui/components/BottomControlPill.tsx`
 
-`app/player.tsx` remains the route entry point responsible for screen composition, fullscreen state, and route-level interactions.
+`app/player.tsx` remains the route entry point responsible for screen composition, fullscreen state, and route-level interactions. The route file is allowed outside the `src/` slice because file-based navigation requires it, while the reusable player UI stays in the feature slice to satisfy the vertical-slice rule for application code.
 
-Rationale: this follows the repository's vertical-slice rule while still allowing the route file to own the screen composition appropriate for a real product surface.
+For this slice, `VideoBackground`, `CircularProgressArc`, and `BottomControlPill` belong in `ui/components/` because they are reusable subparts of the player surface rather than standalone player screens or composed screen-scale views. If a future slice introduces a dedicated player empty state, overlay, or other larger screen-level surface that is reused or substantial enough to stand on its own, that file should live under `src/player/ui/views/` instead of `ui/components/`.
+
+Rationale: this is the strongest fit between Expo Router's required `app/` route ownership and the repository's vertical-slice rule. The route file exists where the navigation system requires it, reusable subcomponents live under the player feature, and the stricter `components` versus `views` split stays available for future player-specific screen-scale UI if the slice grows.
 
 Alternative considered: follow the source plan literally with top-level `src/components/*.tsx` files.
 Rejected because it would conflict with the repo's current feature-first structure and make later player-related work harder to extend coherently.
+
+### Use the existing audio-store setters with route-local handlers in this slice
+
+The player route should wire play or pause and loop behavior through the existing shared audio-store setters and current fields, with any small orchestration kept in local route handlers rather than expanding the store API in this change.
+
+Rationale: this keeps the slice focused on the player UI and route behavior while still honoring the shared playback state that already exists.
+
+Alternative considered: add higher-level store actions such as `togglePlayPause` or `toggleLoop` before implementing the player.
+Rejected because that is a broader store API redesign than this slice needs, and the current store contract is sufficient for the planned interactions.
 
 ### Use a hybrid active-sound contract with route params first and audio store fallback
 
@@ -49,11 +60,14 @@ Rationale: this preserves the explicit route contract from the source plan while
 Alternative considered: rely on `useAudioStore().currentSoundId` only.
 Rejected because it weakens the navigation contract, makes direct route entry less deterministic, and changed the plan without enough benefit.
 
-### Show an explicit unavailable state when no valid sound can be resolved
+### Show a minimal unavailable state when no valid sound can be resolved
 
-If neither the route params nor the audio store produce a valid sound ID in the library manifest, `app/player.tsx` should render a minimal unavailable state with a clear way back to the library instead of silently substituting a different sound.
+If neither the route params nor the audio store produce a valid sound ID in the library manifest, `app/player.tsx` should render a minimal unavailable state with short explanatory copy and a clear way back to the library instead of silently substituting a different sound.
 
 Rationale: this keeps incorrect fallback content from masking bugs while still preserving a stable user path out of the player.
+
+Alternative considered: build a richer custom empty-state treatment for this edge case in the same slice.
+Rejected because the change only needs a safe, explicit fallback path here, not a dedicated polished empty-state feature.
 
 Alternative considered: silently fall back to the first sound in the manifest.
 Rejected because it can display the wrong sound and make navigation bugs harder to detect.
