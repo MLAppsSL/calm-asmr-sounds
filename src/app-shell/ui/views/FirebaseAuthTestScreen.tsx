@@ -102,7 +102,7 @@ export function FirebaseAuthTestScreen() {
   async function runSmokeCheck(
     label: 'Firestore' | 'Storage',
     setStatus: (value: string) => void,
-    action: () => void,
+    action: () => Promise<unknown>,
   ) {
     if (configError) {
       Alert.alert('Firebase config issue', configError);
@@ -112,7 +112,7 @@ export function FirebaseAuthTestScreen() {
     try {
       setIsBusy(true);
       setStatus(`${label} check running...`);
-      action();
+      await action();
       setStatus(`${label} reachable`);
     } catch (error) {
       const message = error instanceof Error ? error.message : `Unknown ${label} error`;
@@ -152,9 +152,8 @@ export function FirebaseAuthTestScreen() {
         <Pressable
           disabled={isBusy}
           onPress={() => {
-            void runSmokeCheck('Firestore', setFirestoreStatus, () => {
-              const ref = firestore().collection('test');
-              void ref;
+            void runSmokeCheck('Firestore', setFirestoreStatus, async () => {
+              await firestore().collection('test').limit(1).get();
             });
           }}
           style={[styles.button, styles.secondaryButton, isBusy && styles.buttonDisabled]}
@@ -170,9 +169,8 @@ export function FirebaseAuthTestScreen() {
         <Pressable
           disabled={isBusy}
           onPress={() => {
-            void runSmokeCheck('Storage', setStorageStatus, () => {
-              const ref = storage().ref('test');
-              void ref;
+            void runSmokeCheck('Storage', setStorageStatus, async () => {
+              await storage().ref('test').list({ maxResults: 1 });
             });
           }}
           style={[styles.button, styles.secondaryButton, isBusy && styles.buttonDisabled]}
