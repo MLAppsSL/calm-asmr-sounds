@@ -41,10 +41,13 @@ export async function resolve(specifier, context, defaultResolve) {
     );
   }
 
-  if ((specifier.startsWith('./') || specifier.startsWith('../')) && !specifier.match(/\.[a-z]+$/i)) {
+  if (
+    (specifier.startsWith('./') || specifier.startsWith('../')) &&
+    !specifier.match(/\.[a-z]+$/i)
+  ) {
     try {
       return await defaultResolve(specifier, context, defaultResolve);
-    } catch (error) {
+    } catch (_error) {
       return defaultResolve(`${specifier}.ts`, context, defaultResolve);
     }
   }
