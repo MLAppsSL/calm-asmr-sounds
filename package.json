@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "prepare": "husky",
-    "test": "node --test",
+    "test": "node --test --loader ./src/shared/data/services/tests/AudioService.audio-loader.mjs",
     "test:audio": "node --test --loader ./src/shared/data/services/tests/AudioService.audio-loader.mjs ./src/shared/data/services/tests/AudioService.audio.mjs",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix"
@@ -33,6 +33,7 @@
     "expo-av": "~16.0.8",
     "expo-build-properties": "~1.0.10",
     "expo-dev-client": "~6.0.21",
+    "expo-file-system": "~19.0.22",
     "expo-router": "~6.0.23",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",

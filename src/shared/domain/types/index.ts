@@ -2,14 +2,20 @@ export type SoundCategory = 'rain' | 'fire' | 'forest' | 'ocean' | 'wind' | 'whi
 
 export type TimerDuration = 60 | 120 | 180;
 
-export interface Sound {
+// Shared descriptive fields that catalog and runtime sound models can both reuse.
+export interface SoundMetadata {
   id: string;
   title: string;
   category: SoundCategory;
-  durationSeconds: TimerDuration;
   isPremium: boolean;
-  storageUrl: string | null;
   thumbnailUrl: string | null;
+}
+
+// Runtime sound state uses a resolved playback URL and a session timer duration.
+// Catalog data should stay separate and provide storageRef/defaultTimerSeconds instead.
+export interface Sound extends SoundMetadata {
+  durationSeconds: TimerDuration;
+  storageUrl: string | null;
 }
 
 export interface User {
