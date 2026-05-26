@@ -6,6 +6,8 @@
   Use this when creating or updating OpenSpec plans or change artifacts so unresolved decisions are clarified immediately instead of assumed, and clearly bad options are called out before proceeding.
 - `git-commit-grouping-and-order`: see `.opencode/rules/git-commit-grouping-and-order.md`.
   Use this whenever creating git commits so unrelated work is split appropriately, and commits are ordered chronologically with dependencies committed first.
+- `stateful-runtime-hardening`: see `.opencode/rules/stateful-runtime-hardening.md`.
+  Use this when touching timer, audio, store, service, or harness logic so brittle selectors, unnecessary polling, unsafe type escapes, missing tests, and async cleanup races are caught during implementation instead of PR review.
 - `.opencode/rules/` is loaded automatically. Keep this file focused on repo-specific workflow notes.
 - Install dependencies with `npm install`.
 - Create a local `.env` from `.env.example` before starting the app, and fill in the required values.

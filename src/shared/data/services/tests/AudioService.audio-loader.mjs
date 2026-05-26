@@ -3,6 +3,13 @@ import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
 
 export async function resolve(specifier, context, defaultResolve) {
+  if (specifier === 'react-native') {
+    return {
+      shortCircuit: true,
+      url: new URL('./ReactNative.test.stub.mjs', import.meta.url).href,
+    };
+  }
+
   if (specifier === 'expo-av') {
     return {
       shortCircuit: true,
@@ -22,6 +29,27 @@ export async function resolve(specifier, context, defaultResolve) {
       shortCircuit: true,
       url: new URL('./Storage.test.stub.mjs', import.meta.url).href,
     };
+  }
+
+  if (specifier.startsWith('@/')) {
+    const aliasedPath = specifier.includes('.') ? specifier.slice(2) : `${specifier.slice(2)}.ts`;
+
+    return defaultResolve(
+      new URL(`../../../../${aliasedPath}`, import.meta.url).href,
+      context,
+      defaultResolve,
+    );
+  }
+
+  if (
+    (specifier.startsWith('./') || specifier.startsWith('../')) &&
+    !specifier.match(/\.[a-z]+$/i)
+  ) {
+    try {
+      return await defaultResolve(specifier, context, defaultResolve);
+    } catch (_error) {
+      return defaultResolve(`${specifier}.ts`, context, defaultResolve);
+    }
   }
 
   return defaultResolve(specifier, context, defaultResolve);

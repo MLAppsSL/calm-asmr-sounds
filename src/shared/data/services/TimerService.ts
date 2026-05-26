@@ -1,20 +1,33 @@
 import { AppState, type AppStateStatus } from 'react-native';
 
-import { useAudioStore } from '@/shared/domain/stores/audioStore';
+import { type TimerDurationMs, useAudioStore } from '@/shared/domain/stores/audioStore';
 
 import { AudioService } from './AudioService';
 
-type TimerDurationMs = 60000 | 120000 | 180000;
-
 const TIMER_POLL_MS = 1000;
 const TIMER_FADE_OUT_MS = 1500;
+
+type ExpiryToken = {
+  currentSoundId: string | null;
+  timerStartedAt: number | null;
+};
 
 class TimerServiceClass {
   private appStateSubscription: { remove: () => void } | null = null;
   private intervalId: ReturnType<typeof setInterval> | null = null;
   private expiryInProgress = false;
+  private timerSessionId = 0;
 
   start(durationMs: TimerDurationMs) {
+    this.startWithDuration(durationMs);
+  }
+
+  startVerification(durationMs: number) {
+    this.startWithDuration(durationMs);
+  }
+
+  private startWithDuration(durationMs: number) {
+    this.timerSessionId += 1;
     useAudioStore.getState().startTimer(durationMs);
     this.expiryInProgress = false;
     this.ensureInterval();
@@ -22,6 +35,7 @@ class TimerServiceClass {
   }
 
   stop() {
+    this.timerSessionId += 1;
     this.clearInterval();
     this.expiryInProgress = false;
     useAudioStore.getState().stopTimer();
@@ -101,20 +115,52 @@ class TimerServiceClass {
       return;
     }
 
+    const expirySessionId = this.timerSessionId;
+    const expiryToken = this.getExpiryToken();
+
     this.expiryInProgress = true;
     this.clearInterval();
 
     try {
       await AudioService.fadeOut(TIMER_FADE_OUT_MS);
+
+      if (!this.expiryStillOwnsState(expirySessionId, expiryToken)) {
+        return;
+      }
+
       await AudioService.stop();
     } finally {
-      const store = useAudioStore.getState();
+      if (this.expiryStillOwnsState(expirySessionId, expiryToken)) {
+        const store = useAudioStore.getState();
 
-      store.setCurrentSound(null);
-      store.setIsPlaying(false);
-      store.stopTimer();
+        store.setCurrentSound(null);
+        store.setIsPlaying(false);
+        store.stopTimer();
+      }
+
       this.expiryInProgress = false;
     }
+  }
+
+  private getExpiryToken(): ExpiryToken {
+    const { currentSoundId, timerStartedAt } = useAudioStore.getState();
+
+    return {
+      currentSoundId,
+      timerStartedAt,
+    };
+  }
+
+  private expiryStillOwnsState(expirySessionId: number, expiryToken: ExpiryToken) {
+    if (this.timerSessionId !== expirySessionId) {
+      return false;
+    }
+
+    const { currentSoundId, timerStartedAt } = useAudioStore.getState();
+
+    return (
+      currentSoundId === expiryToken.currentSoundId && timerStartedAt === expiryToken.timerStartedAt
+    );
   }
 }
 
