@@ -1,0 +1,68 @@
+name: CI Checks
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Node.js without cache
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') == '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies from lockfile
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') != '' }}
+        run: npm ci
+
+      - name: Install dependencies
+        if: ${{ hashFiles('package.json') != '' && hashFiles('package-lock.json') == '' }}
+        run: npm install
+
+      - name: TypeScript check
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npx tsc --noEmit
+
+      - name: ESLint check
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npx eslint .
+
+      - name: Prettier check
+        if: ${{ hashFiles('package.json') != '' && hashFiles('src/**') != '' }}
+        run: npx prettier src --check
+
+      - name: lint-staged check
+        if: ${{ hashFiles('package.json') != '' && github.event_name == 'pull_request' }}
+        run: npx lint-staged --diff="${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}"
+
+      - name: Test suite
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npm test
+
+      - name: Skip when app scaffold is absent
+        if: ${{ hashFiles('package.json') == '' }}
+        run: |
+          echo "No root package.json found on this branch."
+          echo "Skipping Node/Expo quality checks until the app scaffold is merged into develop."
