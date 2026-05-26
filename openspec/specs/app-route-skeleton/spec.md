@@ -2,57 +2,76 @@
 
 ### Requirement: Expo Router defines the complete Phase 1 route graph
 
-The project SHALL define a complete Phase 1 Expo Router route graph with `app/_layout.tsx` as the root stack, `app/(tabs)/_layout.tsx` as a tab navigator, tab routes at `app/(tabs)/index.tsx`, `app/(tabs)/favorites.tsx`, and `app/(tabs)/settings.tsx`, onboarding routes at `app/(onboarding)/_layout.tsx` and `app/(onboarding)/index.tsx`, auth routes at `app/(auth)/_layout.tsx`, `app/(auth)/sign-in.tsx`, and `app/(auth)/sign-up.tsx`, and a modal player route at `app/player.tsx`.
+The project SHALL define a complete Phase 3 Expo Router route graph with `app/_layout.tsx` as the root stack, `app/(tabs)/_layout.tsx` as a tab navigator, tab routes at `app/(tabs)/index.tsx`, `app/(tabs)/now-playing.tsx`, `app/(tabs)/favorites.tsx`, and `app/(tabs)/settings.tsx`, onboarding routes at `app/(onboarding)/_layout.tsx`, `app/(onboarding)/index.tsx`, and `app/(onboarding)/quiet-mode.tsx`, auth routes at `app/(auth)/_layout.tsx`, `app/(auth)/sign-in.tsx`, and `app/(auth)/sign-up.tsx`, and a modal or fullscreen player route at `app/player.tsx`.
 
-#### Scenario: Route files exist for the initial app shell
+#### Scenario: Route files exist for the Phase 3 shell
 
 - **WHEN** a developer inspects the `app/` directory after applying this change
-- **THEN** the project contains the root layout, three tab routes, two onboarding routes, three auth routes, and the player route required for the Phase 1 scaffold
-- **AND** later phases may add additional routes without violating this scaffold requirement as long as these required Phase 1 routes remain present
+- **THEN** the project contains the root layout, four tab routes, the two-screen onboarding flow required for the Phase 3 shell, auth routes, and the player route required for the library-to-player flow
+- **AND** later phases may add additional routes without violating this requirement as long as these required Core UI routes remain present
 
 ### Requirement: Root navigation preserves the agreed navigator boundaries
 
-The root layout SHALL register `(tabs)`, `(onboarding)`, and `(auth)` as stack screens with headers hidden, and it SHALL register `player` as a stack screen presented modally with its header hidden.
+The root layout SHALL register `(tabs)`, `(onboarding)`, and `(auth)` as stack screens with headers hidden, and it SHALL register `player` as a sibling stack screen presented without the tab bar while preserving hidden header behavior.
 
-#### Scenario: Player is configured as a modal route
+#### Scenario: Player stays outside the tab navigator
 
 - **WHEN** a developer reviews `app/_layout.tsx`
-- **THEN** the `player` screen is declared in the root stack with `presentation: 'modal'` and `headerShown: false`
+- **THEN** the `player` screen is declared in the root stack as a sibling of `(tabs)` instead of as a nested tab route
 
 #### Scenario: Route groups are mounted from the root stack
 
 - **WHEN** a developer reviews `app/_layout.tsx`
 - **THEN** the `(tabs)`, `(onboarding)`, and `(auth)` route groups are each declared as stack screens with `headerShown: false`
 
-### Requirement: Tab layout exposes exactly the agreed three tabs
+### Requirement: Tab layout exposes the agreed four-tab Phase 3 shell
 
-The tab layout SHALL expose exactly three tabs named `index`, `favorites`, and `settings`, and their visible titles SHALL be `Library`, `Favorites`, and `Settings` respectively.
+The tab layout SHALL expose exactly four tabs named `index`, `now-playing`, `favorites`, and `settings`, and the shell SHALL present them as the Home or Library tab, the now-playing shortcut tab, the Favorites tab, and the Settings tab respectively.
 
-#### Scenario: Tab contract matches the Phase 1 shell
+#### Scenario: Tab contract matches the Phase 3 shell
 
 - **WHEN** a developer reviews `app/(tabs)/_layout.tsx`
-- **THEN** the tab navigator contains exactly three `Tabs.Screen` entries named `index`, `favorites`, and `settings` with titles `Library`, `Favorites`, and `Settings`
+- **THEN** the tab navigator contains exactly four `Tabs.Screen` entries named `index`, `now-playing`, `favorites`, and `settings`
 
-### Requirement: Route files stay route-only and delegate UI to `src/`
+#### Scenario: Tab bar uses the planned frosted presentation
 
-Each route file under `app/` SHALL remain a thin Expo Router entry point that exports a default component and imports its rendered placeholder screen component from `src/`, instead of defining placeholder screen markup inline inside the route file.
+- **WHEN** a developer reviews the Phase 3 tab layout
+- **THEN** the tab bar uses a blur-backed frosted visual treatment and absolute positioning so route content can extend beneath it
 
-#### Scenario: Route shell imports screen implementation from src
+### Requirement: The now-playing tab behaves as a minimal player shortcut
 
-- **WHEN** a developer reviews any non-layout route file under `app/`
-- **THEN** the file exports a default route component that renders a screen component imported from `src/`
+The `now-playing` tab SHALL act as a lightweight shortcut into the player flow when a sound is active, and it SHALL render an inactive shell state when no sound is active.
 
-#### Scenario: Layout files focus on navigation configuration only
+#### Scenario: Active playback allows the now-playing tab to enter the player route
+
+- **WHEN** a user opens the `now-playing` tab while a sound is active
+- **THEN** the tab route can navigate the user into the `/player` flow for the active sound
+
+#### Scenario: Inactive playback shows a shell state instead of fake player behavior
+
+- **WHEN** a user opens the `now-playing` tab while no sound is active
+- **THEN** the route renders a minimal inactive state rather than pretending playback is available
+
+### Requirement: Route files may own real product UI when they stop being placeholders
+
+Each route file under `app/` SHALL remain focused on navigation and screen composition concerns, but once a route becomes a real product surface it MAY own its product UI directly instead of being forced to delegate through placeholder wrappers in `src/`.
+
+#### Scenario: Product routes are not constrained to placeholder-only wrappers
+
+- **WHEN** a developer reviews a real Core UI route such as the library tab route
+- **THEN** the route file may contain the actual screen composition needed for that product surface
+- **AND** reusable subcomponents still live outside `app/` instead of being duplicated inline across routes
+
+#### Scenario: Layout files remain navigation-focused
 
 - **WHEN** a developer reviews `app/_layout.tsx`, `app/(tabs)/_layout.tsx`, `app/(onboarding)/_layout.tsx`, or `app/(auth)/_layout.tsx`
-- **THEN** each file contains navigator configuration for its route group and does not embed unrelated product logic
+- **THEN** each file still primarily contains navigator configuration and startup wiring relevant to its route group
 
-### Requirement: Placeholder screens are valid app-shell stand-ins
+### Requirement: Root startup can hold splash visibility while shell gating resolves
 
-The placeholder screens rendered from `src/` SHALL provide valid default-rendered screens for library, favorites, settings, onboarding, auth, and player flows so Expo Router can resolve every Phase 1 route without runtime export errors.
+The root layout SHALL allow the shell startup flow to prevent the splash screen from auto-hiding until startup gating for the Phase 3 shell has had a chance to resolve.
 
-#### Scenario: All scaffolded routes resolve to placeholder screens
+#### Scenario: Splash gating is configured from the root layout module
 
-- **WHEN** the developer starts the project with `npm run start` and opens the scaffold in the project's supported development runtime
-- **AND** the developer does not rely on Expo Go because this project uses native Firebase modules and `expo-dev-client`
-- **THEN** every scaffolded route renders a valid placeholder screen instead of failing because a screen implementation is missing
+- **WHEN** a developer reviews the root layout for the Phase 3 shell
+- **THEN** the startup flow includes root-level splash-screen hold behavior that can support onboarding or shell gating without flashing incomplete UI
