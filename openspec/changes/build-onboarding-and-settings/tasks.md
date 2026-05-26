@@ -1,18 +1,19 @@
 ## 1. Root Startup Gating
 
-- [ ] 1.1 Update `app/_layout.tsx` to hold the splash screen at module load, read the `has_seen_onboarding` AsyncStorage flag on mount, and route users to `/(onboarding)` or `/(tabs)` before revealing the shell.
-- [ ] 1.2 Preserve the existing root stack declarations for `(tabs)`, `(onboarding)`, `(auth)`, and `player`, and ensure startup errors fall back to the tabs shell instead of trapping users in onboarding.
+- [ ] 1.1 Update `app/_layout.tsx` to hold the splash screen at module load, wait for persisted `useUIStore` hydration, evaluate `hasSeenOnboarding`, and route users to `/(onboarding)` or `/(tabs)` before revealing the shell.
+- [ ] 1.2 Preserve the existing root stack declarations for `(tabs)`, `(onboarding)`, `(auth)`, and `player`, and ensure startup errors fall back to the tabs shell instead of trapping users in onboarding or flashing the wrong shell first.
 
 ## 2. Onboarding Flow
 
-- [ ] 2.1 Replace `app/(onboarding)/index.tsx` with the Welcome screen that shows the icon treatment, headline, supporting label, and `Begin` action into `/(onboarding)/quiet-mode`.
-- [ ] 2.2 Replace `app/(onboarding)/quiet-mode.tsx` with the Quiet Mode screen that renders the pre-enabled visual DND toggle and both completion CTAs.
-- [ ] 2.3 Implement the shared onboarding completion handler so both `Continue` and `Not now` write `has_seen_onboarding` and replace the flow with `/(tabs)`.
+- [ ] 2.1 Finalize `app/(onboarding)/index.tsx` as the Welcome screen so its content, icon treatment, label, and `Begin` navigation match the Phase `03-03` onboarding contract.
+- [ ] 2.2 Finalize `app/(onboarding)/quiet-mode.tsx` so it renders the pre-enabled visual DND toggle, the expected supporting copy, and both completion CTAs.
+- [ ] 2.3 Implement or align the shared onboarding completion handler so both `Continue` and `Not now` persist `useUIStore.hasSeenOnboarding` and replace the flow with `/(tabs)`.
 
 ## 3. Settings Shell
 
 - [ ] 3.1 Replace `app/(tabs)/settings.tsx` with the full Phase `03-03` settings shell layout and rows for Dark Mode, Session Duration, Loop Mode, Auto-play Next, Silence Notifications, Support and FAQ, and Share with Friends.
-- [ ] 3.2 Wire the Dark Mode control in Settings to `useUIStore` so it reflects `isDarkMode` and calls `toggleDarkMode`, while the remaining rows stay explicit shell-only affordances.
+- [ ] 3.2 Wire the Dark Mode control in Settings to `useUIStore` so it reflects `isDarkMode` and calls `toggleDarkMode`.
+- [ ] 3.3 Keep the remaining settings rows as explicit shell-only affordances that provide clear `coming soon` feedback instead of hidden behavior or silent no-op taps.
 
 ## 4. Validation
 

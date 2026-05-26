@@ -2,7 +2,7 @@
 
 ### Requirement: The app routes first-time and returning users through the correct shell entry path
 
-The app SHALL check an onboarding completion flag during startup and route first-time users into `/(onboarding)` while routing returning users directly into `/(tabs)`.
+The app SHALL check the persisted `useUIStore.hasSeenOnboarding` state during startup and route first-time users into `/(onboarding)` while routing returning users directly into `/(tabs)`.
 
 #### Scenario: First launch enters onboarding
 
@@ -30,7 +30,7 @@ The app SHALL render `app/(onboarding)/index.tsx` as a real Welcome screen that 
 
 ### Requirement: The Quiet Mode screen completes onboarding regardless of CTA choice
 
-The app SHALL render `app/(onboarding)/quiet-mode.tsx` as the second onboarding step with a pre-enabled visual DND toggle and completion actions that both mark onboarding as complete and enter the tabs shell.
+The app SHALL render `app/(onboarding)/quiet-mode.tsx` as the second onboarding step with a pre-enabled visual DND toggle and completion actions that both mark onboarding as complete in the persisted UI store and enter the tabs shell.
 
 #### Scenario: Quiet Mode presents the expected shell controls
 
@@ -40,11 +40,11 @@ The app SHALL render `app/(onboarding)/quiet-mode.tsx` as the second onboarding 
 #### Scenario: Continue completes onboarding
 
 - **WHEN** a user taps `Continue` on the Quiet Mode screen
-- **THEN** the app writes the onboarding completion flag
+- **THEN** the app writes `useUIStore.hasSeenOnboarding` as complete
 - **AND** the app replaces the onboarding flow with `/(tabs)`
 
 #### Scenario: Not now also completes onboarding
 
 - **WHEN** a user taps `Not now` on the Quiet Mode screen
-- **THEN** the app writes the onboarding completion flag
+- **THEN** the app writes `useUIStore.hasSeenOnboarding` as complete
 - **AND** the app replaces the onboarding flow with `/(tabs)`

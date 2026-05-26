@@ -34,9 +34,15 @@ The app SHALL preserve the user-selected dark-mode preference across app restart
 
 ### Requirement: Non-theme settings remain explicit shell-only affordances in Phase 3
 
-The Settings screen SHALL present the remaining planned rows as visible shell affordances without claiming behavior that is not implemented in this slice.
+The Settings screen SHALL present the remaining planned rows as visible shell affordances without claiming behavior that is not implemented in this slice, and those rows SHALL provide explicit `coming soon` feedback when tapped.
 
 #### Scenario: Shell-only rows do not perform hidden product actions
 
 - **WHEN** a user interacts with Session Duration, Loop Mode, Auto-play Next, Silence Notifications, Support and FAQ, or Share with Friends in Phase 3
 - **THEN** the screen keeps those rows as shell-only affordances rather than silently mutating unrelated app state
+
+#### Scenario: Shell-only rows acknowledge interaction explicitly
+
+- **WHEN** a user taps Session Duration, Loop Mode, Auto-play Next, Silence Notifications, Support and FAQ, or Share with Friends in Phase 3
+- **THEN** the app surfaces clear `coming soon` feedback
+- **AND** the tap does not appear broken or silently ignored
