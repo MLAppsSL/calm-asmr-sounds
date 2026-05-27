@@ -23,10 +23,11 @@ export default function QuietModeRoute() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       <View style={styles.content}>
         <View style={styles.hero}>
+          <Text style={styles.badge}>Quiet Mode</Text>
           <Text style={[styles.title, { color: titleColor }]}>Enable Quiet Mode</Text>
           <Text style={[styles.subtitle, { color: subtitleColor }]}>
-            Keep the shell calm and interruption-free. This is a visual-only Phase 3 control and
-            will be wired later.
+            Start with a calmer shell before your first session. Quiet Mode is shown as enabled
+            here, and the real do-not-disturb behavior will be wired in a later phase.
           </Text>
         </View>
 
@@ -34,7 +35,8 @@ export default function QuietModeRoute() {
           <View style={styles.toggleCopy}>
             <Text style={[styles.toggleTitle, { color: titleColor }]}>Silence distractions</Text>
             <Text style={[styles.toggleDescription, { color: toggleDescriptionColor }]}>
-              Recommended before starting a short reset session.
+              Recommended before starting a short reset session. The toggle stays on in this shell
+              preview.
             </Text>
           </View>
           <Switch thumbColor="#f8fafc" trackColor={{ false: '#334155', true: '#8b5cf6' }} value />
@@ -69,6 +71,13 @@ const styles = StyleSheet.create({
   hero: {
     gap: 14,
     marginTop: 40,
+  },
+  badge: {
+    color: '#8b5cf6',
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   title: {
     fontSize: 34,

@@ -7,6 +7,7 @@ export default function OnboardingRoute() {
   const isDarkMode = useUIStore((state) => state.isDarkMode);
 
   const backgroundColor = isDarkMode ? '#020617' : '#e2e8f0';
+  const cardColor = isDarkMode ? '#111827' : '#ffffff';
   const subtitleColor = isDarkMode ? '#cbd5e1' : '#475569';
   const titleColor = isDarkMode ? '#f8fafc' : '#0f172a';
 
@@ -14,10 +15,14 @@ export default function OnboardingRoute() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       <View style={styles.content}>
         <View style={styles.hero}>
-          <Text style={styles.badge}>Calm Sounds</Text>
+          <View style={[styles.iconBadge, { backgroundColor: cardColor }]}>
+            <View style={styles.iconOrbit} />
+            <Text style={styles.iconGlyph}>C</Text>
+          </View>
+          <Text style={styles.badge}>Ultra-Short Sounds</Text>
           <Text style={[styles.title, { color: titleColor }]}>Find your calm in a minute</Text>
           <Text style={[styles.subtitle, { color: subtitleColor }]}>
-            Ultra-short ambient sound sessions built for quick reset moments.
+            Tiny ambient resets for busy days, built to get you breathing and centered fast.
           </Text>
         </View>
 
@@ -48,6 +53,26 @@ const styles = StyleSheet.create({
     gap: 16,
     marginTop: 64,
   },
+  iconBadge: {
+    alignItems: 'center',
+    borderRadius: 24,
+    height: 72,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    width: 72,
+  },
+  iconOrbit: {
+    backgroundColor: 'rgba(139,92,246,0.18)',
+    borderRadius: 999,
+    height: 52,
+    position: 'absolute',
+    width: 52,
+  },
+  iconGlyph: {
+    color: '#8b5cf6',
+    fontSize: 28,
+    fontWeight: '700',
+  },
   badge: {
     color: '#8b5cf6',
     fontSize: 13,
@@ -68,6 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#8b5cf6',
     borderRadius: 18,
+    elevation: 2,
     justifyContent: 'center',
     minHeight: 58,
   },
