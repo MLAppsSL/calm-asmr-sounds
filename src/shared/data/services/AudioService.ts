@@ -1,9 +1,22 @@
-import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
+import {
+  Audio,
+  InterruptionModeAndroid,
+  InterruptionModeIOS,
+  type AVPlaybackStatus,
+} from 'expo-av';
 
 const CROSSFADE_DURATION_MS = 700;
 const ANIMATION_STEP_MS = 50;
 
 type SoundInstance = Audio.Sound;
+
+export type PlaybackStatusSnapshot = {
+  didJustFinish: boolean;
+  durationMillis: number | null;
+  isLooping: boolean;
+  isPlaying: boolean;
+  positionMillis: number;
+};
 
 class AudioServiceClass {
   private initialized = false;
@@ -12,6 +25,8 @@ class AudioServiceClass {
   private outgoingSound: SoundInstance | null = null;
   private activeSoundId: string | null = null;
   private activeVolume = 1;
+  private isLooping = false;
+  private playbackStatusListener: ((status: PlaybackStatusSnapshot | null) => void) | null = null;
   private animationId = 0;
   private animationTimer: ReturnType<typeof setTimeout> | null = null;
   private animationResolve: ((completed: boolean) => void) | null = null;
@@ -48,7 +63,7 @@ class AudioServiceClass {
     }
 
     if (this.activeSound && this.activeSoundId === soundId) {
-      await this.stop();
+      await this.activeSound.playAsync();
       return;
     }
 
@@ -71,9 +86,41 @@ class AudioServiceClass {
     this.outgoingSound = null;
     this.activeSoundId = null;
     this.activeVolume = 1;
+    this.emitPlaybackStatus(null);
 
     await Promise.allSettled(sounds.map((sound) => this.unloadSound(sound)));
     await this.applyAudioMode(false);
+  }
+
+  async pause() {
+    if (!this.activeSound) {
+      return;
+    }
+
+    await this.activeSound.pauseAsync();
+  }
+
+  async resume() {
+    if (!this.activeSound) {
+      return false;
+    }
+
+    await this.activeSound.playAsync();
+    return true;
+  }
+
+  async setLooping(looping: boolean) {
+    this.isLooping = looping;
+
+    const updates = [this.activeSound, this.outgoingSound]
+      .filter((sound): sound is SoundInstance => sound !== null)
+      .map((sound) => this.setSoundLooping(sound, looping));
+
+    await Promise.allSettled(updates);
+  }
+
+  setPlaybackStatusListener(listener: ((status: PlaybackStatusSnapshot | null) => void) | null) {
+    this.playbackStatusListener = listener;
   }
 
   async fadeOut(durationMs: number) {
@@ -185,7 +232,7 @@ class AudioServiceClass {
     const { sound } = await Audio.Sound.createAsync(
       { uri: localUri },
       {
-        isLooping: true,
+        isLooping: this.isLooping,
         shouldPlay: true,
         progressUpdateIntervalMillis: ANIMATION_STEP_MS,
         volume,
@@ -193,6 +240,10 @@ class AudioServiceClass {
       null,
       false,
     );
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      this.handlePlaybackStatus(sound, status);
+    });
 
     return sound;
   }
@@ -207,6 +258,32 @@ class AudioServiceClass {
     if (this.activeSound === sound) {
       this.activeVolume = volume;
     }
+  }
+
+  private async setSoundLooping(sound: SoundInstance, looping: boolean) {
+    if (typeof sound.setIsLoopingAsync !== 'function') {
+      return;
+    }
+
+    await sound.setIsLoopingAsync(looping);
+  }
+
+  private handlePlaybackStatus(sound: SoundInstance, status: AVPlaybackStatus) {
+    if (!status.isLoaded || this.activeSound !== sound) {
+      return;
+    }
+
+    this.emitPlaybackStatus({
+      didJustFinish: status.didJustFinish,
+      durationMillis: status.durationMillis ?? null,
+      isLooping: status.isLooping,
+      isPlaying: status.isPlaying,
+      positionMillis: status.positionMillis,
+    });
+  }
+
+  private emitPlaybackStatus(status: PlaybackStatusSnapshot | null) {
+    this.playbackStatusListener?.(status);
   }
 
   private cancelAnimation() {
