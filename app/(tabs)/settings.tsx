@@ -82,7 +82,7 @@ export default function SettingsRoute() {
             <View style={styles.row}>
               <View style={styles.rowInfo}>
                 <View style={styles.rowIcon}>
-                  <MaterialIcons color="#a78bfa" name="autoplay" size={22} />
+                  <MaterialIcons color="#a78bfa" name="autorenew" size={22} />
                 </View>
                 <Text style={styles.rowTitle}>Auto-play Next</Text>
               </View>
