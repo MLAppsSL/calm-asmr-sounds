@@ -1,6 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import { setStatusBarHidden } from 'expo-status-bar';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
@@ -157,19 +156,16 @@ export default function PlayerRoute() {
     useCallback(() => {
       return () => {
         deactivateKeepAwake(KEEP_AWAKE_TAG);
-        setStatusBarHidden(false, 'fade');
       };
     }, []),
   );
 
   const enterFullscreen = useCallback(() => {
-    setStatusBarHidden(true, 'fade');
     void activateKeepAwakeAsync(KEEP_AWAKE_TAG);
     setIsFullscreen(true);
   }, []);
 
   const exitFullscreen = useCallback(() => {
-    setStatusBarHidden(false, 'fade');
     deactivateKeepAwake(KEEP_AWAKE_TAG);
     setIsFullscreen(false);
   }, []);
