@@ -1,99 +1,144 @@
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
-import { useShallow } from 'zustand/react/shallow';
 
-import { useUIStore } from '@/shared/domain/stores/uiStore';
-
-const SHELL_ROWS = [
-  'Session Duration',
-  'Loop Mode',
-  'Auto-play Next',
-  'Silence Notifications',
-  'Support and FAQ',
-  'Share with Friends',
-] as const;
+import { useAudioStore, type TimerDurationMs } from '@/shared/domain/stores/audioStore';
 
 export default function SettingsRoute() {
-  const { isDarkMode, toggleDarkMode } = useUIStore(
-    useShallow((state) => ({
-      isDarkMode: state.isDarkMode,
-      toggleDarkMode: state.toggleDarkMode,
-    })),
-  );
-  const [comingSoonMessage, setComingSoonMessage] = useState<string | null>(null);
+  const timerDurationMs = useAudioStore((state) => state.timerDurationMs);
+  const isLooping = useAudioStore((state) => state.isLooping);
+  const setIsLooping = useAudioStore((state) => state.setIsLooping);
+  const setTimerDuration = useAudioStore((state) => state.setTimerDuration);
+  const [isAutoPlayNextEnabled, setIsAutoPlayNextEnabled] = useState(false);
+  const [isSilenceNotificationsEnabled, setIsSilenceNotificationsEnabled] = useState(false);
 
-  const backgroundColor = isDarkMode ? '#020617' : '#e2e8f0';
-  const cardColor = isDarkMode ? '#111827' : '#ffffff';
-  const dividerColor = isDarkMode ? 'rgba(148,163,184,0.18)' : 'rgba(15,23,42,0.08)';
-  const helperColor = isDarkMode ? '#94a3b8' : '#64748b';
-  const titleColor = isDarkMode ? '#f8fafc' : '#0f172a';
-
-  function showComingSoon(label: string) {
-    setComingSoonMessage(`${label} is coming soon.`);
-  }
+  const durationOptions: { label: string; value: TimerDurationMs }[] = [
+    { label: '1m', value: 60000 },
+    { label: '2m', value: 120000 },
+    { label: '3m', value: 180000 },
+  ];
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
+    <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.eyebrow}>Settings</Text>
-          <Text style={[styles.title, { color: titleColor }]}>Shape your calm</Text>
-          <Text style={[styles.subtitle, { color: helperColor }]}>
-            Dark Mode works today. The remaining controls stay interactive so you can preview the
-            full shell.
-          </Text>
+        <View style={styles.headerRow}>
+          <Pressable
+            hitSlop={10}
+            onPress={() => {
+              router.back();
+            }}
+            style={styles.backButton}
+          >
+            <MaterialIcons color="#ffffff" name="chevron-left" size={34} />
+          </Pressable>
+
+          <Text style={styles.title}>Settings</Text>
+          <View style={styles.headerSpacer} />
         </View>
 
-        <View style={[styles.sectionCard, { backgroundColor: cardColor }]}>
-          <View style={styles.row}>
-            <View style={styles.rowCopy}>
-              <Text style={[styles.rowTitle, { color: titleColor }]}>Dark Mode</Text>
-              <Text style={[styles.rowHelper, { color: helperColor }]}>
-                Switch the shell between dark and light presentation.
-              </Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>SESSION DURATION</Text>
+
+          <View style={styles.segmentedControl}>
+            {durationOptions.map((option) => {
+              const isActive = option.value === timerDurationMs;
+
+              return (
+                <Pressable
+                  key={option.value}
+                  onPress={() => {
+                    setTimerDuration(option.value);
+                  }}
+                  style={[styles.segmentButton, isActive && styles.segmentButtonActive]}
+                >
+                  <Text style={[styles.segmentLabel, isActive && styles.segmentLabelActive]}>
+                    {option.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>PLAYBACK CONTROL</Text>
+
+          <View style={styles.groupCard}>
+            <View style={styles.row}>
+              <View style={[styles.rowIcon, styles.rowIconPurple]}>
+                <Ionicons color="#b38bff" name="infinite" size={28} />
+              </View>
+              <Text style={styles.rowTitle}>Loop Mode</Text>
+              <Switch
+                ios_backgroundColor="#2d2d33"
+                onValueChange={setIsLooping}
+                thumbColor="#ffffff"
+                trackColor={{ false: '#2d2d33', true: '#af8bff' }}
+                value={isLooping}
+              />
             </View>
-            <Switch
-              onValueChange={() => {
-                setComingSoonMessage(null);
-                toggleDarkMode();
-              }}
-              thumbColor="#f8fafc"
-              trackColor={{ false: '#94a3b8', true: '#8b5cf6' }}
-              value={isDarkMode}
-            />
+
+            <View style={styles.divider} />
+
+            <View style={styles.row}>
+              <View style={[styles.rowIcon, styles.rowIconPurple]}>
+                <MaterialIcons color="#b38bff" name="autorenew" size={27} />
+              </View>
+              <Text style={styles.rowTitle}>Auto-play Next</Text>
+              <Switch
+                ios_backgroundColor="#2d2d33"
+                onValueChange={setIsAutoPlayNextEnabled}
+                thumbColor="#ffffff"
+                trackColor={{ false: '#2d2d33', true: '#af8bff' }}
+                value={isAutoPlayNextEnabled}
+              />
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>DEEP FOCUS</Text>
+
+          <View style={styles.groupCard}>
+            <View style={styles.row}>
+              <View style={[styles.rowIcon, styles.rowIconPurple]}>
+                <MaterialIcons color="#b38bff" name="remove" size={28} />
+              </View>
+              <Text style={styles.rowTitle}>Silence Notifications</Text>
+              <Switch
+                ios_backgroundColor="#2d2d33"
+                onValueChange={setIsSilenceNotificationsEnabled}
+                thumbColor="#ffffff"
+                trackColor={{ false: '#2d2d33', true: '#af8bff' }}
+                value={isSilenceNotificationsEnabled}
+              />
+            </View>
           </View>
 
-          {SHELL_ROWS.map((label, index) => (
-            <Pressable
-              key={label}
-              onPress={() => {
-                showComingSoon(label);
-              }}
-              style={[
-                styles.row,
-                index > 0 && {
-                  borderTopColor: dividerColor,
-                  borderTopWidth: StyleSheet.hairlineWidth,
-                },
-              ]}
-            >
-              <View style={styles.rowCopy}>
-                <Text style={[styles.rowTitle, { color: titleColor }]}>{label}</Text>
-                <Text style={[styles.rowHelper, { color: helperColor }]}>
-                  Tap to preview this shell control.
-                </Text>
-              </View>
-              <Text style={[styles.rowMeta, { color: helperColor }]}>Coming soon</Text>
-            </Pressable>
-          ))}
+          <Text style={styles.helperText}>
+            Automatically activate Focus Mode when a session begins to eliminate distractions.
+          </Text>
         </View>
 
-        <View style={[styles.feedbackCard, { backgroundColor: cardColor }]}>
-          <Text style={[styles.feedbackTitle, { color: titleColor }]}>Shell feedback</Text>
-          <Text style={[styles.feedbackBody, { color: helperColor }]}>
-            {comingSoonMessage ??
-              'Tap any unfinished row to confirm it is still a shell-only affordance.'}
-          </Text>
+        <View style={styles.groupCard}>
+          <Pressable style={styles.row}>
+            <View style={styles.rowIcon}>
+              <Ionicons color="#d5d5d7" name="help" size={24} />
+            </View>
+            <Text style={styles.rowTitle}>Support &amp; FAQ</Text>
+            <MaterialIcons color="rgba(255,255,255,0.24)" name="chevron-right" size={30} />
+          </Pressable>
+
+          <View style={styles.divider} />
+
+          <Pressable style={styles.row}>
+            <View style={styles.rowIcon}>
+              <Ionicons color="#d5d5d7" name="share-social" size={24} />
+            </View>
+            <Text style={styles.rowTitle}>Share with Friends</Text>
+            <MaterialIcons color="rgba(255,255,255,0.24)" name="chevron-right" size={30} />
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -102,71 +147,111 @@ export default function SettingsRoute() {
 
 const styles = StyleSheet.create({
   safeArea: {
+    backgroundColor: '#0c0c12',
     flex: 1,
   },
   content: {
-    gap: 18,
-    padding: 20,
+    gap: 34,
+    paddingHorizontal: 20,
+    paddingTop: 18,
     paddingBottom: 120,
   },
-  header: {
-    gap: 10,
+  headerRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
-  eyebrow: {
-    color: '#8b5cf6',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
+  backButton: {
+    alignItems: 'center',
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
+  headerSpacer: {
+    width: 42,
   },
   title: {
-    fontSize: 34,
+    color: '#f8fafc',
+    fontSize: 28,
+    fontWeight: '500',
+  },
+  section: {
+    gap: 18,
+  },
+  sectionLabel: {
+    color: 'rgba(255,255,255,0.36)',
+    fontSize: 14,
     fontWeight: '700',
-    lineHeight: 40,
+    letterSpacing: 4,
   },
-  subtitle: {
-    fontSize: 15,
-    lineHeight: 22,
+  segmentedControl: {
+    backgroundColor: '#101118',
+    borderColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 30,
+    borderWidth: 1,
+    flexDirection: 'row',
+    padding: 10,
   },
-  sectionCard: {
-    borderRadius: 26,
+  segmentButton: {
+    alignItems: 'center',
+    borderRadius: 24,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 68,
+  },
+  segmentButtonActive: {
+    backgroundColor: '#2a2b33',
+  },
+  segmentLabel: {
+    color: 'rgba(255,255,255,0.42)',
+    fontSize: 18,
+    fontWeight: '500',
+  },
+  segmentLabelActive: {
+    color: '#ffffff',
+  },
+  groupCard: {
+    backgroundColor: '#101118',
+    borderColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 30,
+    borderWidth: 1,
     overflow: 'hidden',
   },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 16,
-    minHeight: 84,
-    paddingHorizontal: 18,
-    paddingVertical: 16,
+    gap: 18,
+    minHeight: 102,
+    paddingHorizontal: 20,
   },
-  rowCopy: {
-    flex: 1,
-    gap: 4,
+  rowIcon: {
+    alignItems: 'center',
+    backgroundColor: '#1f2028',
+    borderRadius: 22,
+    height: 56,
+    justifyContent: 'center',
+    width: 56,
+  },
+  rowIconPurple: {
+    backgroundColor: '#1f2026',
   },
   rowTitle: {
+    color: '#f8fafc',
+    flex: 1,
     fontSize: 17,
     fontWeight: '600',
   },
-  rowHelper: {
-    fontSize: 13,
-    lineHeight: 18,
+  divider: {
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    height: StyleSheet.hairlineWidth,
+    marginHorizontal: 20,
   },
-  rowMeta: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  feedbackCard: {
-    borderRadius: 22,
-    gap: 8,
-    padding: 18,
-  },
-  feedbackTitle: {
+  helperText: {
+    color: 'rgba(255,255,255,0.24)',
     fontSize: 16,
-    fontWeight: '700',
-  },
-  feedbackBody: {
-    fontSize: 14,
-    lineHeight: 20,
+    lineHeight: 28,
+    marginTop: 6,
+    paddingHorizontal: 6,
   },
 });
