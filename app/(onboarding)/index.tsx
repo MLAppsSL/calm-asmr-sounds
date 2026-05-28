@@ -1,29 +1,26 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import { useUIStore } from '@/shared/domain/stores/uiStore';
-
 export default function OnboardingRoute() {
-  const isDarkMode = useUIStore((state) => state.isDarkMode);
-
-  const backgroundColor = isDarkMode ? '#020617' : '#e2e8f0';
-  const cardColor = isDarkMode ? '#111827' : '#ffffff';
-  const subtitleColor = isDarkMode ? '#cbd5e1' : '#475569';
-  const titleColor = isDarkMode ? '#f8fafc' : '#0f172a';
-
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
+    <SafeAreaView style={styles.safeArea}>
+      <View pointerEvents="none" style={styles.backgroundGlow} />
+
       <View style={styles.content}>
         <View style={styles.hero}>
-          <View style={[styles.iconBadge, { backgroundColor: cardColor }]}>
-            <View style={styles.iconOrbit} />
-            <Text style={styles.iconGlyph}>C</Text>
+          <LinearGradient colors={['#0d8eb6', '#1fd4ff']} style={styles.logoTile}>
+            <View style={styles.logoOuterRing}>
+              <View style={styles.logoInnerRing} />
+            </View>
+            <View style={styles.logoHighlight} />
+          </LinearGradient>
+
+          <View style={styles.copyGroup}>
+            <Text style={styles.title}>Find your calm</Text>
+            <Text style={styles.titleMuted}>in a minute</Text>
+            <Text style={styles.badge}>ULTRA-SHORT SOUNDS</Text>
           </View>
-          <Text style={styles.badge}>Ultra-Short Sounds</Text>
-          <Text style={[styles.title, { color: titleColor }]}>Find your calm in a minute</Text>
-          <Text style={[styles.subtitle, { color: subtitleColor }]}>
-            Tiny ambient resets for busy days, built to get you breathing and centered fast.
-          </Text>
         </View>
 
         <Pressable
@@ -41,65 +38,121 @@ export default function OnboardingRoute() {
 
 const styles = StyleSheet.create({
   safeArea: {
+    backgroundColor: '#111827',
     flex: 1,
+  },
+  backgroundGlow: {
+    backgroundColor: 'rgba(74,222,255,0.08)',
+    borderRadius: 420,
+    height: 420,
+    left: -24,
+    position: 'absolute',
+    right: -24,
+    top: 120,
   },
   content: {
     flex: 1,
     justifyContent: 'space-between',
     paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingVertical: 28,
   },
   hero: {
-    gap: 16,
-    marginTop: 64,
-  },
-  iconBadge: {
     alignItems: 'center',
-    borderRadius: 24,
-    height: 72,
+    flex: 1,
     justifyContent: 'center',
-    overflow: 'hidden',
-    width: 72,
   },
-  iconOrbit: {
-    backgroundColor: 'rgba(139,92,246,0.18)',
+  logoTile: {
+    alignItems: 'center',
+    borderRadius: 2,
+    height: 142,
+    justifyContent: 'center',
+    shadowColor: '#31d4ff',
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
+    shadowOpacity: 0.55,
+    shadowRadius: 28,
+    width: 142,
+  },
+  logoOuterRing: {
+    alignItems: 'center',
+    borderColor: '#ffffff',
     borderRadius: 999,
-    height: 52,
+    borderWidth: 5,
+    height: 54,
+    justifyContent: 'center',
+    width: 54,
+  },
+  logoInnerRing: {
+    borderColor: '#ffffff',
+    borderRadius: 999,
+    borderWidth: 2.5,
+    height: 40,
+    marginLeft: 6,
+    width: 40,
+  },
+  logoHighlight: {
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    borderRadius: 999,
+    bottom: 22,
+    height: 76,
     position: 'absolute',
-    width: 52,
+    width: 76,
   },
-  iconGlyph: {
-    color: '#8b5cf6',
-    fontSize: 28,
-    fontWeight: '700',
-  },
-  badge: {
-    color: '#8b5cf6',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
+  copyGroup: {
+    alignItems: 'center',
+    marginTop: 158,
   },
   title: {
-    fontSize: 40,
-    fontWeight: '700',
-    lineHeight: 46,
+    color: '#f8fafc',
+    fontSize: 46,
+    fontWeight: '300',
+    letterSpacing: -1.2,
+    lineHeight: 54,
+    textAlign: 'center',
   },
-  subtitle: {
-    fontSize: 17,
-    lineHeight: 25,
+  titleMuted: {
+    color: 'rgba(248,250,252,0.55)',
+    fontSize: 44,
+    fontWeight: '300',
+    letterSpacing: -1,
+    lineHeight: 52,
+    textAlign: 'center',
+  },
+  badge: {
+    color: 'rgba(203,213,225,0.28)',
+    fontSize: 15,
+    letterSpacing: 6,
+    marginTop: 36,
+    textAlign: 'center',
   },
   primaryButton: {
     alignItems: 'center',
-    backgroundColor: '#8b5cf6',
-    borderRadius: 18,
-    elevation: 2,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderColor: 'rgba(255,255,255,0.14)',
+    borderRadius: 38,
+    borderWidth: 1,
     justifyContent: 'center',
-    minHeight: 58,
+    marginBottom: 18,
+    minHeight: 82,
+    shadowColor: '#000000',
+    shadowOffset: {
+      height: 10,
+      width: 0,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 22,
   },
   primaryButtonText: {
     color: '#f8fafc',
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: '400',
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: {
+      height: 1,
+      width: 0,
+    },
+    textShadowRadius: 4,
   },
 });
