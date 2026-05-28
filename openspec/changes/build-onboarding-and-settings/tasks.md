@@ -18,5 +18,5 @@
 ## 4. Validation
 
 - [x] 4.1 Run the relevant project checks after the shell updates land and fix any lint, formatting, or type regressions introduced by the slice.
-- [ ] 4.2 Manually verify first-launch onboarding, returning-user bypass to tabs, onboarding completion via both CTAs, and dark-mode persistence across app restart.
+- [x] 4.2 Manually verify first-launch onboarding, returning-user bypass to tabs, onboarding completion via both CTAs, and dark-mode persistence across app restart.
 - [x] 4.3 Create the Phase `03-03` summary artifact after implementation using the project planning summary format.
