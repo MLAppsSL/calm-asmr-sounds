@@ -22,25 +22,22 @@ export default function SettingsRoute() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.headerRow}>
+        <View style={styles.header}>
           <Pressable
-            hitSlop={10}
             onPress={() => {
               router.back();
             }}
             style={styles.backButton}
           >
-            <MaterialIcons color="#ffffff" name="chevron-left" size={34} />
+            <MaterialIcons color="rgba(255,255,255,0.7)" name="arrow-back-ios-new" size={18} />
           </Pressable>
-
-          <Text style={styles.title}>Settings</Text>
+          <Text style={styles.screenTitle}>Settings</Text>
           <View style={styles.headerSpacer} />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>SESSION DURATION</Text>
-
-          <View style={styles.segmentedControl}>
+          <Text style={styles.sectionLabel}>Session Duration</Text>
+          <View style={styles.segmentedCard}>
             {durationOptions.map((option) => {
               const isActive = option.value === timerDurationMs;
 
@@ -50,9 +47,9 @@ export default function SettingsRoute() {
                   onPress={() => {
                     setTimerDuration(option.value);
                   }}
-                  style={[styles.segmentButton, isActive && styles.segmentButtonActive]}
+                  style={[styles.segmentItem, isActive && styles.segmentItemActive]}
                 >
-                  <Text style={[styles.segmentLabel, isActive && styles.segmentLabelActive]}>
+                  <Text style={[styles.segmentText, isActive && styles.segmentTextActive]}>
                     {option.label}
                   </Text>
                 </Pressable>
@@ -62,19 +59,20 @@ export default function SettingsRoute() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>PLAYBACK CONTROL</Text>
-
+          <Text style={styles.sectionLabel}>Playback Control</Text>
           <View style={styles.groupCard}>
             <View style={styles.row}>
-              <View style={[styles.rowIcon, styles.rowIconPurple]}>
-                <Ionicons color="#b38bff" name="infinite" size={28} />
+              <View style={styles.rowInfo}>
+                <View style={styles.rowIcon}>
+                  <Ionicons color="#a78bfa" name="infinite" size={22} />
+                </View>
+                <Text style={styles.rowTitle}>Loop Mode</Text>
               </View>
-              <Text style={styles.rowTitle}>Loop Mode</Text>
               <Switch
-                ios_backgroundColor="#2d2d33"
+                ios_backgroundColor="rgba(255,255,255,0.1)"
                 onValueChange={setIsLooping}
                 thumbColor="#ffffff"
-                trackColor={{ false: '#2d2d33', true: '#af8bff' }}
+                trackColor={{ false: 'rgba(255,255,255,0.1)', true: '#a78bfa' }}
                 value={isLooping}
               />
             </View>
@@ -82,15 +80,17 @@ export default function SettingsRoute() {
             <View style={styles.divider} />
 
             <View style={styles.row}>
-              <View style={[styles.rowIcon, styles.rowIconPurple]}>
-                <MaterialIcons color="#b38bff" name="autorenew" size={27} />
+              <View style={styles.rowInfo}>
+                <View style={styles.rowIcon}>
+                  <MaterialIcons color="#a78bfa" name="autoplay" size={22} />
+                </View>
+                <Text style={styles.rowTitle}>Auto-play Next</Text>
               </View>
-              <Text style={styles.rowTitle}>Auto-play Next</Text>
               <Switch
-                ios_backgroundColor="#2d2d33"
+                ios_backgroundColor="rgba(255,255,255,0.1)"
                 onValueChange={setIsAutoPlayNextEnabled}
                 thumbColor="#ffffff"
-                trackColor={{ false: '#2d2d33', true: '#af8bff' }}
+                trackColor={{ false: 'rgba(255,255,255,0.1)', true: '#a78bfa' }}
                 value={isAutoPlayNextEnabled}
               />
             </View>
@@ -98,46 +98,50 @@ export default function SettingsRoute() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>DEEP FOCUS</Text>
-
+          <Text style={styles.sectionLabel}>Deep Focus</Text>
           <View style={styles.groupCard}>
             <View style={styles.row}>
-              <View style={[styles.rowIcon, styles.rowIconPurple]}>
-                <MaterialIcons color="#b38bff" name="remove" size={28} />
+              <View style={styles.rowInfo}>
+                <View style={styles.rowIcon}>
+                  <MaterialIcons color="#a78bfa" name="do-not-disturb-on" size={22} />
+                </View>
+                <Text style={styles.rowTitle}>Silence Notifications</Text>
               </View>
-              <Text style={styles.rowTitle}>Silence Notifications</Text>
               <Switch
-                ios_backgroundColor="#2d2d33"
+                ios_backgroundColor="rgba(255,255,255,0.1)"
                 onValueChange={setIsSilenceNotificationsEnabled}
                 thumbColor="#ffffff"
-                trackColor={{ false: '#2d2d33', true: '#af8bff' }}
+                trackColor={{ false: 'rgba(255,255,255,0.1)', true: '#a78bfa' }}
                 value={isSilenceNotificationsEnabled}
               />
             </View>
           </View>
-
           <Text style={styles.helperText}>
             Automatically activate Focus Mode when a session begins to eliminate distractions.
           </Text>
         </View>
 
         <View style={styles.groupCard}>
-          <Pressable style={styles.row}>
-            <View style={styles.rowIcon}>
-              <Ionicons color="#d5d5d7" name="help" size={24} />
+          <Pressable style={styles.rowAction}>
+            <View style={styles.rowInfo}>
+              <View style={styles.rowIconMuted}>
+                <Ionicons color="rgba(255,255,255,0.6)" name="help" size={20} />
+              </View>
+              <Text style={styles.rowTitle}>Support &amp; FAQ</Text>
             </View>
-            <Text style={styles.rowTitle}>Support &amp; FAQ</Text>
-            <MaterialIcons color="rgba(255,255,255,0.24)" name="chevron-right" size={30} />
+            <MaterialIcons color="rgba(255,255,255,0.2)" name="chevron-right" size={24} />
           </Pressable>
 
           <View style={styles.divider} />
 
-          <Pressable style={styles.row}>
-            <View style={styles.rowIcon}>
-              <Ionicons color="#d5d5d7" name="share-social" size={24} />
+          <Pressable style={styles.rowAction}>
+            <View style={styles.rowInfo}>
+              <View style={styles.rowIconMuted}>
+                <Ionicons color="rgba(255,255,255,0.6)" name="share-social" size={20} />
+              </View>
+              <Text style={styles.rowTitle}>Share with Friends</Text>
             </View>
-            <Text style={styles.rowTitle}>Share with Friends</Text>
-            <MaterialIcons color="rgba(255,255,255,0.24)" name="chevron-right" size={30} />
+            <MaterialIcons color="rgba(255,255,255,0.2)" name="chevron-right" size={24} />
           </Pressable>
         </View>
       </ScrollView>
@@ -147,100 +151,121 @@ export default function SettingsRoute() {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: '#0c0c12',
+    backgroundColor: '#0b0b0f',
     flex: 1,
   },
   content: {
-    gap: 34,
-    paddingHorizontal: 20,
-    paddingTop: 18,
-    paddingBottom: 120,
+    gap: 32,
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 40,
   },
-  headerRow: {
+  header: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    paddingVertical: 8,
   },
   backButton: {
     alignItems: 'center',
-    height: 42,
+    borderRadius: 20,
+    height: 40,
     justifyContent: 'center',
-    width: 42,
+    width: 40,
   },
   headerSpacer: {
-    width: 42,
+    height: 40,
+    width: 40,
   },
-  title: {
-    color: '#f8fafc',
-    fontSize: 28,
-    fontWeight: '500',
+  screenTitle: {
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 24,
+    fontWeight: '600',
   },
   section: {
-    gap: 18,
+    gap: 16,
   },
   sectionLabel: {
-    color: 'rgba(255,255,255,0.36)',
-    fontSize: 14,
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 12,
     fontWeight: '700',
-    letterSpacing: 4,
+    letterSpacing: 2.4,
+    marginLeft: 4,
+    textTransform: 'uppercase',
   },
-  segmentedControl: {
-    backgroundColor: '#101118',
-    borderColor: 'rgba(255,255,255,0.06)',
-    borderRadius: 30,
+  segmentedCard: {
+    backgroundColor: 'rgba(255,255,255,0.02)',
+    borderColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 24,
     borderWidth: 1,
     flexDirection: 'row',
-    padding: 10,
+    gap: 4,
+    padding: 6,
   },
-  segmentButton: {
+  segmentItem: {
     alignItems: 'center',
-    borderRadius: 24,
+    borderRadius: 16,
     flex: 1,
+    height: 44,
     justifyContent: 'center',
-    minHeight: 68,
   },
-  segmentButtonActive: {
-    backgroundColor: '#2a2b33',
+  segmentItemActive: {
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
-  segmentLabel: {
-    color: 'rgba(255,255,255,0.42)',
-    fontSize: 18,
+  segmentText: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 14,
     fontWeight: '500',
   },
-  segmentLabelActive: {
+  segmentTextActive: {
     color: '#ffffff',
   },
   groupCard: {
-    backgroundColor: '#101118',
-    borderColor: 'rgba(255,255,255,0.06)',
-    borderRadius: 30,
+    backgroundColor: 'rgba(255,255,255,0.02)',
+    borderColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 24,
     borderWidth: 1,
     overflow: 'hidden',
   },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 18,
-    minHeight: 102,
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  rowAction: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  rowInfo: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 16,
   },
   rowIcon: {
     alignItems: 'center',
-    backgroundColor: '#1f2028',
-    borderRadius: 22,
-    height: 56,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 20,
+    height: 40,
     justifyContent: 'center',
-    width: 56,
+    width: 40,
   },
-  rowIconPurple: {
-    backgroundColor: '#1f2026',
+  rowIconMuted: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 20,
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
   },
   rowTitle: {
-    color: '#f8fafc',
-    flex: 1,
-    fontSize: 17,
-    fontWeight: '600',
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 15,
+    fontWeight: '500',
   },
   divider: {
     backgroundColor: 'rgba(255,255,255,0.06)',
@@ -248,10 +273,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   helperText: {
-    color: 'rgba(255,255,255,0.24)',
-    fontSize: 16,
-    lineHeight: 28,
-    marginTop: 6,
-    paddingHorizontal: 6,
+    color: 'rgba(255,255,255,0.3)',
+    fontSize: 13,
+    fontWeight: '300',
+    lineHeight: 20,
+    paddingHorizontal: 4,
   },
 });
