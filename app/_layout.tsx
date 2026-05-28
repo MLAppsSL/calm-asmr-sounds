@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import * as SplashScreen from 'expo-splash-screen';
-import { Stack } from 'expo-router';
+import { Stack, useRootNavigationState } from 'expo-router';
 
 import { AudioService } from '@/shared/data/services/AudioService';
 import { TimerService } from '@/shared/data/services/TimerService';
@@ -13,6 +13,8 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 
 export default function RootLayout() {
   const hasHydrated = useUIStore((state) => state._hasHydrated);
+  const rootNavigationState = useRootNavigationState();
+  const [isStartupReady, setIsStartupReady] = useState(false);
 
   useEffect(() => {
     void AudioService.initialize().catch((error: unknown) => {
@@ -27,14 +29,22 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (!hasHydrated) {
+    if (isStartupReady || !rootNavigationState?.key || !hasHydrated) {
+      return;
+    }
+
+    setIsStartupReady(true);
+  }, [hasHydrated, isStartupReady, rootNavigationState?.key]);
+
+  useEffect(() => {
+    if (!isStartupReady) {
       return;
     }
 
     void SplashScreen.hideAsync().catch(() => {
       // Ignore hide races during development reloads.
     });
-  }, [hasHydrated]);
+  }, [isStartupReady]);
 
   return (
     <Stack>

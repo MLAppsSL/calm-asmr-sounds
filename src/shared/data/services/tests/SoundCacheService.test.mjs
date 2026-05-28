@@ -29,16 +29,17 @@ afterEach(() => {
   __resetStorageMock();
 });
 
-test('catalog exports 9 sounds with lookup helpers', () => {
-  assert.equal(SOUNDS.length, 9);
-  assert.equal(SOUNDS_BY_ID['ocean-01'].title, 'Ocean Waves');
-  assert.equal(SOUNDS_BY_CATEGORY.rain.length, 2);
-  assert.equal(SOUNDS_BY_CATEGORY.fire.length, 2);
-  assert.equal(SOUNDS_BY_CATEGORY.forest.length, 2);
-  assert.equal(SOUNDS_BY_CATEGORY['white-noise'][0].storageRef, 'sounds/white-noise-01.mp3');
+test('catalog exports 17 sounds with lookup helpers', () => {
+  assert.equal(SOUNDS.length, 17);
+  assert.equal(SOUNDS_BY_ID['wave-01'].title, 'Ocean Waves');
+  assert.equal(SOUNDS_BY_CATEGORY.rain.length, 4);
+  assert.equal(SOUNDS_BY_CATEGORY.fire.length, 4);
+  assert.equal(SOUNDS_BY_CATEGORY.forest.length, 5);
+  assert.equal(SOUNDS_BY_CATEGORY.wave[3].storageRef, 'sounds/ocean-04.mp3');
+  assert.equal(SOUNDS_BY_ID['wave-03'].isPremium, true);
+  assert.equal(SOUNDS_BY_ID['forest-05'].defaultTimerSeconds, 130);
 
   for (const sound of SOUNDS) {
-    assert.equal(sound.isPremium, false);
     assert.equal(sound.thumbnailUrl, null);
     assert.match(sound.storageRef, /^sounds\/.+\.mp3$/);
   }

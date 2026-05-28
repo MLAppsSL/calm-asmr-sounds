@@ -15,14 +15,37 @@ export function VideoBackground({ source }: VideoBackgroundProps) {
     videoPlayer.play();
   });
 
+  const safelyControlPlayer = useCallback(
+    (action: 'play' | 'pause') => {
+      try {
+        if (action === 'play') {
+          player.play();
+          return;
+        }
+
+        player.pause();
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          /released|Cannot use shared object/i.test(error.message)
+        ) {
+          return;
+        }
+
+        console.warn(`Video background ${action} failed.`, error);
+      }
+    },
+    [player],
+  );
+
   useFocusEffect(
     useCallback(() => {
-      player.play();
+      safelyControlPlayer('play');
 
       return () => {
-        player.pause();
+        safelyControlPlayer('pause');
       };
-    }, [player]),
+    }, [safelyControlPlayer]),
   );
 
   return (
