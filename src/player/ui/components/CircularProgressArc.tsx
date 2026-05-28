@@ -8,7 +8,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const RADIUS = 46;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-const SVG_SIZE = 200;
+const SVG_SIZE = 288;
 
 type CircularProgressArcProps = {
   progress: number;
@@ -48,16 +48,16 @@ export function CircularProgressArc({
           cy={50}
           fill="none"
           r={RADIUS}
-          stroke="rgba(255,255,255,0.9)"
+          stroke="rgba(255,255,255,0.8)"
           strokeDasharray={CIRCUMFERENCE}
           strokeLinecap="round"
-          strokeWidth={0.9}
+          strokeWidth={0.8}
         />
       </Svg>
 
       <Pressable onPress={onPlayPause} style={styles.playButton}>
         <View style={styles.playButtonGlass}>
-          <MaterialIcons color="#ffffff" name={isPlaying ? 'pause' : 'play-arrow'} size={56} />
+          <MaterialIcons color="#ffffff" name={isPlaying ? 'pause' : 'play-arrow'} size={42} />
         </View>
       </Pressable>
     </View>
@@ -76,17 +76,15 @@ const styles = StyleSheet.create({
   },
   playButtonGlass: {
     alignItems: 'center',
-    backgroundColor: 'rgba(156,175,186,0.14)',
-    borderColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderColor: 'rgba(255,255,255,0.1)',
     borderRadius: 999,
     borderWidth: 1,
-    height: 118,
+    height: 96,
     justifyContent: 'center',
-    width: 118,
+    width: 96,
   },
   svg: {
-    height: 340,
     transform: [{ rotate: '-90deg' }],
-    width: 340,
   },
 });
