@@ -56,8 +56,8 @@ export const SOUNDS: LibrarySound[] = [
   },
   {
     id: 'wave-03',
-    name: 'Deep Blue',
-    subtitle: 'Rolling tides',
+    name: 'Deep Ocean',
+    subtitle: 'Rolling waves',
     category: 'nature',
     duration: '3:00',
     durationSeconds: 180,

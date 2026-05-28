@@ -19,12 +19,12 @@ export default function LibraryRoute() {
           </View>
 
           <View style={styles.profileButton}>
-            <Ionicons color="#dce3ef" name="person" size={24} />
+            <Ionicons color="#cbd5e1" name="person" size={20} />
           </View>
         </View>
 
         <View style={styles.searchBar}>
-          <MaterialIcons color="#64748b" name="search" size={26} />
+          <MaterialIcons color="#64748b" name="search" size={22} />
           <TextInput
             editable={false}
             placeholder="Search sounds..."
@@ -67,78 +67,80 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingBottom: 140,
-    paddingTop: 12,
+    paddingTop: 8,
   },
   headerRow: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
   },
   title: {
     color: '#ffffff',
-    fontSize: 30,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '600',
   },
   subtitle: {
-    color: '#93a1b4',
-    fontSize: 14,
-    marginTop: 4,
+    color: '#94a3b8',
+    fontSize: 13,
+    fontWeight: '500',
+    marginTop: 2,
   },
   profileButton: {
     alignItems: 'center',
     backgroundColor: '#181b22',
     borderColor: 'rgba(255,255,255,0.08)',
-    borderRadius: 22,
+    borderRadius: 20,
     borderWidth: 1,
-    height: 56,
+    height: 40,
     justifyContent: 'center',
-    width: 56,
+    width: 40,
   },
   searchBar: {
     alignItems: 'center',
-    backgroundColor: '#181b22',
+    backgroundColor: 'rgba(255,255,255,0.05)',
     borderColor: 'rgba(255,255,255,0.08)',
-    borderRadius: 22,
+    borderRadius: 16,
     borderWidth: 1,
     flexDirection: 'row',
     gap: 12,
-    marginHorizontal: 20,
-    marginTop: 26,
-    minHeight: 68,
-    paddingHorizontal: 22,
+    marginHorizontal: 24,
+    marginTop: 24,
+    minHeight: 48,
+    paddingHorizontal: 16,
   },
   searchInput: {
     color: '#64748b',
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
+    fontWeight: '400',
   },
   sectionHeader: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 34,
-    paddingHorizontal: 20,
+    marginTop: 28,
+    paddingHorizontal: 24,
   },
   sectionTitle: {
     color: '#ffffff',
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '500',
   },
   sectionAction: {
-    color: '#9463ff',
-    fontSize: 15,
+    color: '#8b5cf6',
+    fontSize: 13,
     fontWeight: '600',
   },
   horizontalRow: {
-    marginTop: 18,
-    paddingLeft: 20,
+    marginTop: 16,
+    paddingLeft: 24,
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginTop: 18,
-    paddingHorizontal: 20,
+    marginTop: 16,
+    paddingHorizontal: 24,
   },
 });
