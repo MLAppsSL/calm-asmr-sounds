@@ -1,36 +1,42 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 export default function OnboardingRoute() {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View pointerEvents="none" style={styles.backgroundGlow} />
+      <View style={styles.background} />
+      <View style={styles.radialGlow} />
 
       <View style={styles.content}>
-        <View style={styles.hero}>
-          <LinearGradient colors={['#0d8eb6', '#1fd4ff']} style={styles.logoTile}>
+        <View style={styles.topSpacer} />
+
+        <View style={styles.logoBlock}>
+          <View style={styles.logoGlow} />
+          <View style={styles.logoBox}>
             <View style={styles.logoOuterRing}>
               <View style={styles.logoInnerRing} />
             </View>
-            <View style={styles.logoHighlight} />
-          </LinearGradient>
-
-          <View style={styles.copyGroup}>
-            <Text style={styles.title}>Find your calm</Text>
-            <Text style={styles.titleMuted}>in a minute</Text>
-            <Text style={styles.badge}>ULTRA-SHORT SOUNDS</Text>
           </View>
         </View>
 
-        <Pressable
-          onPress={() => {
-            router.push('./quiet-mode');
-          }}
-          style={styles.primaryButton}
-        >
-          <Text style={styles.primaryButtonText}>Begin</Text>
-        </Pressable>
+        <View style={styles.copyBlock}>
+          <Text style={styles.title}>Find your calm</Text>
+          <Text style={styles.titleMuted}>in a minute</Text>
+          <Text style={styles.badge}>Ultra-short sounds</Text>
+        </View>
+
+        <View style={styles.footer}>
+          <Pressable
+            onPress={() => {
+              router.push('./quiet-mode');
+            }}
+            style={styles.primaryButton}
+          >
+            <View style={styles.primaryButtonOverlay} />
+            <Text style={styles.primaryButtonText}>Begin</Text>
+          </Pressable>
+          <View style={styles.footerSpacer} />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -38,121 +44,116 @@ export default function OnboardingRoute() {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: '#111827',
+    backgroundColor: '#0a0e17',
     flex: 1,
   },
-  backgroundGlow: {
-    backgroundColor: 'rgba(74,222,255,0.08)',
-    borderRadius: 420,
-    height: 420,
-    left: -24,
+  background: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#0f141d',
+  },
+  radialGlow: {
+    backgroundColor: 'rgba(30,58,138,0.12)',
+    borderRadius: 999,
+    height: '60%',
+    left: '-10%',
     position: 'absolute',
-    right: -24,
-    top: 120,
+    top: '-10%',
+    width: '120%',
   },
   content: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 28,
+    paddingHorizontal: 32,
+    paddingVertical: 32,
   },
-  hero: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
+  topSpacer: {
+    height: 12,
   },
-  logoTile: {
+  logoBlock: {
     alignItems: 'center',
-    borderRadius: 2,
-    height: 142,
     justifyContent: 'center',
-    shadowColor: '#31d4ff',
-    shadowOffset: {
-      height: 0,
-      width: 0,
-    },
-    shadowOpacity: 0.55,
-    shadowRadius: 28,
-    width: 142,
+    paddingTop: 48,
+  },
+  logoGlow: {
+    backgroundColor: 'rgba(59,130,246,0.12)',
+    borderRadius: 999,
+    height: 128,
+    position: 'absolute',
+    width: 128,
+  },
+  logoBox: {
+    alignItems: 'center',
+    height: 96,
+    justifyContent: 'center',
+    width: 96,
   },
   logoOuterRing: {
     alignItems: 'center',
     borderColor: '#ffffff',
     borderRadius: 999,
-    borderWidth: 5,
-    height: 54,
+    borderWidth: 4,
+    height: 52,
     justifyContent: 'center',
-    width: 54,
+    width: 52,
   },
   logoInnerRing: {
     borderColor: '#ffffff',
     borderRadius: 999,
-    borderWidth: 2.5,
-    height: 40,
+    borderWidth: 2,
+    height: 36,
     marginLeft: 6,
-    width: 40,
+    width: 36,
   },
-  logoHighlight: {
-    backgroundColor: 'rgba(255,255,255,0.16)',
-    borderRadius: 999,
-    bottom: 22,
-    height: 76,
-    position: 'absolute',
-    width: 76,
-  },
-  copyGroup: {
+  copyBlock: {
     alignItems: 'center',
-    marginTop: 158,
+    gap: 16,
   },
   title: {
-    color: '#f8fafc',
-    fontSize: 46,
+    color: '#ffffff',
+    fontSize: 36,
     fontWeight: '300',
-    letterSpacing: -1.2,
-    lineHeight: 54,
+    letterSpacing: -0.8,
+    lineHeight: 42,
     textAlign: 'center',
   },
   titleMuted: {
-    color: 'rgba(248,250,252,0.55)',
-    fontSize: 44,
-    fontWeight: '300',
-    letterSpacing: -1,
-    lineHeight: 52,
-    textAlign: 'center',
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: '200',
   },
   badge: {
-    color: 'rgba(203,213,225,0.28)',
-    fontSize: 15,
-    letterSpacing: 6,
-    marginTop: 36,
-    textAlign: 'center',
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 14,
+    fontWeight: '300',
+    letterSpacing: 3,
+    textTransform: 'uppercase',
+  },
+  footer: {
+    alignItems: 'center',
+    gap: 16,
+    width: '100%',
   },
   primaryButton: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderColor: 'rgba(255,255,255,0.14)',
-    borderRadius: 38,
+    borderColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 999,
     borderWidth: 1,
+    height: 64,
     justifyContent: 'center',
-    marginBottom: 18,
-    minHeight: 82,
-    shadowColor: '#000000',
-    shadowOffset: {
-      height: 10,
-      width: 0,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 22,
+    maxWidth: 320,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  primaryButtonOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
   primaryButtonText: {
-    color: '#f8fafc',
-    fontSize: 22,
+    color: '#ffffff',
+    fontSize: 18,
     fontWeight: '400',
-    textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowOffset: {
-      height: 1,
-      width: 0,
-    },
-    textShadowRadius: 4,
+  },
+  footerSpacer: {
+    height: 8,
   },
 });
