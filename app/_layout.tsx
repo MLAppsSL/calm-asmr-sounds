@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import * as SplashScreen from 'expo-splash-screen';
-import { Stack, router, useRootNavigationState, useSegments } from 'expo-router';
+import { Stack, useRootNavigationState } from 'expo-router';
 
 import { AudioService } from '@/shared/data/services/AudioService';
 import { TimerService } from '@/shared/data/services/TimerService';
@@ -12,17 +12,9 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 });
 
 export default function RootLayout() {
-  const hasSeenOnboarding = useUIStore((state) => state.hasSeenOnboarding);
   const hasHydrated = useUIStore((state) => state._hasHydrated);
   const rootNavigationState = useRootNavigationState();
-  const segments = useSegments();
   const [isStartupReady, setIsStartupReady] = useState(false);
-
-  const currentGroup = segments[0];
-  const isStartupRouteResolved =
-    currentGroup === '(auth)' ||
-    currentGroup === 'player' ||
-    currentGroup === (hasSeenOnboarding ? '(tabs)' : '(onboarding)');
 
   useEffect(() => {
     void AudioService.initialize().catch((error: unknown) => {
@@ -41,24 +33,8 @@ export default function RootLayout() {
       return;
     }
 
-    if (isStartupRouteResolved) {
-      setIsStartupReady(true);
-      return;
-    }
-
-    try {
-      router.replace(hasSeenOnboarding ? '/(tabs)' : '/(onboarding)');
-    } catch (error) {
-      console.error('Startup routing failed. Falling back to tabs shell.', error);
-      router.replace('/(tabs)');
-    }
-  }, [
-    hasHydrated,
-    hasSeenOnboarding,
-    isStartupReady,
-    isStartupRouteResolved,
-    rootNavigationState?.key,
-  ]);
+    setIsStartupReady(true);
+  }, [hasHydrated, isStartupReady, rootNavigationState?.key]);
 
   useEffect(() => {
     if (!isStartupReady) {
@@ -69,10 +45,6 @@ export default function RootLayout() {
       // Ignore hide races during development reloads.
     });
   }, [isStartupReady]);
-
-  if (!isStartupReady) {
-    return null;
-  }
 
   return (
     <Stack>
