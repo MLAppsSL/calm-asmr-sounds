@@ -25,10 +25,7 @@ export function VideoBackground({ source }: VideoBackgroundProps) {
 
         player.pause();
       } catch (error) {
-        if (
-          error instanceof Error &&
-          /released|Cannot use shared object/i.test(error.message)
-        ) {
+        if (error instanceof Error && /released|Cannot use shared object/i.test(error.message)) {
           return;
         }
 
