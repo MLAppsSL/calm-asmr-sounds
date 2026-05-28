@@ -18,19 +18,19 @@ export function BottomControlPill({ loopActive, onLoop, onFullscreen }: BottomCo
     >
       <Pressable onPress={onLoop} style={styles.iconButton}>
         <MaterialIcons
-          color={loopActive ? '#8b5cf6' : 'rgba(255,255,255,0.7)'}
+          color={loopActive ? '#ffffff' : 'rgba(255,255,255,0.66)'}
           name="loop"
-          size={24}
+          size={28}
         />
       </Pressable>
       <Pressable onPress={() => {}} style={styles.iconButton}>
-        <MaterialIcons color="rgba(255,255,255,0.7)" name="cast" size={24} />
+        <MaterialIcons color="rgba(255,255,255,0.66)" name="bookmark-border" size={28} />
       </Pressable>
       <Pressable onPress={() => {}} style={styles.iconButton}>
-        <MaterialIcons color="rgba(255,255,255,0.7)" name="favorite-border" size={24} />
+        <MaterialIcons color="rgba(255,255,255,0.66)" name="favorite-border" size={28} />
       </Pressable>
       <Pressable onPress={onFullscreen} style={styles.iconButton}>
-        <MaterialIcons color="rgba(255,255,255,0.7)" name="fullscreen" size={24} />
+        <MaterialIcons color="rgba(255,255,255,0.66)" name="fullscreen" size={28} />
       </Pressable>
     </BlurView>
   );
@@ -38,16 +38,19 @@ export function BottomControlPill({ loopActive, onLoop, onFullscreen }: BottomCo
 
 const styles = StyleSheet.create({
   iconButton: {
-    padding: 8,
+    padding: 10,
   },
   pill: {
     alignItems: 'center',
+    backgroundColor: 'rgba(15,15,18,0.8)',
+    borderColor: 'rgba(255,255,255,0.08)',
     borderRadius: 50,
+    borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    minWidth: 240,
+    minWidth: 320,
     overflow: 'hidden',
-    paddingHorizontal: 28,
-    paddingVertical: 16,
+    paddingHorizontal: 26,
+    paddingVertical: 18,
   },
 });

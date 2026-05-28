@@ -1,6 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedProps, useSharedValue } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 
@@ -14,14 +14,12 @@ type CircularProgressArcProps = {
   progress: number;
   isPlaying: boolean;
   onPlayPause: () => void;
-  timerLabel: string;
 };
 
 export function CircularProgressArc({
   progress,
   isPlaying,
   onPlayPause,
-  timerLabel,
 }: CircularProgressArcProps) {
   const progressValue = useSharedValue(progress);
 
@@ -41,8 +39,8 @@ export function CircularProgressArc({
           cy={50}
           fill="none"
           r={RADIUS}
-          stroke="rgba(255,255,255,0.12)"
-          strokeWidth={0.6}
+          stroke="rgba(255,255,255,0.1)"
+          strokeWidth={0.5}
         />
         <AnimatedCircle
           animatedProps={animatedProps}
@@ -50,18 +48,18 @@ export function CircularProgressArc({
           cy={50}
           fill="none"
           r={RADIUS}
-          stroke="rgba(255,255,255,0.85)"
+          stroke="rgba(255,255,255,0.9)"
           strokeDasharray={CIRCUMFERENCE}
           strokeLinecap="round"
-          strokeWidth={0.8}
+          strokeWidth={0.9}
         />
       </Svg>
 
       <Pressable onPress={onPlayPause} style={styles.playButton}>
-        <MaterialIcons color="#ffffff" name={isPlaying ? 'pause' : 'play-arrow'} size={48} />
+        <View style={styles.playButtonGlass}>
+          <MaterialIcons color="#ffffff" name={isPlaying ? 'pause' : 'play-arrow'} size={56} />
+        </View>
       </Pressable>
-
-      <Text style={styles.timerLabel}>{timerLabel}</Text>
     </View>
   );
 }
@@ -73,19 +71,22 @@ const styles = StyleSheet.create({
   },
   playButton: {
     alignItems: 'center',
-    height: 80,
     justifyContent: 'center',
     position: 'absolute',
-    width: 80,
+  },
+  playButtonGlass: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(156,175,186,0.14)',
+    borderColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 118,
+    justifyContent: 'center',
+    width: 118,
   },
   svg: {
+    height: 340,
     transform: [{ rotate: '-90deg' }],
-  },
-  timerLabel: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 16,
-    fontWeight: '200',
-    letterSpacing: 2,
-    marginTop: 16,
+    width: 340,
   },
 });

@@ -26,6 +26,14 @@ function formatMillisAsClock(milliseconds: number) {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
+function formatDisplayClock(milliseconds: number) {
+  const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+}
+
 export default function PlayerRoute() {
   const params = useLocalSearchParams<{ soundId?: string | string[] }>();
   const currentSoundId = useAudioStore((state) => state.currentSoundId);
@@ -48,7 +56,7 @@ export default function PlayerRoute() {
 
   const resolvedSoundId = paramSoundId ?? currentSoundId;
   const sound = SOUNDS.find((item) => item.id === resolvedSoundId) ?? null;
-  const runtimeSound = resolvedSoundId ? SOUNDS_BY_ID[resolvedSoundId] ?? null : null;
+  const runtimeSound = resolvedSoundId ? (SOUNDS_BY_ID[resolvedSoundId] ?? null) : null;
   const effectivePlaybackStatus = playbackStatus ?? lastPlaybackStatus;
   const timerLabel = useMemo(() => {
     if (!effectivePlaybackStatus?.durationMillis) {
@@ -58,7 +66,26 @@ export default function PlayerRoute() {
     const remainingMillis =
       effectivePlaybackStatus.durationMillis - effectivePlaybackStatus.positionMillis;
     return formatMillisAsClock(remainingMillis);
-  }, [effectivePlaybackStatus?.durationMillis, effectivePlaybackStatus?.positionMillis, sound?.duration]);
+  }, [
+    effectivePlaybackStatus?.durationMillis,
+    effectivePlaybackStatus?.positionMillis,
+    sound?.duration,
+  ]);
+  const displayTimerLabel = useMemo(() => {
+    if (!effectivePlaybackStatus?.durationMillis) {
+      const [minutes = '0', seconds = '00'] = (sound?.duration ?? '0:00').split(':');
+
+      return `${minutes.padStart(2, '0')} : ${seconds.padStart(2, '0')}`;
+    }
+
+    const remainingMillis =
+      effectivePlaybackStatus.durationMillis - effectivePlaybackStatus.positionMillis;
+    return formatDisplayClock(remainingMillis);
+  }, [
+    effectivePlaybackStatus?.durationMillis,
+    effectivePlaybackStatus?.positionMillis,
+    sound?.duration,
+  ]);
   const progress = useMemo(() => {
     if (!effectivePlaybackStatus?.durationMillis || effectivePlaybackStatus.durationMillis <= 0) {
       return 1;
@@ -239,7 +266,7 @@ export default function PlayerRoute() {
         <>
           <SafeAreaView style={styles.topBar}>
             <Pressable onPress={handleLeavePlayer} style={styles.backButton}>
-              <MaterialIcons color="#ffffff" name="chevron-left" size={28} />
+              <MaterialIcons color="#ffffff" name="keyboard-arrow-down" size={32} />
             </Pressable>
             <View style={styles.topCenter}>
               <Text style={styles.nowPlayingLabel}>NOW PLAYING</Text>
@@ -248,17 +275,25 @@ export default function PlayerRoute() {
               </Text>
             </View>
             <Pressable style={styles.moreButton}>
-              <Text style={styles.moreIcon}>•••</Text>
+              <MaterialIcons color="#ffffff" name="more-horiz" size={28} />
             </Pressable>
           </SafeAreaView>
+
+          <View style={styles.copyBlock}>
+            <Text style={styles.heroTitle}>{sound.name}</Text>
+            <Text style={styles.heroMeta}>
+              {sound.subtitle.toUpperCase()} {'\u2022'} {timerLabel}
+            </Text>
+          </View>
 
           <View style={styles.center}>
             <CircularProgressArc
               isPlaying={isPlaying}
               onPlayPause={handlePlayPause}
               progress={progress}
-              timerLabel={timerLabel}
             />
+
+            <Text style={styles.displayTimerLabel}>{displayTimerLabel}</Text>
           </View>
 
           <View style={styles.bottomArea}>
@@ -276,41 +311,71 @@ export default function PlayerRoute() {
 
 const styles = StyleSheet.create({
   backButton: {
-    padding: 8,
+    alignItems: 'center',
+    backgroundColor: 'rgba(18,22,27,0.7)',
+    borderColor: 'rgba(255,255,255,0.14)',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 74,
+    justifyContent: 'center',
+    width: 74,
   },
   bottomArea: {
     alignItems: 'center',
-    bottom: 60,
+    bottom: 42,
     left: 0,
     position: 'absolute',
     right: 0,
   },
   center: {
     alignItems: 'center',
-    bottom: 0,
     justifyContent: 'center',
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0,
+    marginTop: 88,
+  },
+  copyBlock: {
+    alignItems: 'center',
+    marginTop: 116,
+    paddingHorizontal: 24,
   },
   container: {
     backgroundColor: '#0f1115',
     flex: 1,
   },
-  moreButton: {
-    padding: 8,
+  displayTimerLabel: {
+    color: 'rgba(255,255,255,0.88)',
+    fontSize: 28,
+    fontWeight: '200',
+    letterSpacing: 6,
+    marginTop: 36,
   },
-  moreIcon: {
-    color: 'rgba(255,255,255,0.7)',
+  heroMeta: {
+    color: 'rgba(255,255,255,0.34)',
     fontSize: 14,
-    letterSpacing: 1,
+    letterSpacing: 4,
+    marginTop: 12,
+  },
+  heroTitle: {
+    color: '#ffffff',
+    fontSize: 42,
+    fontWeight: '300',
+    letterSpacing: -1,
+    textAlign: 'center',
+  },
+  moreButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(18,22,27,0.7)',
+    borderColor: 'rgba(255,255,255,0.14)',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 74,
+    justifyContent: 'center',
+    width: 74,
   },
   nowPlayingLabel: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: 10,
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 11,
     fontWeight: '600',
-    letterSpacing: 2,
+    letterSpacing: 6,
   },
   primaryButton: {
     alignItems: 'center',
@@ -328,19 +393,20 @@ const styles = StyleSheet.create({
   },
   scrim: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: 'rgba(2,8,12,0.56)',
   },
   soundName: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '300',
-    marginTop: 2,
+    marginTop: 6,
   },
   topBar: {
     alignItems: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 8,
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingTop: 24,
     zIndex: 10,
   },
   topCenter: {
