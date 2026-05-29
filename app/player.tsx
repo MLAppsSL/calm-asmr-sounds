@@ -4,6 +4,7 @@ import { setStatusBarHidden } from 'expo-status-bar';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 import { SOUNDS } from '@/library/data/sounds';
 import { BottomControlPill } from '@/player/ui/components/BottomControlPill';
@@ -36,12 +37,18 @@ function formatDisplayClock(milliseconds: number) {
 
 export default function PlayerRoute() {
   const params = useLocalSearchParams<{ soundId?: string | string[] }>();
-  const currentSoundId = useAudioStore((state) => state.currentSoundId);
-  const isLooping = useAudioStore((state) => state.isLooping);
-  const isPlaying = useAudioStore((state) => state.isPlaying);
-  const setCurrentSound = useAudioStore((state) => state.setCurrentSound);
-  const setIsLooping = useAudioStore((state) => state.setIsLooping);
-  const setIsPlaying = useAudioStore((state) => state.setIsPlaying);
+
+  const { currentSoundId, isLooping, isPlaying, setCurrentSound, setIsLooping, setIsPlaying } =
+    useAudioStore(
+      useShallow((state) => ({
+        currentSoundId: state.currentSoundId,
+        isLooping: state.isLooping,
+        isPlaying: state.isPlaying,
+        setCurrentSound: state.setCurrentSound,
+        setIsLooping: state.setIsLooping,
+        setIsPlaying: state.setIsPlaying,
+      })),
+    );
   const setPlayerVisible = useUIStore((state) => state.setPlayerVisible);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [playbackStatus, setPlaybackStatus] = useState<PlaybackStatusSnapshot | null>(null);
@@ -128,7 +135,13 @@ export default function PlayerRoute() {
   }, [resolvedSoundId]);
 
   useEffect(() => {
-    if (!playbackStatus?.didJustFinish || playbackStatus.isLooping) {
+    if (!playbackStatus?.didJustFinish || playbackStatus.isLooping || !resolvedSoundId) {
+      return;
+    }
+
+    const finishedSoundId = resolvedSoundId;
+
+    if (useAudioStore.getState().currentSoundId !== finishedSoundId) {
       return;
     }
 
@@ -138,10 +151,12 @@ export default function PlayerRoute() {
       positionMillis: playbackStatus.durationMillis ?? playbackStatus.positionMillis,
     });
 
-    void AudioService.stop().finally(() => {
-      setIsPlaying(false);
+    void AudioService.stop().then(() => {
+      if (useAudioStore.getState().currentSoundId === finishedSoundId) {
+        setIsPlaying(false);
+      }
     });
-  }, [playbackStatus, setIsPlaying]);
+  }, [playbackStatus, setIsPlaying, resolvedSoundId]);
 
   const startPlayback = useCallback(async () => {
     if (!sound || !runtimeSound) {

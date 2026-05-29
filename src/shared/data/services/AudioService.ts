@@ -25,7 +25,7 @@ class AudioServiceClass {
   private outgoingSound: SoundInstance | null = null;
   private activeSoundId: string | null = null;
   private activeVolume = 1;
-  private isLooping = false;
+  private isLooping = true;
   private playbackStatusListener: ((status: PlaybackStatusSnapshot | null) => void) | null = null;
   private animationId = 0;
   private animationTimer: ReturnType<typeof setTimeout> | null = null;

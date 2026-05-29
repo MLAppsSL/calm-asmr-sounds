@@ -6,13 +6,12 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 
 export default function TabsLayout() {
-  const { currentSoundId, isPlaying } = useAudioStore(
+  const { currentSoundId } = useAudioStore(
     useShallow((state) => ({
       currentSoundId: state.currentSoundId,
-      isPlaying: state.isPlaying,
     })),
   );
-  const hasActiveSound = Boolean(currentSoundId && isPlaying);
+  const hasActiveSound = Boolean(currentSoundId);
 
   return (
     <Tabs

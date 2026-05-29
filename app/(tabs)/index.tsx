@@ -7,7 +7,7 @@ import {
   LIBRARY_CATEGORY_LABELS,
   LIBRARY_CATEGORY_ORDER,
 } from '@/library/data/sounds';
-import { SoundCard } from '@/library/ui/components/SoundCard';
+import { CategorySection } from '@/library/ui/components/CategorySection';
 
 export default function LibraryRoute() {
   const sections = LIBRARY_CATEGORY_ORDER.map((category) => ({
@@ -42,21 +42,12 @@ export default function LibraryRoute() {
         </View>
 
         {sections.map((section) => (
-          <View key={section.category}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{section.label}</Text>
-            </View>
-
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.horizontalRow}
-            >
-              {section.sounds.map((sound) => (
-                <SoundCard key={sound.id} sound={sound} />
-              ))}
-            </ScrollView>
-          </View>
+          <CategorySection
+            key={section.category}
+            label={section.label}
+            sounds={section.sounds}
+            titleColor="#ffffff"
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -117,20 +108,5 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '400',
-  },
-  sectionHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginTop: 28,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '500',
-  },
-  horizontalRow: {
-    marginTop: 16,
-    paddingLeft: 24,
   },
 });
