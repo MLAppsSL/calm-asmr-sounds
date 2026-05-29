@@ -1,7 +1,6 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
 import { Tabs, router } from 'expo-router';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 
@@ -17,9 +16,7 @@ export default function TabsLayout() {
         tabBarActiveTintColor: '#8b5cf6',
         tabBarInactiveTintColor: '#94a3b8',
         tabBarShowLabel: false,
-        tabBarBackground: () => (
-          <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
-        ),
+        tabBarBackground: () => <View style={styles.tabBarBackground} />,
         tabBarStyle: styles.tabBar,
       }}
     >
@@ -79,5 +76,12 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     position: 'absolute',
     right: 24,
+  },
+  tabBarBackground: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(26,28,34,0.92)',
+    borderColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 24,
+    borderWidth: 1,
   },
 });
