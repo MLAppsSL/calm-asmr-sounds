@@ -1,11 +1,16 @@
 import { router } from 'expo-router';
 import { Pressable, SafeAreaView, StyleSheet, Switch, Text, View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 export default function QuietModeRoute() {
-  const setHasSeenOnboarding = useUIStore((state) => state.setHasSeenOnboarding);
-  const isDarkMode = useUIStore((state) => state.isDarkMode);
+  const { isDarkMode, setHasSeenOnboarding } = useUIStore(
+    useShallow((state) => ({
+      isDarkMode: state.isDarkMode,
+      setHasSeenOnboarding: state.setHasSeenOnboarding,
+    })),
+  );
 
   const backgroundColor = isDarkMode ? '#020617' : '#e2e8f0';
   const cardColor = isDarkMode ? '#111827' : '#ffffff';
@@ -37,7 +42,12 @@ export default function QuietModeRoute() {
               Recommended before starting a short reset session.
             </Text>
           </View>
-          <Switch thumbColor="#f8fafc" trackColor={{ false: '#334155', true: '#8b5cf6' }} value />
+          <Switch
+            disabled
+            thumbColor="#f8fafc"
+            trackColor={{ false: '#334155', true: '#8b5cf6' }}
+            value
+          />
         </View>
 
         <View style={styles.actions}>

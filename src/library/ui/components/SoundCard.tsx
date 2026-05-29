@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 import type { LibrarySound } from '@/library/data/sounds';
 import { SOUNDS_BY_ID } from '@/shared/data/catalogs/sounds';
@@ -243,7 +244,9 @@ function Artwork({ sound }: { sound: LibrarySound }) {
 }
 
 export function SoundCard({ sound }: SoundCardProps) {
-  const setCurrentSound = useAudioStore((state) => state.setCurrentSound);
+  const { setCurrentSound } = useAudioStore(
+    useShallow((state) => ({ setCurrentSound: state.setCurrentSound })),
+  );
   const setPlayerVisible = useUIStore((state) => state.setPlayerVisible);
   const [displayDuration, setDisplayDuration] = useState(sound.duration);
 
@@ -296,7 +299,9 @@ export function SoundCard({ sound }: SoundCardProps) {
       <Text numberOfLines={1} style={styles.subtitle}>
         {sound.subtitle}
       </Text>
-      <Text style={styles.hiddenDuration}>{displayDuration}</Text>
+      <Text numberOfLines={1} style={styles.duration}>
+        {displayDuration}
+      </Text>
     </Pressable>
   );
 }
@@ -348,10 +353,10 @@ const styles = StyleSheet.create({
     color: '#91a0b5',
     fontSize: 12,
   },
-  hiddenDuration: {
-    color: 'transparent',
-    fontSize: 1,
-    height: 0,
+  duration: {
+    color: '#64748b',
+    fontSize: 12,
+    fontWeight: '500',
   },
   proBadge: {
     alignItems: 'center',
