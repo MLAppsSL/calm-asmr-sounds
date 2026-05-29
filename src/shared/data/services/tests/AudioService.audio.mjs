@@ -26,7 +26,7 @@ afterEach(async () => {
   __resetExpoAvMock();
 });
 
-test('play starts a looping sound immediately', async () => {
+test('play starts a non-looping sound immediately', async () => {
   await AudioService.play('rain', 'file://rain.mp3');
 
   const state = __getExpoAvMockState();
@@ -34,7 +34,7 @@ test('play starts a looping sound immediately', async () => {
   assert.equal(state.createCalls.length, 1);
   assert.deepEqual(state.createCalls[0], {
     initialStatus: {
-      isLooping: true,
+      isLooping: false,
       progressUpdateIntervalMillis: 50,
       shouldPlay: true,
       volume: 1,
