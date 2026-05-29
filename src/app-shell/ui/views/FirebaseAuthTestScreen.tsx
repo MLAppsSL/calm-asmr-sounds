@@ -13,8 +13,9 @@ import {
 } from 'react-native';
 
 import { getApps } from '@react-native-firebase/app';
+import { getStorage, list, ref } from '@react-native-firebase/storage';
 
-import { auth, firestore, storage } from '@/lib/firebase';
+import { auth, firestore } from '@/lib/firebase';
 
 import { ScreenAccessPanel } from './ScreenAccessPanel';
 
@@ -170,7 +171,7 @@ export function FirebaseAuthTestScreen() {
           disabled={isBusy}
           onPress={() => {
             void runSmokeCheck('Storage', setStorageStatus, async () => {
-              await storage().ref('test').list({ maxResults: 1 });
+              await list(ref(getStorage(), 'test'), { maxResults: 1 });
             });
           }}
           style={[styles.button, styles.secondaryButton, isBusy && styles.buttonDisabled]}
