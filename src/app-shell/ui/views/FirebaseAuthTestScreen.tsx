@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { getApps } from '@react-native-firebase/app';
-import { getStorage, list, ref } from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 
 import { auth, firestore } from '@/lib/firebase';
 
@@ -171,7 +171,7 @@ export function FirebaseAuthTestScreen() {
           disabled={isBusy}
           onPress={() => {
             void runSmokeCheck('Storage', setStorageStatus, async () => {
-              await list(ref(getStorage(), 'test'), { maxResults: 1 });
+              await storage().ref('test').list({ maxResults: 1 });
             });
           }}
           style={[styles.button, styles.secondaryButton, isBusy && styles.buttonDisabled]}

@@ -13,8 +13,8 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#f8fafc',
-        tabBarInactiveTintColor: 'rgba(226,232,240,0.68)',
+        tabBarActiveTintColor: '#8b5cf6',
+        tabBarInactiveTintColor: '#94a3b8',
         tabBarShowLabel: false,
         tabBarBackground: () => <View style={styles.tabBarBackground} />,
         tabBarStyle: styles.tabBar,
@@ -64,12 +64,25 @@ export default function TabsLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(26,28,34,0.8)',
+    borderColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 24,
     borderTopColor: 'rgba(255,255,255,0.08)',
-    height: 78,
+    borderWidth: 1,
+    bottom: 24,
+    height: 64,
+    left: 24,
     paddingBottom: Platform.OS === 'ios' ? 18 : 12,
-    paddingTop: 10,
+    paddingTop: 6,
     position: 'absolute',
+    right: 24,
+  },
+  tabBarBackground: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(26,28,34,0.92)',
+    borderColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 24,
+    borderWidth: 1,
   },
   tabBarBackground: {
     ...StyleSheet.absoluteFillObject,
