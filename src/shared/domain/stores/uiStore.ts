@@ -35,11 +35,20 @@ export const useUIStore = create<UIState>()(
     }),
     {
       name: 'ui-store',
+      version: 1,
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         isDarkMode: state.isDarkMode,
         hasSeenOnboarding: state.hasSeenOnboarding,
       }),
+      migrate: (persistedState) => {
+        const state = persistedState as Partial<UIState> | undefined;
+
+        return {
+          ...state,
+          hasSeenOnboarding: false,
+        };
+      },
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
