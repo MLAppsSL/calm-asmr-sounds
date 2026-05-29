@@ -1,12 +1,17 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Tabs, router } from 'expo-router';
 import { Platform, StyleSheet, View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 
 export default function TabsLayout() {
-  const currentSoundId = useAudioStore((state) => state.currentSoundId);
-  const isPlaying = useAudioStore((state) => state.isPlaying);
+  const { currentSoundId, isPlaying } = useAudioStore(
+    useShallow((state) => ({
+      currentSoundId: state.currentSoundId,
+      isPlaying: state.isPlaying,
+    })),
+  );
   const hasActiveSound = Boolean(currentSoundId && isPlaying);
 
   return (
