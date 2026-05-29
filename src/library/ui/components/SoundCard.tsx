@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
-import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -63,7 +62,6 @@ export function SoundCard({ sound }: SoundCardProps) {
   return (
     <Pressable onPress={handlePress} style={styles.card}>
       <View style={[StyleSheet.absoluteFill, { backgroundColor: sound.imageAsset }]} />
-      <Image contentFit="cover" source={null} style={StyleSheet.absoluteFill} />
       <LinearGradient
         colors={['transparent', 'rgba(0,0,0,0.78)']}
         end={{ x: 0, y: 1 }}

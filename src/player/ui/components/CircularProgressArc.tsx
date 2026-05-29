@@ -1,10 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated, { useAnimatedProps, useSharedValue } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
-
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const RADIUS = 46;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
@@ -23,15 +19,7 @@ export function CircularProgressArc({
   onPlayPause,
   timerLabel,
 }: CircularProgressArcProps) {
-  const progressValue = useSharedValue(progress);
-
-  useEffect(() => {
-    progressValue.value = progress;
-  }, [progress, progressValue]);
-
-  const animatedProps = useAnimatedProps(() => ({
-    strokeDashoffset: CIRCUMFERENCE * (1 - progressValue.value),
-  }));
+  const strokeDashoffset = CIRCUMFERENCE * (1 - progress);
 
   return (
     <View style={styles.container}>
@@ -44,14 +32,14 @@ export function CircularProgressArc({
           stroke="rgba(255,255,255,0.12)"
           strokeWidth={0.6}
         />
-        <AnimatedCircle
-          animatedProps={animatedProps}
+        <Circle
           cx={50}
           cy={50}
           fill="none"
           r={RADIUS}
           stroke="rgba(255,255,255,0.85)"
           strokeDasharray={CIRCUMFERENCE}
+          strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
           strokeWidth={0.8}
         />
