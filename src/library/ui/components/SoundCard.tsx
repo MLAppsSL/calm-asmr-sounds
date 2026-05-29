@@ -180,6 +180,20 @@ function Artwork({ sound }: { sound: LibrarySound }) {
     );
   }
 
+  if (sound.artwork === 'fire') {
+    return (
+      <View style={styles.artworkBase}>
+        <LinearGradient
+          colors={['#2d1611', '#8e3d1e', '#f59e0b']}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={styles.fireGlowOuter} />
+        <View style={styles.fireGlowInner} />
+        <View style={styles.fireFlameCore} />
+      </View>
+    );
+  }
+
   if (sound.artwork === 'vinyl') {
     return (
       <View style={styles.artworkBase}>
@@ -440,6 +454,33 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 102,
+  },
+  fireGlowOuter: {
+    backgroundColor: 'rgba(251,146,60,0.34)',
+    borderRadius: 999,
+    bottom: 18,
+    height: 88,
+    left: 24,
+    position: 'absolute',
+    width: 108,
+  },
+  fireGlowInner: {
+    backgroundColor: 'rgba(254,215,170,0.48)',
+    borderRadius: 999,
+    bottom: 34,
+    height: 56,
+    left: 44,
+    position: 'absolute',
+    width: 68,
+  },
+  fireFlameCore: {
+    backgroundColor: 'rgba(255,251,235,0.82)',
+    borderRadius: 999,
+    bottom: 54,
+    height: 28,
+    left: 64,
+    position: 'absolute',
+    width: 28,
   },
   vinylDiscLarge: {
     backgroundColor: 'rgba(174,158,150,0.6)',

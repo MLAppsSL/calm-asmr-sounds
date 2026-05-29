@@ -2,12 +2,19 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { getSoundsByCategory } from '@/library/data/sounds';
+import {
+  getSoundsByCategory,
+  LIBRARY_CATEGORY_LABELS,
+  LIBRARY_CATEGORY_ORDER,
+} from '@/library/data/sounds';
 import { SoundCard } from '@/library/ui/components/SoundCard';
 
 export default function LibraryRoute() {
-  const natureSounds = getSoundsByCategory('nature');
-  const ambientSounds = getSoundsByCategory('ambient');
+  const sections = LIBRARY_CATEGORY_ORDER.map((category) => ({
+    category,
+    label: LIBRARY_CATEGORY_LABELS[category],
+    sounds: getSoundsByCategory(category),
+  }));
 
   return (
     <SafeAreaView edges={['top']} style={styles.safeArea}>
@@ -34,27 +41,24 @@ export default function LibraryRoute() {
           />
         </View>
 
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Nature</Text>
-          <Text style={styles.sectionAction}>View all</Text>
-        </View>
+        {sections.map((section) => (
+          <View key={section.category}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>{section.label}</Text>
+              <Text style={styles.sectionAction}>View all</Text>
+            </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalRow}>
-          {natureSounds.map((sound) => (
-            <SoundCard key={sound.id} sound={sound} />
-          ))}
-        </ScrollView>
-
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Ambient</Text>
-          <Text style={styles.sectionAction}>View all</Text>
-        </View>
-
-        <View style={styles.grid}>
-          {ambientSounds.map((sound) => (
-            <SoundCard key={sound.id} sound={sound} />
-          ))}
-        </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.horizontalRow}
+            >
+              {section.sounds.map((sound) => (
+                <SoundCard key={sound.id} sound={sound} />
+              ))}
+            </ScrollView>
+          </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
@@ -135,12 +139,5 @@ const styles = StyleSheet.create({
   horizontalRow: {
     marginTop: 16,
     paddingLeft: 24,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginTop: 16,
-    paddingHorizontal: 24,
   },
 });
