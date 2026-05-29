@@ -1,4 +1,4 @@
-import { getDownloadURL, getStorage, ref } from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 import { Audio, type AVPlaybackStatus } from 'expo-av';
 
 import type { SoundConfig } from '../catalogs/sounds';
@@ -6,7 +6,6 @@ import type { SoundConfig } from '../catalogs/sounds';
 class SoundDurationServiceClass {
   private cachedDurations = new Map<string, number | null>();
   private inFlight = new Map<string, Promise<number | null>>();
-  private storage = getStorage();
 
   async getDurationMillis(sound: SoundConfig): Promise<number | null> {
     const cachedDuration = this.cachedDurations.get(sound.id);
@@ -34,7 +33,7 @@ class SoundDurationServiceClass {
     let audioSound: Audio.Sound | null = null;
 
     try {
-      const downloadUrl = await getDownloadURL(ref(this.storage, sound.storageRef));
+      const downloadUrl = await storage().ref(sound.storageRef).getDownloadURL();
       const result = await Audio.Sound.createAsync(
         { uri: downloadUrl },
         { shouldPlay: false },
