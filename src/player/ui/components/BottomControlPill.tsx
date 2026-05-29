@@ -1,6 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 type BottomControlPillProps = {
   loopActive: boolean;
@@ -10,12 +9,7 @@ type BottomControlPillProps = {
 
 export function BottomControlPill({ loopActive, onLoop, onFullscreen }: BottomControlPillProps) {
   return (
-    <BlurView
-      experimentalBlurMethod="dimezisBlurView"
-      intensity={80}
-      style={styles.pill}
-      tint="dark"
-    >
+    <View style={styles.pill}>
       <Pressable onPress={onLoop} style={styles.iconButton}>
         <MaterialIcons
           color={loopActive ? '#ffffff' : 'rgba(255,255,255,0.5)'}
@@ -32,7 +26,7 @@ export function BottomControlPill({ loopActive, onLoop, onFullscreen }: BottomCo
       <Pressable onPress={onFullscreen} style={styles.iconButton}>
         <MaterialIcons color="rgba(255,255,255,0.5)" name="fullscreen" size={24} />
       </Pressable>
-    </BlurView>
+    </View>
   );
 }
 
