@@ -56,7 +56,6 @@ export default function QuietModeRoute() {
               while you listen.
             </Text>
           </View>
-
           <View style={styles.permissionPanel}>
             <View style={styles.permissionCard}>
               <View style={styles.permissionInfo}>

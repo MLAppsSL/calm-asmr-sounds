@@ -45,7 +45,6 @@ export default function LibraryRoute() {
           <View key={section.category}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>{section.label}</Text>
-              <Text style={styles.sectionAction}>View all</Text>
             </View>
 
             <ScrollView
@@ -122,7 +121,6 @@ const styles = StyleSheet.create({
   sectionHeader: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     marginTop: 28,
     paddingHorizontal: 24,
   },
@@ -130,11 +128,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 18,
     fontWeight: '500',
-  },
-  sectionAction: {
-    color: '#8b5cf6',
-    fontSize: 13,
-    fontWeight: '600',
   },
   horizontalRow: {
     marginTop: 16,

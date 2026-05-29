@@ -41,8 +41,12 @@ export const useUIStore = create<UIState>()(
         isDarkMode: state.isDarkMode,
         hasSeenOnboarding: state.hasSeenOnboarding,
       }),
-      migrate: (persistedState) => {
+      migrate: (persistedState, version) => {
         const state = persistedState as Partial<UIState> | undefined;
+
+        if (version >= 1) {
+          return state ?? {};
+        }
 
         return {
           ...state,

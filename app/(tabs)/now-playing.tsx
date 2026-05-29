@@ -1,12 +1,17 @@
 import { router } from 'expo-router';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 export default function NowPlayingRoute() {
-  const currentSoundId = useAudioStore((state) => state.currentSoundId);
-  const isPlaying = useAudioStore((state) => state.isPlaying);
+  const { currentSoundId, isPlaying } = useAudioStore(
+    useShallow((state) => ({
+      currentSoundId: state.currentSoundId,
+      isPlaying: state.isPlaying,
+    })),
+  );
   const isDarkMode = useUIStore((state) => state.isDarkMode);
 
   const backgroundColor = isDarkMode ? '#020617' : '#e2e8f0';
