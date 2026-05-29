@@ -1,10 +1,11 @@
-import storage from '@react-native-firebase/storage';
+import { getDownloadURL, getStorage, ref } from '@react-native-firebase/storage';
 import * as FileSystem from 'expo-file-system/legacy';
 
 import type { SoundConfig } from '../catalogs/sounds';
 
 class SoundCacheServiceClass {
   private inProgress = new Map<string, Promise<string | null>>();
+  private storage = getStorage();
 
   async getLocalUri(sound: SoundConfig): Promise<string | null> {
     const localPath = this.localPath(sound.id);
@@ -52,7 +53,7 @@ class SoundCacheServiceClass {
       await this.ensureSoundsDirectory();
 
       // Firebase Storage rules must allow reads for the sounds/ prefix.
-      const downloadUrl = await storage().ref(sound.storageRef).getDownloadURL();
+      const downloadUrl = await getDownloadURL(ref(this.storage, sound.storageRef));
       const result = await FileSystem.downloadAsync(downloadUrl, localPath);
 
       if (result.status !== 200) {
