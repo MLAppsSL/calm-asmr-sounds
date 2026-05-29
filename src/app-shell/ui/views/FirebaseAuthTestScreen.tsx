@@ -13,8 +13,9 @@ import {
 } from 'react-native';
 
 import { getApps } from '@react-native-firebase/app';
+import storage from '@react-native-firebase/storage';
 
-import { auth, firestore, storage } from '@/lib/firebase';
+import { auth, firestore } from '@/lib/firebase';
 
 import { ScreenAccessPanel } from './ScreenAccessPanel';
 
