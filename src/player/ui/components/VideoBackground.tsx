@@ -16,9 +16,7 @@ export function VideoBackground({ source }: VideoBackgroundProps) {
     useCallback(() => {
       player.play();
 
-      return () => {
-        player.pause();
-      };
+      return () => {};
     }, [player]),
   );
 

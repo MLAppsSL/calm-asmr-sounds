@@ -63,8 +63,12 @@ class AudioServiceClass {
     }
 
     if (this.activeSound && this.activeSoundId === soundId) {
-      await this.activeSound.playAsync();
-      return;
+      const status = await this.activeSound.getStatusAsync();
+      if (status.isLoaded) {
+        await this.activeSound.playAsync();
+        return;
+      }
+      this.activeSound = null;
     }
 
     if (!this.activeSound) {
