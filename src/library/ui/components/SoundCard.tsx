@@ -1,97 +1,16 @@
-import storage from '@react-native-firebase/storage';
-import { Audio, type AVPlaybackStatus } from 'expo-av';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
 import type { LibrarySound } from '@/library/data/sounds';
-import { SOUNDS_BY_ID } from '@/shared/data/catalogs/sounds';
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 type SoundCardProps = {
   sound: LibrarySound;
 };
-
-const cachedDurations = new Map<string, number | null>();
-const inFlightDurations = new Map<string, Promise<number | null>>();
-
-function formatMillisAsClock(milliseconds: number) {
-  const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
-
-function readDurationMillis(status: AVPlaybackStatus) {
-  if (!status.isLoaded) {
-    return null;
-  }
-
-  return status.durationMillis ?? null;
-}
-
-async function getDurationMillis(soundId: string) {
-  const cachedDuration = cachedDurations.get(soundId);
-
-  if (cachedDuration !== undefined) {
-    return cachedDuration;
-  }
-
-  const runtimeSound = SOUNDS_BY_ID[soundId];
-
-  if (!runtimeSound) {
-    cachedDurations.set(soundId, null);
-    return null;
-  }
-
-  const existingRequest = inFlightDurations.get(soundId);
-
-  if (existingRequest) {
-    return existingRequest;
-  }
-
-  const request = (async () => {
-    let audioSound: Audio.Sound | null = null;
-
-    try {
-      const downloadUrl = await storage().ref(runtimeSound.storageRef).getDownloadURL();
-      const result = await Audio.Sound.createAsync(
-        { uri: downloadUrl },
-        { shouldPlay: false },
-        undefined,
-        false,
-      );
-
-      audioSound = result.sound;
-
-      const durationMillis = readDurationMillis(result.status);
-      cachedDurations.set(soundId, durationMillis);
-
-      return durationMillis;
-    } catch (error) {
-      console.warn(`[SoundCard] Failed to load duration for ${soundId}.`, error);
-      cachedDurations.set(soundId, null);
-      return null;
-    } finally {
-      inFlightDurations.delete(soundId);
-
-      if (audioSound) {
-        await audioSound.unloadAsync().catch(() => {
-          // Ignore unload cleanup failures and keep the cached result.
-        });
-      }
-    }
-  })();
-
-  inFlightDurations.set(soundId, request);
-
-  return request;
-}
 
 function Badge({ sound }: { sound: LibrarySound }) {
   if (sound.badge === 'pro') {
@@ -248,25 +167,6 @@ export function SoundCard({ sound }: SoundCardProps) {
     useShallow((state) => ({ setCurrentSound: state.setCurrentSound })),
   );
   const setPlayerVisible = useUIStore((state) => state.setPlayerVisible);
-  const [displayDuration, setDisplayDuration] = useState(sound.duration);
-
-  useEffect(() => {
-    let isCancelled = false;
-
-    setDisplayDuration(sound.duration);
-
-    void getDurationMillis(sound.id).then((durationMillis) => {
-      if (isCancelled || durationMillis === null) {
-        return;
-      }
-
-      setDisplayDuration(formatMillisAsClock(durationMillis));
-    });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [sound.duration, sound.id]);
 
   function handlePress() {
     setCurrentSound(sound.id);
@@ -300,7 +200,7 @@ export function SoundCard({ sound }: SoundCardProps) {
         {sound.subtitle}
       </Text>
       <Text numberOfLines={1} style={styles.duration}>
-        {displayDuration}
+        {sound.duration}
       </Text>
     </Pressable>
   );

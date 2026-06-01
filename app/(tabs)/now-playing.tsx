@@ -6,10 +6,9 @@ import { useAudioStore } from '@/shared/domain/stores/audioStore';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 export default function NowPlayingRoute() {
-  const { currentSoundId, isPlaying } = useAudioStore(
+  const { currentSoundId } = useAudioStore(
     useShallow((state) => ({
       currentSoundId: state.currentSoundId,
-      isPlaying: state.isPlaying,
     })),
   );
   const isDarkMode = useUIStore((state) => state.isDarkMode);
@@ -18,7 +17,7 @@ export default function NowPlayingRoute() {
   const subtitleColor = isDarkMode ? '#cbd5e1' : '#475569';
   const titleColor = isDarkMode ? '#f8fafc' : '#0f172a';
 
-  if (!currentSoundId || !isPlaying) {
+  if (!currentSoundId) {
     return (
       <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
         <View style={styles.emptyState}>

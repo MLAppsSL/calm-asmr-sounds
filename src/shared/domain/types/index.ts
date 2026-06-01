@@ -1,6 +1,6 @@
 export type SoundCategory = 'rain' | 'fire' | 'forest' | 'wave';
 
-export type TimerDuration = 90 | 120 | 130 | 150 | 180;
+export type TimerDuration = 60 | 90 | 120 | 130 | 150 | 180;
 
 // Shared descriptive fields that catalog and runtime sound models can both reuse.
 export interface SoundMetadata {

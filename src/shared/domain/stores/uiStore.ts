@@ -41,18 +41,7 @@ export const useUIStore = create<UIState>()(
         isDarkMode: state.isDarkMode,
         hasSeenOnboarding: state.hasSeenOnboarding,
       }),
-      migrate: (persistedState, version) => {
-        const state = persistedState as Partial<UIState> | undefined;
-
-        if (version >= 1) {
-          return state ?? {};
-        }
-
-        return {
-          ...state,
-          hasSeenOnboarding: false,
-        };
-      },
+      migrate: (persistedState) => (persistedState as Partial<UIState> | undefined) ?? {},
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },

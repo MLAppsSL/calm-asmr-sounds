@@ -18,6 +18,9 @@ class MockSound {
     this.nextSetVolumeError = null;
   }
 
+  // Añadimos el método que le falta para que el AudioService real no explote
+  setOnPlaybackStatusUpdate() {}
+
   failNextSetVolume(error) {
     this.nextSetVolumeError = error;
   }
