@@ -1,0 +1,24 @@
+## ADDED Requirements
+
+### Requirement: Player pre-fills timer from saved default for new sessions
+
+The system SHALL initialize the player timer from the saved default timer duration when the player screen opens or regains focus for a session that is not currently playing.
+
+#### Scenario: Player opens with no active playback
+
+- **WHEN** the player screen gains focus and no sound is currently playing
+- **THEN** the system SHALL copy the saved default timer duration into the player timer state
+
+#### Scenario: Player regains focus during active playback
+
+- **WHEN** the player screen gains focus while a sound is already playing
+- **THEN** the system SHALL preserve the current session timer instead of overwriting it from the saved default
+
+### Requirement: Player timer changes become the new saved default
+
+The system SHALL persist every timer duration change made from the player controls as the new default timer duration for future sessions.
+
+#### Scenario: User changes timer in player
+
+- **WHEN** the user selects a different timer duration from the player controls
+- **THEN** the system SHALL update both the active player timer state and the saved default timer preference to the selected duration
