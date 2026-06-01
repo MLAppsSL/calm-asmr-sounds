@@ -1,27 +1,16 @@
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
 import type { LibrarySound } from '@/library/data/sounds';
-import { SOUNDS_BY_ID } from '@/shared/data/catalogs/sounds';
-import { SoundDurationService } from '@/shared/data/services/SoundDurationService';
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 type SoundCardProps = {
   sound: LibrarySound;
 };
-
-function formatMillisAsClock(milliseconds: number) {
-  const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
 
 function Badge({ sound }: { sound: LibrarySound }) {
   if (sound.badge === 'pro') {
@@ -178,32 +167,6 @@ export function SoundCard({ sound }: SoundCardProps) {
     useShallow((state) => ({ setCurrentSound: state.setCurrentSound })),
   );
   const setPlayerVisible = useUIStore((state) => state.setPlayerVisible);
-  const [displayDuration, setDisplayDuration] = useState(sound.duration);
-
-  useEffect(() => {
-    let isCancelled = false;
-    const runtimeSound = SOUNDS_BY_ID[sound.id];
-
-    setDisplayDuration(sound.duration);
-
-    if (!runtimeSound) {
-      return () => {
-        isCancelled = true;
-      };
-    }
-
-    void SoundDurationService.getDurationMillis(runtimeSound).then((durationMillis) => {
-      if (isCancelled || durationMillis === null) {
-        return;
-      }
-
-      setDisplayDuration(formatMillisAsClock(durationMillis));
-    });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [sound.duration, sound.id]);
 
   function handlePress() {
     setCurrentSound(sound.id);
@@ -237,7 +200,7 @@ export function SoundCard({ sound }: SoundCardProps) {
         {sound.subtitle}
       </Text>
       <Text numberOfLines={1} style={styles.duration}>
-        {displayDuration}
+        {sound.duration}
       </Text>
     </Pressable>
   );

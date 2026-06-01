@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
+import { BlurView } from 'expo-blur';
 
 type BottomControlPillProps = {
   loopActive: boolean;
@@ -9,24 +10,24 @@ type BottomControlPillProps = {
 
 export function BottomControlPill({ loopActive, onLoop, onFullscreen }: BottomControlPillProps) {
   return (
-    <View style={styles.pill}>
+    <BlurView style={styles.pill} intensity={60} tint="dark">
       <Pressable onPress={onLoop} style={styles.iconButton}>
         <MaterialIcons
-          color={loopActive ? '#8b5cf6' : 'rgba(255,255,255,0.7)'}
+          color={loopActive ? '#ffffff' : 'rgba(255,255,255,0.5)'}
           name="loop"
           size={24}
         />
       </Pressable>
       <Pressable onPress={() => {}} style={styles.iconButton}>
-        <MaterialIcons color="rgba(255,255,255,0.7)" name="cast" size={24} />
+        <MaterialIcons color="rgba(255,255,255,0.5)" name="airplay" size={24} />
       </Pressable>
       <Pressable onPress={() => {}} style={styles.iconButton}>
-        <MaterialIcons color="rgba(255,255,255,0.7)" name="favorite-border" size={24} />
+        <MaterialIcons color="rgba(255,255,255,0.5)" name="favorite-border" size={24} />
       </Pressable>
       <Pressable onPress={onFullscreen} style={styles.iconButton}>
-        <MaterialIcons color="rgba(255,255,255,0.7)" name="fullscreen" size={24} />
+        <MaterialIcons color="rgba(255,255,255,0.5)" name="fullscreen" size={24} />
       </Pressable>
-    </View>
+    </BlurView>
   );
 }
 
@@ -36,13 +37,13 @@ const styles = StyleSheet.create({
   },
   pill: {
     alignItems: 'center',
-    backgroundColor: 'rgba(15,23,42,0.72)',
-    borderColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 999,
     borderWidth: 1,
-    borderRadius: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    minWidth: 240,
+    minWidth: 300,
     overflow: 'hidden',
     paddingHorizontal: 28,
     paddingVertical: 16,

@@ -1,90 +1,53 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 import {
   getSoundsByCategory,
   LIBRARY_CATEGORY_LABELS,
   LIBRARY_CATEGORY_ORDER,
 } from '@/library/data/sounds';
-import { SoundCard } from '@/library/ui/components/SoundCard';
+import { CategorySection } from '@/library/ui/components/CategorySection';
 
 export default function LibraryRoute() {
-  const isDarkMode = useUIStore((state) => state.isDarkMode);
   const sections = LIBRARY_CATEGORY_ORDER.map((category) => ({
     category,
     label: LIBRARY_CATEGORY_LABELS[category],
     sounds: getSoundsByCategory(category),
   }));
-  const backgroundColor = isDarkMode ? '#0c0f15' : '#f8fafc';
-  const titleColor = isDarkMode ? '#ffffff' : '#0f172a';
-  const subtitleColor = isDarkMode ? '#94a3b8' : '#475569';
-  const profileButtonBackgroundColor = isDarkMode ? '#181b22' : '#ffffff';
-  const profileButtonBorderColor = isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)';
-  const profileIconColor = isDarkMode ? '#cbd5e1' : '#334155';
-  const searchBarBackgroundColor = isDarkMode ? 'rgba(255,255,255,0.05)' : '#ffffff';
-  const searchBarBorderColor = isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)';
-  const searchIconColor = isDarkMode ? '#64748b' : '#94a3b8';
-  const searchTextColor = isDarkMode ? '#64748b' : '#64748b';
 
   return (
-    <SafeAreaView edges={['top']} style={[styles.safeArea, { backgroundColor }]}>
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <View>
-            <Text style={[styles.title, { color: titleColor }]}>Library</Text>
-            <Text style={[styles.subtitle, { color: subtitleColor }]}>Find your instant calm</Text>
+            <Text style={styles.title}>Library</Text>
+            <Text style={styles.subtitle}>Find your instant calm</Text>
           </View>
 
-          <View
-            style={[
-              styles.profileButton,
-              {
-                backgroundColor: profileButtonBackgroundColor,
-                borderColor: profileButtonBorderColor,
-              },
-            ]}
-          >
-            <Ionicons color={profileIconColor} name="person" size={20} />
+          <View style={styles.profileButton}>
+            <Ionicons color="#cbd5e1" name="person" size={20} />
           </View>
         </View>
 
-        <View
-          style={[
-            styles.searchBar,
-            {
-              backgroundColor: searchBarBackgroundColor,
-              borderColor: searchBarBorderColor,
-            },
-          ]}
-        >
-          <MaterialIcons color={searchIconColor} name="search" size={22} />
+        <View style={styles.searchBar}>
+          <MaterialIcons color="#64748b" name="search" size={22} />
           <TextInput
             editable={false}
             placeholder="Search sounds..."
-            placeholderTextColor={searchTextColor}
-            style={[styles.searchInput, { color: searchTextColor }]}
+            placeholderTextColor="#64748b"
+            style={styles.searchInput}
             value=""
           />
         </View>
 
         {sections.map((section) => (
-          <View key={section.category}>
-            <View style={styles.sectionHeader}>
-              <Text style={[styles.sectionTitle, { color: titleColor }]}>{section.label}</Text>
-            </View>
-
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.horizontalRow}
-            >
-              {section.sounds.map((sound) => (
-                <SoundCard key={sound.id} sound={sound} />
-              ))}
-            </ScrollView>
-          </View>
+          <CategorySection
+            key={section.category}
+            label={section.label}
+            sounds={section.sounds}
+            titleColor="#ffffff"
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -93,6 +56,7 @@ export default function LibraryRoute() {
 
 const styles = StyleSheet.create({
   safeArea: {
+    backgroundColor: '#0c0f15',
     flex: 1,
   },
   content: {
@@ -106,16 +70,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   title: {
+    color: '#ffffff',
     fontSize: 28,
     fontWeight: '600',
   },
   subtitle: {
+    color: '#94a3b8',
     fontSize: 13,
     fontWeight: '500',
     marginTop: 2,
   },
   profileButton: {
     alignItems: 'center',
+    backgroundColor: '#181b22',
+    borderColor: 'rgba(255,255,255,0.08)',
     borderRadius: 20,
     borderWidth: 1,
     height: 40,
@@ -124,6 +92,8 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderColor: 'rgba(255,255,255,0.08)',
     borderRadius: 16,
     borderWidth: 1,
     flexDirection: 'row',
@@ -134,22 +104,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   searchInput: {
+    color: '#64748b',
     flex: 1,
     fontSize: 14,
     fontWeight: '400',
-  },
-  sectionHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginTop: 28,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '500',
-  },
-  horizontalRow: {
-    marginTop: 16,
-    paddingLeft: 24,
   },
 });

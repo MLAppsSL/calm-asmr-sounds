@@ -4,41 +4,24 @@ import { Platform, StyleSheet, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
-import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 export default function TabsLayout() {
-  const { currentSoundId, isPlaying } = useAudioStore(
+  const { currentSoundId } = useAudioStore(
     useShallow((state) => ({
       currentSoundId: state.currentSoundId,
-      isPlaying: state.isPlaying,
     })),
   );
-  const isDarkMode = useUIStore((state) => state.isDarkMode);
-  const hasActiveSound = Boolean(currentSoundId && isPlaying);
-  const tabBarActiveTintColor = isDarkMode ? '#f8fafc' : '#0f172a';
-  const tabBarInactiveTintColor = isDarkMode ? 'rgba(226,232,240,0.68)' : 'rgba(15,23,42,0.48)';
-  const tabBarBorderColor = isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)';
-  const tabBarBackgroundColor = isDarkMode ? 'rgba(2,6,23,0.92)' : 'rgba(248,250,252,0.96)';
+  const hasActiveSound = Boolean(currentSoundId);
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor,
-        tabBarInactiveTintColor,
+        tabBarActiveTintColor: '#f8fafc',
+        tabBarInactiveTintColor: 'rgba(226,232,240,0.68)',
         tabBarShowLabel: false,
-        tabBarBackground: () => (
-          <View
-            style={[
-              styles.tabBarBackground,
-              {
-                backgroundColor: tabBarBackgroundColor,
-                borderTopColor: tabBarBorderColor,
-              },
-            ]}
-          />
-        ),
-        tabBarStyle: [styles.tabBar, { borderTopColor: tabBarBorderColor }],
+        tabBarBackground: () => <View style={styles.tabBarBackground} />,
+        tabBarStyle: styles.tabBar,
       }}
     >
       <Tabs.Screen
@@ -94,6 +77,8 @@ const styles = StyleSheet.create({
   },
   tabBarBackground: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(2,6,23,0.92)',
+    borderTopColor: 'rgba(255,255,255,0.08)',
     borderTopWidth: StyleSheet.hairlineWidth,
   },
 });
