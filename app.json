@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "scheme": "calm-sounds",
     "orientation": "portrait",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
