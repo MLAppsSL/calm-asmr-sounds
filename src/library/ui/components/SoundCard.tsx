@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
+import { FavoriteButton } from '@/favorites/ui/components/FavoriteButton';
 import type { LibrarySound } from '@/library/data/sounds';
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
@@ -191,6 +192,9 @@ export function SoundCard({ sound }: SoundCardProps) {
           style={StyleSheet.absoluteFill}
         />
         <Badge sound={sound} />
+        <View style={styles.favoriteButtonBackdrop}>
+          <FavoriteButton size={18} soundId={sound.id} />
+        </View>
       </View>
 
       <Text numberOfLines={1} style={styles.soundName}>
@@ -296,6 +300,16 @@ const styles = StyleSheet.create({
     gap: 3,
     position: 'absolute',
     right: 12,
+  },
+  favoriteButtonBackdrop: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderRadius: 999,
+    bottom: 10,
+    justifyContent: 'center',
+    padding: 4,
+    position: 'absolute',
+    right: 10,
   },
   equalizerBarShort: {
     backgroundColor: '#8f5bff',
