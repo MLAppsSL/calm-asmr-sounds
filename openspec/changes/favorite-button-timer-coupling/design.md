@@ -1,6 +1,6 @@
 ## Context
 
-Phase 4.1 introduced the persisted favorites store shape and a UI store field for the default timer duration, but the Phase 3 surfaces still lack the controls that expose those behaviors. This change spans shared UI components, the library card surface, and the player screen, so the main design concern is keeping favorite state reactive without causing broad list re-renders while also keeping timer preference writes consistent with the existing audio flow.
+Phase 4.1 introduced the persisted favorites store shape and a UI store field for the default timer duration, but the Phase 3 surfaces still lack the favorite controls and the current timer surfaces are split across the player and settings flows. This change spans shared UI components, the library card surface, the player screen, and the existing settings timer selector, so the main design concern is keeping favorite state reactive without causing broad list re-renders while also keeping timer preference writes consistent across both UI entry points.
 
 ## Goals / Non-Goals
 
@@ -9,7 +9,7 @@ Phase 4.1 introduced the persisted favorites store shape and a UI store field fo
 - Add a reusable favorite toggle component that reads and writes the existing favorites store efficiently.
 - Surface favorite state and toggle actions from both `SoundCard` and the player controls.
 - Ensure the player initializes its timer from the saved default when starting a new session.
-- Ensure timer changes made in the player also update the saved default preference.
+- Ensure timer changes made in the player and settings both update the saved default preference.
 
 **Non-Goals:**
 
@@ -21,7 +21,7 @@ Phase 4.1 introduced the persisted favorites store shape and a UI store field fo
 
 ### Use a dedicated `FavoriteButton` component backed by scoped Zustand selectors
 
-The favorite toggle will live in `src/components/FavoriteButton.tsx` and subscribe with `useFavoritesStore((s) => s.isFavorite(soundId))`, while invoking `useFavoritesStore.getState().toggleFavorite(soundId)` for the action path. This keeps each button reactive only to its own sound's favorite status instead of subscribing every card to the whole store.
+The favorite toggle will live in `src/favorites/ui/components/FavoriteButton.tsx` and subscribe with `useFavoritesStore((s) => s.isFavorite(soundId))`, while invoking `useFavoritesStore.getState().toggleFavorite(soundId)` for the action path. This keeps each button reactive only to its own sound's favorite status instead of subscribing every card to the whole store.
 
 Alternative considered: reading both `isFavorite` and `toggleFavorite` through a single hook subscription. Rejected because the function subscription is unnecessary and broadens the render surface.
 
@@ -37,6 +37,12 @@ The player screen will own the focus-time prefill and the coupling write because
 
 Alternative considered: embedding automatic sync inside `audioStore` setters or cross-store subscriptions. Rejected because it would make timer persistence implicit and harder to reason about, especially when different screens may eventually edit timer state for different reasons.
 
+### Treat `uiStore.defaultTimerDuration` as the persisted source of truth across player and settings
+
+The existing settings timer selector already edits `audioStore.timerDurationMs`, so this change will also update settings to read the persisted default from `uiStore.defaultTimerDuration` and write back to both stores when the user changes the selection. The player remains responsible for focus-time prefill, but both surfaces must keep the persisted preference synchronized with the active timer duration.
+
+Alternative considered: leaving settings unchanged and syncing only from the player. Rejected because the settings selector would drift from the persisted default and player focus could overwrite a settings choice that was never saved.
+
 ### Guard timer prefill to new sessions only
 
 On player focus, the screen will read `uiStore.defaultTimerDuration` and write it into `audioStore` only when playback is not already active. This prevents overwriting an in-progress session if the user returns to the player mid-playback.
@@ -46,7 +52,8 @@ Alternative considered: always applying the saved default on focus. Rejected bec
 ## Risks / Trade-offs
 
 - [Favorite button placement may overlap existing card content] → Mitigation: place the button in a card corner with minimal footprint and adjust to a backed container if the current text layout needs separation.
-- [Player timer coupling could drift from the actual audio setter name] → Mitigation: read the current `audioStore` implementation before coding and use the existing setter instead of assuming `setTimer`.
+- [Player timer coupling could drift from the actual audio setter name or units] → Mitigation: read the current `audioStore` implementation before coding and use the existing millisecond-based `setTimerDuration` API with explicit seconds-to-milliseconds conversion where needed.
+- [Settings timer selector could diverge from the persisted default] → Mitigation: update the settings route to derive its selected value from `uiStore.defaultTimerDuration` and write both stores on change.
 - [Focus-based prefill could overwrite state during navigation edge cases] → Mitigation: gate on the current playback state and limit the write to non-playing sessions.
 - [Per-button subscriptions still create many listeners in large lists] → Mitigation: use the narrowest possible selector so only the affected sound card re-renders when its favorite state changes.
 
