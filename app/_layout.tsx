@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { Stack, useRootNavigationState } from 'expo-router';
 
 import { AudioService } from '@/shared/data/services/AudioService';
@@ -47,17 +48,20 @@ export default function RootLayout() {
   }, [isStartupReady]);
 
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="player"
-        options={{
-          presentation: 'modal',
-          headerShown: false,
-        }}
-      />
-    </Stack>
+    <>
+      <StatusBar hidden style="light" translucent />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="player"
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+          }}
+        />
+      </Stack>
+    </>
   );
 }

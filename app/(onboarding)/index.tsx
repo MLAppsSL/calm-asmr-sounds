@@ -1,34 +1,42 @@
 import { router } from 'expo-router';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import { useUIStore } from '@/shared/domain/stores/uiStore';
-
 export default function OnboardingRoute() {
-  const isDarkMode = useUIStore((state) => state.isDarkMode);
-
-  const backgroundColor = isDarkMode ? '#020617' : '#e2e8f0';
-  const subtitleColor = isDarkMode ? '#cbd5e1' : '#475569';
-  const titleColor = isDarkMode ? '#f8fafc' : '#0f172a';
-
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.background} />
+      <View style={styles.radialGlow} />
+
       <View style={styles.content}>
-        <View style={styles.hero}>
-          <Text style={styles.badge}>Calm Sounds</Text>
-          <Text style={[styles.title, { color: titleColor }]}>Find your calm in a minute</Text>
-          <Text style={[styles.subtitle, { color: subtitleColor }]}>
-            Ultra-short ambient sound sessions built for quick reset moments.
-          </Text>
+        <View style={styles.topSpacer} />
+
+        <View style={styles.logoBlock}>
+          <View style={styles.logoGlow} />
+          <View style={styles.logoBox}>
+            <View style={styles.logoOuterRing}>
+              <View style={styles.logoInnerRing} />
+            </View>
+          </View>
         </View>
 
-        <Pressable
-          onPress={() => {
-            router.push('./quiet-mode');
-          }}
-          style={styles.primaryButton}
-        >
-          <Text style={styles.primaryButtonText}>Begin</Text>
-        </Pressable>
+        <View style={styles.copyBlock}>
+          <Text style={styles.title}>Find your calm</Text>
+          <Text style={styles.titleMuted}>in a minute</Text>
+          <Text style={styles.badge}>Ultra-short sounds</Text>
+        </View>
+
+        <View style={styles.footer}>
+          <Pressable
+            onPress={() => {
+              router.push('./quiet-mode');
+            }}
+            style={styles.primaryButton}
+          >
+            <View style={styles.primaryButtonOverlay} />
+            <Text style={styles.primaryButtonText}>Begin</Text>
+          </Pressable>
+          <View style={styles.footerSpacer} />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -36,44 +44,116 @@ export default function OnboardingRoute() {
 
 const styles = StyleSheet.create({
   safeArea: {
+    backgroundColor: '#0a0e17',
     flex: 1,
+  },
+  background: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#0f141d',
+  },
+  radialGlow: {
+    backgroundColor: 'rgba(30,58,138,0.12)',
+    borderRadius: 999,
+    height: '60%',
+    left: '-10%',
+    position: 'absolute',
+    top: '-10%',
+    width: '120%',
   },
   content: {
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
+    paddingHorizontal: 32,
     paddingVertical: 32,
   },
-  hero: {
-    gap: 16,
-    marginTop: 64,
+  topSpacer: {
+    height: 12,
   },
-  badge: {
-    color: '#8b5cf6',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
+  logoBlock: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 48,
+  },
+  logoGlow: {
+    backgroundColor: 'rgba(59,130,246,0.12)',
+    borderRadius: 999,
+    height: 128,
+    position: 'absolute',
+    width: 128,
+  },
+  logoBox: {
+    alignItems: 'center',
+    height: 96,
+    justifyContent: 'center',
+    width: 96,
+  },
+  logoOuterRing: {
+    alignItems: 'center',
+    borderColor: '#ffffff',
+    borderRadius: 999,
+    borderWidth: 4,
+    height: 52,
+    justifyContent: 'center',
+    width: 52,
+  },
+  logoInnerRing: {
+    borderColor: '#ffffff',
+    borderRadius: 999,
+    borderWidth: 2,
+    height: 36,
+    marginLeft: 6,
+    width: 36,
+  },
+  copyBlock: {
+    alignItems: 'center',
+    gap: 16,
   },
   title: {
-    fontSize: 40,
-    fontWeight: '700',
-    lineHeight: 46,
+    color: '#ffffff',
+    fontSize: 36,
+    fontWeight: '300',
+    letterSpacing: -0.8,
+    lineHeight: 42,
+    textAlign: 'center',
   },
-  subtitle: {
-    fontSize: 17,
-    lineHeight: 25,
+  titleMuted: {
+    color: 'rgba(255,255,255,0.8)',
+    fontWeight: '200',
+  },
+  badge: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 14,
+    fontWeight: '300',
+    letterSpacing: 3,
+    textTransform: 'uppercase',
+  },
+  footer: {
+    alignItems: 'center',
+    gap: 16,
+    width: '100%',
   },
   primaryButton: {
     alignItems: 'center',
-    backgroundColor: '#8b5cf6',
-    borderRadius: 18,
+    borderColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 64,
     justifyContent: 'center',
-    minHeight: 58,
+    maxWidth: 320,
+    overflow: 'hidden',
+    width: '100%',
+  },
+  primaryButtonOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
   primaryButtonText: {
-    color: '#f8fafc',
-    fontSize: 16,
-    fontWeight: '700',
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  footerSpacer: {
+    height: 8,
   },
 });

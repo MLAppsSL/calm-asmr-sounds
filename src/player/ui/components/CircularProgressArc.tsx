@@ -1,21 +1,23 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
 const RADIUS = 46;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-const SVG_SIZE = 288;
+const SVG_SIZE = 200;
 
 type CircularProgressArcProps = {
   progress: number;
   isPlaying: boolean;
   onPlayPause: () => void;
+  timerLabel: string;
 };
 
 export function CircularProgressArc({
   progress,
   isPlaying,
   onPlayPause,
+  timerLabel,
 }: CircularProgressArcProps) {
   const strokeDashoffset = CIRCUMFERENCE * (1 - progress);
 
@@ -27,15 +29,15 @@ export function CircularProgressArc({
           cy={50}
           fill="none"
           r={RADIUS}
-          stroke="rgba(255,255,255,0.1)"
-          strokeWidth={0.5}
+          stroke="rgba(255,255,255,0.12)"
+          strokeWidth={0.6}
         />
         <Circle
           cx={50}
           cy={50}
           fill="none"
           r={RADIUS}
-          stroke="rgba(255,255,255,0.8)"
+          stroke="rgba(255,255,255,0.85)"
           strokeDasharray={CIRCUMFERENCE}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
@@ -44,10 +46,10 @@ export function CircularProgressArc({
       </Svg>
 
       <Pressable onPress={onPlayPause} style={styles.playButton}>
-        <View style={styles.playButtonGlass}>
-          <MaterialIcons color="#ffffff" name={isPlaying ? 'pause' : 'play-arrow'} size={42} />
-        </View>
+        <MaterialIcons color="#ffffff" name={isPlaying ? 'pause' : 'play-arrow'} size={48} />
       </Pressable>
+
+      <Text style={styles.timerLabel}>{timerLabel}</Text>
     </View>
   );
 }
@@ -59,20 +61,19 @@ const styles = StyleSheet.create({
   },
   playButton: {
     alignItems: 'center',
+    height: 80,
     justifyContent: 'center',
     position: 'absolute',
-  },
-  playButtonGlass: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 999,
-    borderWidth: 1,
-    height: 96,
-    justifyContent: 'center',
-    width: 96,
+    width: 80,
   },
   svg: {
     transform: [{ rotate: '-90deg' }],
+  },
+  timerLabel: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 16,
+    fontWeight: '200',
+    letterSpacing: 2,
+    marginTop: 16,
   },
 });

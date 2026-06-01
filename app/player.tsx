@@ -1,6 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import { setStatusBarHidden } from 'expo-status-bar';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
@@ -27,14 +26,6 @@ function formatMillisAsClock(milliseconds: number) {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
-function formatDisplayClock(milliseconds: number) {
-  const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
 export default function PlayerRoute() {
   const params = useLocalSearchParams<{ soundId?: string | string[] }>();
 
@@ -57,6 +48,7 @@ export default function PlayerRoute() {
 
   const paramSoundId = useMemo(() => {
     const candidate = params.soundId;
+
     return Array.isArray(candidate) ? candidate[0] : candidate;
   }, [params.soundId]);
 
@@ -77,20 +69,6 @@ export default function PlayerRoute() {
     effectivePlaybackStatus?.positionMillis,
     sound?.duration,
   ]);
-  const displayTimerLabel = useMemo(() => {
-    if (!effectivePlaybackStatus?.durationMillis) {
-      const [minutes = '0', seconds = '00'] = (sound?.duration ?? '0:00').split(':');
-      return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
-    }
-
-    const remainingMillis =
-      effectivePlaybackStatus.durationMillis - effectivePlaybackStatus.positionMillis;
-    return formatDisplayClock(remainingMillis);
-  }, [
-    effectivePlaybackStatus?.durationMillis,
-    effectivePlaybackStatus?.positionMillis,
-    sound?.duration,
-  ]);
   const progress = useMemo(() => {
     if (!effectivePlaybackStatus?.durationMillis || effectivePlaybackStatus.durationMillis <= 0) {
       return 1;
@@ -103,6 +81,7 @@ export default function PlayerRoute() {
 
   useEffect(() => {
     setPlayerVisible(true);
+
     return () => {
       setPlayerVisible(false);
     };
@@ -112,11 +91,13 @@ export default function PlayerRoute() {
     if (!sound) {
       return;
     }
+
     setCurrentSound(sound.id);
   }, [setCurrentSound, sound]);
 
   useEffect(() => {
     AudioService.setPlaybackStatusListener(setPlaybackStatus);
+
     return () => {
       AudioService.setPlaybackStatusListener(null);
     };
@@ -126,6 +107,7 @@ export default function PlayerRoute() {
     if (!playbackStatus) {
       return;
     }
+
     setLastPlaybackStatus(playbackStatus);
   }, [playbackStatus]);
 
@@ -164,6 +146,7 @@ export default function PlayerRoute() {
     }
 
     const localUri = await SoundCacheService.getLocalUri(runtimeSound);
+
     if (!localUri) {
       setIsPlaying(false);
       return;
@@ -188,19 +171,16 @@ export default function PlayerRoute() {
     useCallback(() => {
       return () => {
         deactivateKeepAwake(KEEP_AWAKE_TAG);
-        setStatusBarHidden(false, 'fade');
       };
     }, []),
   );
 
   const enterFullscreen = useCallback(() => {
-    setStatusBarHidden(true, 'fade');
     void activateKeepAwakeAsync(KEEP_AWAKE_TAG);
     setIsFullscreen(true);
   }, []);
 
   const exitFullscreen = useCallback(() => {
-    setStatusBarHidden(false, 'fade');
     deactivateKeepAwake(KEEP_AWAKE_TAG);
     setIsFullscreen(false);
   }, []);
@@ -219,6 +199,7 @@ export default function PlayerRoute() {
           setIsPlaying(true);
           return;
         }
+
         void startPlayback();
       });
       return;
@@ -229,6 +210,7 @@ export default function PlayerRoute() {
 
   const handleLoop = useCallback(() => {
     const nextLooping = !isLooping;
+
     setIsLooping(nextLooping);
     void AudioService.setLooping(nextLooping);
   }, [isLooping, setIsLooping]);
@@ -271,37 +253,27 @@ export default function PlayerRoute() {
       ) : (
         <>
           <SafeAreaView style={styles.topBar}>
-            <Pressable onPress={handleLeavePlayer} style={styles.iconButton}>
-              <MaterialIcons color="rgba(255,255,255,0.9)" name="expand-more" size={24} />
+            <Pressable onPress={handleLeavePlayer} style={styles.backButton}>
+              <MaterialIcons color="#ffffff" name="chevron-left" size={28} />
             </Pressable>
-
             <View style={styles.topCenter}>
-              <Text style={styles.nowPlayingLabel}>Now Playing</Text>
-              <Text numberOfLines={1} style={styles.topSoundName}>
+              <Text style={styles.nowPlayingLabel}>NOW PLAYING</Text>
+              <Text numberOfLines={1} style={styles.soundName}>
                 {sound.name}
               </Text>
             </View>
-
-            <Pressable style={styles.iconButton}>
-              <MaterialIcons color="rgba(255,255,255,0.9)" name="more-horiz" size={24} />
+            <Pressable style={styles.moreButton}>
+              <Text style={styles.moreIcon}>•••</Text>
             </Pressable>
           </SafeAreaView>
 
-          <View style={styles.centerContent}>
-            <View style={styles.copyBlock}>
-              <Text style={styles.title}>{sound.name}</Text>
-              <Text style={styles.meta}>
-                {sound.subtitle.toUpperCase()} {'\u2022'} {timerLabel}
-              </Text>
-            </View>
-
+          <View style={styles.center}>
             <CircularProgressArc
               isPlaying={isPlaying}
               onPlayPause={handlePlayPause}
               progress={progress}
+              timerLabel={timerLabel}
             />
-
-            <Text style={styles.timer}>{displayTimerLabel}</Text>
           </View>
 
           <View style={styles.bottomArea}>
@@ -318,88 +290,83 @@ export default function PlayerRoute() {
 }
 
 const styles = StyleSheet.create({
+  backButton: {
+    padding: 8,
+  },
+  bottomArea: {
+    alignItems: 'center',
+    bottom: 60,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+  },
+  center: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
   container: {
-    backgroundColor: '#000000',
+    backgroundColor: '#0f1115',
     flex: 1,
+  },
+  moreButton: {
+    padding: 8,
+  },
+  moreIcon: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 14,
+    letterSpacing: 1,
+  },
+  nowPlayingLabel: {
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: 10,
+    fontWeight: '600',
+    letterSpacing: 2,
+  },
+  primaryButton: {
+    alignItems: 'center',
+    backgroundColor: '#8b5cf6',
+    borderRadius: 16,
+    justifyContent: 'center',
+    minHeight: 54,
+    paddingHorizontal: 24,
+    width: '100%',
+  },
+  primaryButtonText: {
+    color: '#f8fafc',
+    fontSize: 15,
+    fontWeight: '700',
   },
   scrim: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.28)',
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
+  soundName: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '300',
+    marginTop: 2,
   },
   topBar: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingTop: 16,
+    paddingHorizontal: 16,
+    paddingTop: 8,
     zIndex: 10,
-  },
-  iconButton: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 20,
-    borderWidth: 1,
-    height: 40,
-    justifyContent: 'center',
-    width: 40,
   },
   topCenter: {
     alignItems: 'center',
     flex: 1,
   },
-  nowPlayingLabel: {
-    color: 'rgba(255,255,255,0.4)',
-    fontSize: 10,
-    fontWeight: '500',
-    letterSpacing: 3,
-    textTransform: 'uppercase',
-  },
-  topSoundName: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 14,
-    fontWeight: '300',
-    marginTop: 2,
-  },
-  centerContent: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 32,
-    paddingBottom: 32,
-    paddingTop: 8,
-  },
-  copyBlock: {
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 40,
-  },
-  title: {
-    color: '#ffffff',
-    fontSize: 34,
-    fontWeight: '300',
-    letterSpacing: -0.6,
-  },
-  meta: {
-    color: 'rgba(255,255,255,0.4)',
-    fontSize: 12,
-    fontWeight: '300',
-    letterSpacing: 2.2,
-    textTransform: 'uppercase',
-  },
-  timer: {
-    color: 'rgba(255,255,255,0.9)',
-    fontSize: 30,
-    fontWeight: '200',
-    letterSpacing: 6,
-    marginTop: 32,
-  },
-  bottomArea: {
-    alignItems: 'center',
-    bottom: 32,
-    left: 0,
-    position: 'absolute',
-    right: 0,
+  unavailableCopy: {
+    color: '#cbd5e1',
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'center',
   },
   unavailableSafeArea: {
     backgroundColor: '#020617',
@@ -415,26 +382,6 @@ const styles = StyleSheet.create({
   unavailableTitle: {
     color: '#f8fafc',
     fontSize: 28,
-    fontWeight: '700',
-  },
-  unavailableCopy: {
-    color: '#cbd5e1',
-    fontSize: 15,
-    lineHeight: 22,
-    textAlign: 'center',
-  },
-  primaryButton: {
-    alignItems: 'center',
-    backgroundColor: '#8b5cf6',
-    borderRadius: 16,
-    justifyContent: 'center',
-    minHeight: 54,
-    paddingHorizontal: 24,
-    width: '100%',
-  },
-  primaryButtonText: {
-    color: '#f8fafc',
-    fontSize: 15,
     fontWeight: '700',
   },
 });
