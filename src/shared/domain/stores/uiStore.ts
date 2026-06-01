@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import type { TimerDuration } from '../types';
+import { migratePersistedUIState, type PersistedUIState } from './uiStorePersistence';
 
 type UIState = {
   isDarkMode: boolean;
@@ -22,6 +23,7 @@ type UIState = {
 };
 
 const initialDarkMode = Appearance.getColorScheme() === 'dark';
+const DEFAULT_TIMER_DURATION: TimerDuration = 60;
 
 // When selecting multiple store values in a component, use useShallow from
 // 'zustand/react/shallow' to avoid unnecessary re-renders with Zustand v5.
@@ -29,7 +31,7 @@ export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
       isDarkMode: initialDarkMode,
-      defaultTimerDuration: 60,
+      defaultTimerDuration: DEFAULT_TIMER_DURATION,
       hasSeenOnboarding: false,
       isImmersiveMode: false,
       isPlayerVisible: false,
@@ -51,10 +53,8 @@ export const useUIStore = create<UIState>()(
         defaultTimerDuration: state.defaultTimerDuration,
         hasSeenOnboarding: state.hasSeenOnboarding,
       }),
-      migrate: (persistedState) => ({
-        defaultTimerDuration: 60,
-        ...(persistedState as Partial<UIState> | undefined),
-      }),
+      migrate: (persistedState) =>
+        migratePersistedUIState(persistedState as PersistedUIState | undefined),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
