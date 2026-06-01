@@ -11,4 +11,8 @@
 
 ## 3. Verification
 
-- [ ] 3.1 Run the TypeScript verification for the touched files and confirm the new favorite button usage and timer-sync hooks are present in the library card and player surfaces.
+- [ ] 3.1 Run the TypeScript verification for the touched files.
+- [ ] 3.2 Confirm `src/components/FavoriteButton.tsx` uses a selector scoped to `isFavorite(soundId)` and calls `useFavoritesStore.getState().toggleFavorite(soundId)` directly.
+- [ ] 3.3 Confirm `src/components/FavoriteButton.tsx` uses the approved `MaterialIcons` favorite icons and a scale-pop animation sequence.
+- [ ] 3.4 Confirm `src/components/SoundCard.tsx` and `app/player.tsx` both render `FavoriteButton`.
+- [ ] 3.5 Confirm `app/player.tsx` includes the player-focus timer pre-fill hook and writes timer changes to both the audio timer state and `uiStore.setDefaultTimerDuration`.
