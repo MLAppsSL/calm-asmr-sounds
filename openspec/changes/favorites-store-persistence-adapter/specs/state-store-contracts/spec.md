@@ -84,9 +84,9 @@ The project SHALL provide `src/shared/domain/types/index.ts` exporting the share
 #### Scenario: Shared scaffold types match the Phase 1 baseline contract
 
 - **WHEN** a developer reviews `src/shared/domain/types/index.ts`
-- **THEN** `SoundCategory` is defined as `'rain' | 'fire' | 'forest' | 'ocean' | 'wind' | 'white-noise'`
-- **AND** `TimerDuration` is defined as `60 | 120 | 180`
-- **AND** `Sound` includes `id`, `title`, `category`, `durationSeconds`, `isPremium`, `storageUrl`, and `thumbnailUrl`
+- **THEN** `SoundCategory` is defined as `'rain' | 'fire' | 'forest' | 'wave'`
+- **AND** `TimerDuration` is defined as `60 | 90 | 120 | 130 | 150 | 180`
+- **AND** `Sound` includes the shared metadata fields `id`, `title`, `category`, `isPremium`, and `thumbnailUrl`, plus the runtime fields `durationSeconds` and `storageUrl`
 - **AND** `Sound.durationSeconds` uses the `TimerDuration` type
 - **AND** `Sound.storageUrl` and `Sound.thumbnailUrl` are nullable until later phases resolve them
 - **AND** `User` includes `uid`, `email`, and `isAnonymous`
