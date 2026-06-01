@@ -36,6 +36,22 @@ test('legacy favoriteIds migrate into deterministic favorite records', () => {
   ]);
 });
 
+test('persisted favorites keep the most recent valid timestamp per id', () => {
+  const migrated = migratePersistedFavoritesState({
+    favorites: [
+      { id: 'rain-01', addedAt: 5 },
+      { id: 'rain-01', addedAt: Number.NaN },
+      { id: 'rain-01', addedAt: 20 },
+      { id: 'fire-01', addedAt: Number.POSITIVE_INFINITY },
+    ],
+  });
+
+  assert.deepEqual(migrated.favorites, [
+    { id: 'rain-01', addedAt: 20 },
+    { id: 'fire-01', addedAt: 0 },
+  ]);
+});
+
 test('toggleFavorite and getSortedFavorites preserve most-recent-first reads', () => {
   const originalDateNow = Date.now;
   let nowMs = 1_000;

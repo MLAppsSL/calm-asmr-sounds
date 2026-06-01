@@ -22,6 +22,10 @@ type PersistedFavoritesState = {
 const FAVORITES_STORE_VERSION = 2;
 const LEGACY_MIGRATION_BASE_ADDED_AT = 1_000_000_000_000;
 
+function sanitizeAddedAt(value: unknown) {
+  return typeof value === 'number' && Number.isFinite(value) ? value : 0;
+}
+
 function dedupeFavorites(favorites: Favorite[]) {
   const uniqueFavorites = new Map<string, Favorite>();
 
@@ -30,10 +34,15 @@ function dedupeFavorites(favorites: Favorite[]) {
       return;
     }
 
-    uniqueFavorites.set(favorite.id, {
+    const normalizedFavorite = {
       id: favorite.id,
-      addedAt: favorite.addedAt,
-    });
+      addedAt: sanitizeAddedAt(favorite.addedAt),
+    };
+    const existingFavorite = uniqueFavorites.get(favorite.id);
+
+    if (!existingFavorite || normalizedFavorite.addedAt >= existingFavorite.addedAt) {
+      uniqueFavorites.set(favorite.id, normalizedFavorite);
+    }
   });
 
   return Array.from(uniqueFavorites.values());
