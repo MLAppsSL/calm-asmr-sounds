@@ -1,5 +1,7 @@
 ## Context
 
+> Correction: the implemented Phase 5 auth foundation is being steered back to Firebase Auth to match the existing native project setup. Supabase-specific wording in this change is stale planning drift.
+
 Phase 5 needs an auth bootstrap layer before favorites migration and cross-device sync can be implemented. The app already relies on Supabase for backend integration in recent plans, and this plan explicitly locks Phase 5 auth to Supabase email/password instead of Firebase Auth. The current shell must stay anonymous-first, so authentication can add cloud identity without blocking playback, browsing, favorites, or settings for signed-out users.
 
 This change also intersects with app startup. The root layout already coordinates onboarding gating; auth restoration now needs to join that bootstrap flow so the app does not briefly render the wrong shell state during cold start. The route shape also changes from the earlier placeholder auth route-group plan to a single modal auth entry screen.

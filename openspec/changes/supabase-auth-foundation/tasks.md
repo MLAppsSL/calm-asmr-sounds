@@ -1,5 +1,7 @@
 ## 1. Auth Client Foundation
 
+> Correction: Firebase Auth is the current Phase 5 source of truth. These completed Supabase task records are retained as history, but the active implementation is being moved back to Firebase.
+
 - [x] 1.1 Update `src/lib/supabase.ts` to configure Supabase auth with `AsyncStorage`, `persistSession`, `autoRefreshToken`, and `detectSessionInUrl: false` while preserving a named `supabase` export for later Phase 5 work.
 - [x] 1.2 Extend `src/types/index.ts` with the shared `AuthUser` alias and `FavoritesRow` type used by the Phase 5 auth and sync layers.
 

@@ -1,5 +1,7 @@
 ## Why
 
+> Correction: the implemented Phase 5 auth foundation is being steered back to Firebase Auth to match the existing native project setup. Supabase-specific wording in this change is stale planning drift.
+
 Phase 5 depends on a working auth foundation before favorites can migrate or sync across devices. The app needs optional email auth that preserves calm-first access for anonymous users while restoring sessions reliably across app restarts.
 
 ## What Changes
