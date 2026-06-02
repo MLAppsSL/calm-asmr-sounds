@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
+import { FavoritesService } from '../FavoritesService.ts';
 import {
   favoritesArrayToMap,
   favoritesMapToArray,
@@ -51,4 +52,25 @@ test('mergeFavoritesByEarliest unions local and cloud favorites without duplicat
     { id: 'forest-01', addedAt: 250 },
     { id: 'rain-01', addedAt: 100 },
   ]);
+});
+
+test('FavoritesService.getFavorites propagates Firestore read failures', async () => {
+  const firestoreReadError = new Error('offline');
+  const originalFirestore = FavoritesService.firestore;
+
+  FavoritesService.firestore = () => ({
+    collection: () => ({
+      doc: () => ({
+        get: async () => {
+          throw firestoreReadError;
+        },
+      }),
+    }),
+  });
+
+  try {
+    await assert.rejects(() => FavoritesService.getFavorites('user-1'), firestoreReadError);
+  } finally {
+    FavoritesService.firestore = originalFirestore;
+  }
 });

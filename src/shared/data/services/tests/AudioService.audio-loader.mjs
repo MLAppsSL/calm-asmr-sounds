@@ -3,6 +3,13 @@ import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
 
 export async function resolve(specifier, context, defaultResolve) {
+  if (specifier === '@/lib/firebase') {
+    return {
+      shortCircuit: true,
+      url: new URL('./Firebase.test.stub.mjs', import.meta.url).href,
+    };
+  }
+
   if (specifier === 'react-native') {
     return {
       shortCircuit: true,

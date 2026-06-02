@@ -16,21 +16,19 @@ function cloneFavorite(favorite: Favorite): Favorite {
 }
 
 export class FavoritesService {
-  static async getFavorites(uid: string): Promise<Favorite[]> {
-    try {
-      const snapshot = await firestore().collection('users').doc(uid).get();
-      const data = snapshot.data() as FavoritesDocument | undefined;
+  static firestore = firestore;
 
-      return favoritesMapToArray(data?.favorites);
-    } catch {
-      return [];
-    }
+  static async getFavorites(uid: string): Promise<Favorite[]> {
+    const snapshot = await FavoritesService.firestore().collection('users').doc(uid).get();
+    const data = snapshot.data() as FavoritesDocument | undefined;
+
+    return favoritesMapToArray(data?.favorites);
   }
 
   static async setFavorites(uid: string, favorites: Favorite[]): Promise<void> {
     const favoritesMap = favoritesArrayToMap(favorites);
 
-    await firestore().collection('users').doc(uid).set(
+    await FavoritesService.firestore().collection('users').doc(uid).set(
       {
         favorites: favoritesMap,
       },
