@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change favorite-button-timer-coupling. Update Purpose after archive.
+Define how the saved default timer duration stays synchronized between player controls, settings, and future playback sessions.
 
 ## Requirements
 

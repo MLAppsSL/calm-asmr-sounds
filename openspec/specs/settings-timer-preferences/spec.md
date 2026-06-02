@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change favorites-screen-and-settings-duration. Update Purpose after archive.
+Define how the Settings screen reflects and updates the persisted default timer duration without breaking the existing dark-mode control.
 
 ## Requirements
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change favorite-button-timer-coupling. Update Purpose after archive.
+Define the shared favorite-toggle behavior, feedback, and subscription scoping used by library cards and player controls.
 
 ## Requirements
 
