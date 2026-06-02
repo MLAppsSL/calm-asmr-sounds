@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Stack, useRootNavigationState } from 'expo-router';
 
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { useFavoritesSync } from '@/favorites/data/hooks/useFavoritesSync';
 import { AudioService } from '@/shared/data/services/AudioService';
 import { TimerService } from '@/shared/data/services/TimerService';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
@@ -26,6 +27,8 @@ function RootLayoutContent() {
   const { isLoading: isAuthLoading } = useAuth();
   const rootNavigationState = useRootNavigationState();
   const [isStartupReady, setIsStartupReady] = useState(false);
+
+  useFavoritesSync();
 
   useEffect(() => {
     void AudioService.initialize().catch((error: unknown) => {
