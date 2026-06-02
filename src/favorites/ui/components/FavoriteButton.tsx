@@ -18,6 +18,7 @@ type FavoriteButtonProps = {
 export function FavoriteButton({ soundId, size = 22, style }: FavoriteButtonProps) {
   const isFavorite = useFavoritesStore((state) => state.isFavorite(soundId));
   const scale = useSharedValue(1);
+  const accessibilityLabel = isFavorite ? 'Remove from favorites' : 'Add to favorites';
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -32,7 +33,14 @@ export function FavoriteButton({ soundId, size = 22, style }: FavoriteButtonProp
   }
 
   return (
-    <Pressable hitSlop={8} onPress={handlePress} style={style}>
+    <Pressable
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="button"
+      accessibilityState={{ selected: isFavorite }}
+      hitSlop={8}
+      onPress={handlePress}
+      style={style}
+    >
       <Animated.View style={animatedStyle}>
         <MaterialIcons
           color={isFavorite ? '#f43f5e' : '#94a3b8'}
