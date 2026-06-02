@@ -2,7 +2,7 @@
 
 ## Purpose
 
-TBD - created by archiving change favorites-screen-and-settings-duration. Update Purpose after archive.
+Define how the Favorites tab renders hydrated saved sounds, empty-state behavior, and safe handling of stale favorite IDs.
 
 ## Requirements
 
