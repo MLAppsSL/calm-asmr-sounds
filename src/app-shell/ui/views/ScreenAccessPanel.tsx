@@ -7,8 +7,7 @@ const screenLinks = [
   { href: '/(tabs)/settings', label: 'Settings' },
   { href: '/player', label: 'Player' },
   { href: '/(onboarding)', label: 'Onboarding' },
-  { href: '/sign-in', label: 'Firebase Check' },
-  { href: '/sign-up', label: 'Sign Up' },
+  { href: '/auth', label: 'Auth' },
 ] as const;
 
 export function ScreenAccessPanel() {

@@ -1,10 +1,14 @@
-import type { User } from '@supabase/supabase-js';
+import type { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
-export type AuthUser = User;
+export type AuthUser = FirebaseAuthTypes.User;
 
-export type FavoritesRow = {
-  id: string;
-  user_id: string;
-  sound_id: string;
-  added_at: string;
+export type FavoritesMap = Record<
+  string,
+  {
+    addedAt: number;
+  }
+>;
+
+export type FavoritesDocument = {
+  favorites: FavoritesMap;
 };

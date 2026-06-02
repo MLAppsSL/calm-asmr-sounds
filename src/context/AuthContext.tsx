@@ -1,7 +1,14 @@
+import { getApps } from '@react-native-firebase/app';
+
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 
-import { supabase } from '@/lib/supabase';
+import { auth } from '@/lib/firebase';
 import type { AuthUser } from '@/types';
+
+type FirebaseErrorLike = {
+  code?: string;
+  message?: string;
+};
 
 type AuthActionResult = {
   error: string | null;
@@ -17,40 +24,70 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-function mapAuthError(message: string) {
-  const normalizedMessage = message.toLowerCase();
+const missingFirebaseConfigMessage =
+  'Firebase auth is not configured for this build. Rebuild the development client after confirming google-services.json and GoogleService-Info.plist are present.';
 
-  if (normalizedMessage.includes('invalid login credentials')) {
+function isFirebaseConfigured() {
+  return getApps().length > 0;
+}
+
+function mapAuthError(error: unknown) {
+  if (!isFirebaseConfigured()) {
+    return missingFirebaseConfigMessage;
+  }
+
+  if (typeof error !== 'object' || error === null) {
+    return 'Unable to complete that request right now. Please try again.';
+  }
+
+  const firebaseError = error as FirebaseErrorLike;
+  const normalizedCode = firebaseError.code?.toLowerCase() ?? '';
+  const normalizedMessage = firebaseError.message?.toLowerCase() ?? '';
+
+  if (normalizedCode === 'auth/invalid-credential') {
     return 'Incorrect email or password.';
   }
 
-  if (normalizedMessage.includes('user already registered')) {
-    return 'An account already exists for this email.';
-  }
-
-  if (normalizedMessage.includes('password should be at least 6 characters')) {
-    return 'Password must be at least 6 characters.';
-  }
-
-  if (normalizedMessage.includes('invalid email')) {
+  if (normalizedCode === 'auth/invalid-email') {
     return 'Enter a valid email address.';
   }
 
-  if (normalizedMessage.includes('email not confirmed')) {
-    return 'Check your inbox to confirm your email, then try again.';
+  if (
+    normalizedCode === 'auth/wrong-password' ||
+    normalizedCode === 'auth/user-not-found' ||
+    normalizedCode === 'auth/invalid-login-credentials'
+  ) {
+    return 'Incorrect email or password.';
+  }
+
+  if (normalizedCode === 'auth/email-already-in-use') {
+    return 'An account already exists for this email.';
+  }
+
+  if (normalizedCode === 'auth/weak-password') {
+    return 'Password must be at least 6 characters.';
+  }
+
+  if (
+    normalizedCode === 'auth/network-request-failed' ||
+    normalizedMessage.includes('network request failed')
+  ) {
+    return 'Unable to reach Firebase right now. Check your connection and try again.';
+  }
+
+  if (normalizedCode === 'auth/too-many-requests') {
+    return 'Too many attempts. Please wait a moment and try again.';
   }
 
   return 'Unable to complete that request right now. Please try again.';
 }
 
 async function getCurrentUser() {
-  const { data, error } = await supabase.auth.getSession();
-
-  if (error) {
+  if (!isFirebaseConfigured()) {
     return null;
   }
 
-  return data.session?.user ?? null;
+  return auth().currentUser;
 }
 
 export function AuthProvider({ children }: PropsWithChildren) {
@@ -59,6 +96,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     let isMounted = true;
+
+    if (!isFirebaseConfigured()) {
+      setIsLoading(false);
+      return () => {
+        isMounted = false;
+      };
+    }
 
     void getCurrentUser()
       .then((nextUser) => {
@@ -72,51 +116,64 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
       });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const unsubscribe = auth().onAuthStateChanged((nextUser) => {
       if (!isMounted) {
         return;
       }
 
-      setUser(session?.user ?? null);
+      setUser(nextUser);
       setIsLoading(false);
     });
 
     return () => {
       isMounted = false;
-      subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
 
   const signIn = async (email: string, password: string): Promise<AuthActionResult> => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
+    if (!isFirebaseConfigured()) {
+      return { error: missingFirebaseConfigMessage };
+    }
 
-    return {
-      error: error ? mapAuthError(error.message) : null,
-    };
+    try {
+      await auth().signInWithEmailAndPassword(email.trim(), password);
+      return { error: null };
+    } catch (error: unknown) {
+      return {
+        error: mapAuthError(error),
+      };
+    }
   };
 
   const signUp = async (email: string, password: string): Promise<AuthActionResult> => {
-    const { error } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-    });
+    if (!isFirebaseConfigured()) {
+      return { error: missingFirebaseConfigMessage };
+    }
 
-    return {
-      error: error ? mapAuthError(error.message) : null,
-    };
+    try {
+      await auth().createUserWithEmailAndPassword(email.trim(), password);
+      return { error: null };
+    } catch (error: unknown) {
+      return {
+        error: mapAuthError(error),
+      };
+    }
   };
 
   const signOut = async (): Promise<AuthActionResult> => {
-    const { error } = await supabase.auth.signOut();
+    if (!isFirebaseConfigured()) {
+      return { error: missingFirebaseConfigMessage };
+    }
 
-    return {
-      error: error ? mapAuthError(error.message) : null,
-    };
+    try {
+      await auth().signOut();
+      return { error: null };
+    } catch (error: unknown) {
+      return {
+        error: mapAuthError(error),
+      };
+    }
   };
 
   return (
