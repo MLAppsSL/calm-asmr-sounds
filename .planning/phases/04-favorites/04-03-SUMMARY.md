@@ -21,4 +21,4 @@
 ### Notes
 
 - The original Phase `04-03` plan expected the Settings timer wiring to be implemented in this slice, but the branch already had that behavior in place. This slice treated Settings as preserve-and-verify work while implementing the missing Favorites route.
-- Human verification for favorites ordering, persistence across restart without empty-state flash, empty-state CTA navigation, timer persistence, player timer coupling, and dark-mode behavior is still pending.
+- Human verification was completed for favorites ordering, persistence across restart without empty-state flash, empty-state CTA navigation, timer persistence, player timer coupling, and dark-mode behavior.

@@ -19,5 +19,5 @@
 ## 4. Verify and Close the Slice
 
 - [x] 4.1 Run `npx tsc --noEmit` and the targeted static checks for the hydration guard in `app/(tabs)/favorites.tsx`, `ListEmptyComponent` wiring, `defaultTimerDuration` plus `setDefaultTimerDuration` usage in `app/(tabs)/settings.tsx`, `FavoriteButton` presence on cards and player, and absence of legacy `favoriteIds` runtime usage outside the persisted-state migration compatibility path.
-- [ ] 4.2 Perform a human verification pass on device or simulator covering library-card favorite toggles, player favorite toggles, Favorites ordering, saved-count visibility, persistence across restart without empty-state flash, empty-state CTA navigation, Settings timer persistence, player timer coupling, and dark-mode behavior.
-- [ ] 4.3 Document the Phase 4 implementation outcome in `.planning/phases/04-favorites/04-03-SUMMARY.md` after verification is approved.
+- [x] 4.2 Perform a human verification pass on device or simulator covering library-card favorite toggles, player favorite toggles, Favorites ordering, saved-count visibility, persistence across restart without empty-state flash, empty-state CTA navigation, Settings timer persistence, player timer coupling, and dark-mode behavior.
+- [x] 4.3 Document the Phase 4 implementation outcome in `.planning/phases/04-favorites/04-03-SUMMARY.md` after verification is approved.
