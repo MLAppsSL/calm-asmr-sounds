@@ -12,7 +12,12 @@ import { VideoBackground } from '@/player/ui/components/VideoBackground';
 import { SOUNDS_BY_ID } from '@/shared/data/catalogs/sounds';
 import { AudioService, type PlaybackStatusSnapshot } from '@/shared/data/services/AudioService';
 import { SoundCacheService } from '@/shared/data/services/SoundCacheService';
-import { useAudioStore } from '@/shared/domain/stores/audioStore';
+import { type TimerDurationMs, useAudioStore } from '@/shared/domain/stores/audioStore';
+import {
+  TIMER_DURATION_OPTIONS,
+  timerDurationMsFromSeconds,
+  timerDurationSecondsFromMs,
+} from '@/shared/domain/timerOptions';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 const KEEP_AWAKE_TAG = 'fullscreen-player';
@@ -29,17 +34,27 @@ function formatMillisAsClock(milliseconds: number) {
 export default function PlayerRoute() {
   const params = useLocalSearchParams<{ soundId?: string | string[] }>();
 
-  const { currentSoundId, isLooping, isPlaying, setCurrentSound, setIsLooping, setIsPlaying } =
-    useAudioStore(
-      useShallow((state) => ({
-        currentSoundId: state.currentSoundId,
-        isLooping: state.isLooping,
-        isPlaying: state.isPlaying,
-        setCurrentSound: state.setCurrentSound,
-        setIsLooping: state.setIsLooping,
-        setIsPlaying: state.setIsPlaying,
-      })),
-    );
+  const {
+    currentSoundId,
+    isLooping,
+    isPlaying,
+    setCurrentSound,
+    setIsLooping,
+    setIsPlaying,
+    setTimerDuration,
+    timerDurationMs,
+  } = useAudioStore(
+    useShallow((state) => ({
+      currentSoundId: state.currentSoundId,
+      isLooping: state.isLooping,
+      isPlaying: state.isPlaying,
+      setCurrentSound: state.setCurrentSound,
+      setIsLooping: state.setIsLooping,
+      setIsPlaying: state.setIsPlaying,
+      setTimerDuration: state.setTimerDuration,
+      timerDurationMs: state.timerDurationMs,
+    })),
+  );
   const setPlayerVisible = useUIStore((state) => state.setPlayerVisible);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [playbackStatus, setPlaybackStatus] = useState<PlaybackStatusSnapshot | null>(null);
@@ -169,6 +184,13 @@ export default function PlayerRoute() {
 
   useFocusEffect(
     useCallback(() => {
+      const { defaultTimerDuration } = useUIStore.getState();
+      const audioStore = useAudioStore.getState();
+
+      if (!audioStore.isPlaying) {
+        audioStore.setTimerDuration(timerDurationMsFromSeconds(defaultTimerDuration));
+      }
+
       return () => {
         deactivateKeepAwake(KEEP_AWAKE_TAG);
       };
@@ -214,6 +236,14 @@ export default function PlayerRoute() {
     setIsLooping(nextLooping);
     void AudioService.setLooping(nextLooping);
   }, [isLooping, setIsLooping]);
+
+  const handleTimerDurationChange = useCallback(
+    (durationMs: TimerDurationMs) => {
+      setTimerDuration(durationMs);
+      useUIStore.getState().setDefaultTimerDuration(timerDurationSecondsFromMs(durationMs));
+    },
+    [setTimerDuration],
+  );
 
   const handleLeavePlayer = useCallback(() => {
     setPlayerVisible(false);
@@ -277,7 +307,29 @@ export default function PlayerRoute() {
           </View>
 
           <View style={styles.bottomArea}>
+            <View style={styles.timerSelector}>
+              {TIMER_DURATION_OPTIONS.map((option) => {
+                const isActive = option.value === timerDurationMs;
+
+                return (
+                  <Pressable
+                    key={option.value}
+                    onPress={() => {
+                      handleTimerDurationChange(option.value);
+                    }}
+                    style={[styles.timerChip, isActive ? styles.timerChipActive : null]}
+                  >
+                    <Text
+                      style={[styles.timerChipText, isActive ? styles.timerChipTextActive : null]}
+                    >
+                      {option.label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
             <BottomControlPill
+              favoriteSoundId={sound.id}
               loopActive={isLooping}
               onFullscreen={enterFullscreen}
               onLoop={handleLoop}
@@ -350,6 +402,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '300',
     marginTop: 2,
+  },
+  timerChip: {
+    borderColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  timerChipActive: {
+    backgroundColor: 'rgba(255,255,255,0.14)',
+    borderColor: 'rgba(255,255,255,0.22)',
+  },
+  timerChipText: {
+    color: 'rgba(255,255,255,0.55)',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  timerChipTextActive: {
+    color: '#ffffff',
+  },
+  timerSelector: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 16,
   },
   topBar: {
     alignItems: 'center',

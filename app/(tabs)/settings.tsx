@@ -3,14 +3,20 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
-import { useAudioStore, type TimerDurationMs } from '@/shared/domain/stores/audioStore';
+import { useAudioStore } from '@/shared/domain/stores/audioStore';
+import {
+  TIMER_DURATION_OPTIONS,
+  timerDurationMsFromSeconds,
+  timerDurationSecondsFromMs,
+} from '@/shared/domain/timerOptions';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 export default function SettingsRoute() {
   const hasHydrated = useUIStore((state) => state._hasHydrated);
   const isDarkMode = useUIStore((state) => state.isDarkMode);
   const toggleDarkMode = useUIStore((state) => state.toggleDarkMode);
-  const timerDurationMs = useAudioStore((state) => state.timerDurationMs);
+  const defaultTimerDuration = useUIStore((state) => state.defaultTimerDuration);
+  const setDefaultTimerDuration = useUIStore((state) => state.setDefaultTimerDuration);
   const isLooping = useAudioStore((state) => state.isLooping);
   const setIsLooping = useAudioStore((state) => state.setIsLooping);
   const setTimerDuration = useAudioStore((state) => state.setTimerDuration);
@@ -32,11 +38,7 @@ export default function SettingsRoute() {
   const segmentedTextColor = isDarkMode ? 'rgba(255,255,255,0.4)' : 'rgba(15,23,42,0.54)';
   const titleColor = isDarkMode ? 'rgba(255,255,255,0.9)' : '#111827';
 
-  const durationOptions: { label: string; value: TimerDurationMs }[] = [
-    { label: '1m', value: 60000 },
-    { label: '2m', value: 120000 },
-    { label: '3m', value: 180000 },
-  ];
+  const timerDurationMs = timerDurationMsFromSeconds(defaultTimerDuration);
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
@@ -92,7 +94,7 @@ export default function SettingsRoute() {
               { backgroundColor: cardBackgroundColor, borderColor: cardBorderColor },
             ]}
           >
-            {durationOptions.map((option) => {
+            {TIMER_DURATION_OPTIONS.map((option) => {
               const isActive = option.value === timerDurationMs;
 
               return (
@@ -100,6 +102,7 @@ export default function SettingsRoute() {
                   key={option.value}
                   onPress={() => {
                     setTimerDuration(option.value);
+                    setDefaultTimerDuration(timerDurationSecondsFromMs(option.value));
                   }}
                   style={[
                     styles.segmentItem,
