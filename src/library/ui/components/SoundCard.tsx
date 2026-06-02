@@ -308,11 +308,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.35)',
     borderRadius: 999,
-    bottom: 10,
     justifyContent: 'center',
+    left: 10,
     padding: 4,
     position: 'absolute',
-    right: 10,
+    top: 10,
   },
   equalizerBarShort: {
     backgroundColor: '#8f5bff',
