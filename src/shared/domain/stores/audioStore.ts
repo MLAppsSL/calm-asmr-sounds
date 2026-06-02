@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type TimerDurationMs = 60000 | 120000 | 180000;
+export type TimerDurationMs = 60000 | 90000 | 120000 | 130000 | 150000 | 180000;
 
 type AudioState = {
   currentSoundId: string | null;
