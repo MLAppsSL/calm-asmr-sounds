@@ -1,15 +1,17 @@
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
 
+import { FavoriteButton } from '@/favorites/ui/components/FavoriteButton';
 import type { LibrarySound } from '@/library/data/sounds';
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 type SoundCardProps = {
   sound: LibrarySound;
+  style?: StyleProp<ViewStyle>;
 };
 
 function Badge({ sound }: { sound: LibrarySound }) {
@@ -162,11 +164,12 @@ function Artwork({ sound }: { sound: LibrarySound }) {
   );
 }
 
-export function SoundCard({ sound }: SoundCardProps) {
+export function SoundCard({ sound, style }: SoundCardProps) {
   const { setCurrentSound } = useAudioStore(
     useShallow((state) => ({ setCurrentSound: state.setCurrentSound })),
   );
   const setPlayerVisible = useUIStore((state) => state.setPlayerVisible);
+  const isDarkMode = useUIStore((state) => state.isDarkMode);
 
   function handlePress() {
     setCurrentSound(sound.id);
@@ -175,12 +178,18 @@ export function SoundCard({ sound }: SoundCardProps) {
   }
 
   const isWide = sound.cardVariant === 'wide';
+  const frameBackgroundColor = isDarkMode ? '#1a1c22' : '#ffffff';
+  const frameBorderColor = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(15,23,42,0.08)';
+  const titleColor = isDarkMode ? '#f8fafc' : '#0f172a';
+  const subtitleColor = isDarkMode ? '#91a0b5' : '#475569';
+  const durationColor = isDarkMode ? '#64748b' : '#94a3b8';
 
   return (
-    <Pressable onPress={handlePress} style={isWide ? styles.wideCard : styles.squareCard}>
+    <Pressable onPress={handlePress} style={[isWide ? styles.wideCard : styles.squareCard, style]}>
       <View
         style={[
           styles.artworkFrame,
+          { backgroundColor: frameBackgroundColor, borderColor: frameBorderColor },
           isWide ? styles.wideArtworkFrame : styles.squareArtworkFrame,
           sound.badge === 'pro' || sound.badge === 'lock' ? styles.premiumFrame : null,
         ]}
@@ -191,15 +200,18 @@ export function SoundCard({ sound }: SoundCardProps) {
           style={StyleSheet.absoluteFill}
         />
         <Badge sound={sound} />
+        <View style={styles.favoriteButtonBackdrop}>
+          <FavoriteButton size={18} soundId={sound.id} />
+        </View>
       </View>
 
-      <Text numberOfLines={1} style={styles.soundName}>
+      <Text numberOfLines={1} style={[styles.soundName, { color: titleColor }]}>
         {sound.name}
       </Text>
-      <Text numberOfLines={1} style={styles.subtitle}>
+      <Text numberOfLines={1} style={[styles.subtitle, { color: subtitleColor }]}>
         {sound.subtitle}
       </Text>
-      <Text numberOfLines={1} style={styles.duration}>
+      <Text numberOfLines={1} style={[styles.duration, { color: durationColor }]}>
         {sound.duration}
       </Text>
     </Pressable>
@@ -212,8 +224,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   artworkFrame: {
-    backgroundColor: '#1a1c22',
-    borderColor: 'rgba(255,255,255,0.05)',
     borderWidth: 1,
     overflow: 'hidden',
   },
@@ -245,16 +255,13 @@ const styles = StyleSheet.create({
     width: '48%',
   },
   soundName: {
-    color: '#f8fafc',
     fontSize: 15,
     fontWeight: '500',
   },
   subtitle: {
-    color: '#91a0b5',
     fontSize: 12,
   },
   duration: {
-    color: '#64748b',
     fontSize: 12,
     fontWeight: '500',
   },
@@ -296,6 +303,16 @@ const styles = StyleSheet.create({
     gap: 3,
     position: 'absolute',
     right: 12,
+  },
+  favoriteButtonBackdrop: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderRadius: 999,
+    justifyContent: 'center',
+    left: 10,
+    padding: 4,
+    position: 'absolute',
+    top: 10,
   },
   equalizerBarShort: {
     backgroundColor: '#8f5bff',

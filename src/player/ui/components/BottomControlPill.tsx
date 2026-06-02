@@ -1,14 +1,21 @@
+import { FavoriteButton } from '@/favorites/ui/components/FavoriteButton';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 
 type BottomControlPillProps = {
+  favoriteSoundId: string | null;
   loopActive: boolean;
   onLoop: () => void;
   onFullscreen: () => void;
 };
 
-export function BottomControlPill({ loopActive, onLoop, onFullscreen }: BottomControlPillProps) {
+export function BottomControlPill({
+  favoriteSoundId,
+  loopActive,
+  onLoop,
+  onFullscreen,
+}: BottomControlPillProps) {
   return (
     <BlurView style={styles.pill} intensity={60} tint="dark">
       <Pressable onPress={onLoop} style={styles.iconButton}>
@@ -21,9 +28,9 @@ export function BottomControlPill({ loopActive, onLoop, onFullscreen }: BottomCo
       <Pressable onPress={() => {}} style={styles.iconButton}>
         <MaterialIcons color="rgba(255,255,255,0.5)" name="airplay" size={24} />
       </Pressable>
-      <Pressable onPress={() => {}} style={styles.iconButton}>
-        <MaterialIcons color="rgba(255,255,255,0.5)" name="favorite-border" size={24} />
-      </Pressable>
+      {favoriteSoundId ? (
+        <FavoriteButton size={24} soundId={favoriteSoundId} style={styles.iconButton} />
+      ) : null}
       <Pressable onPress={onFullscreen} style={styles.iconButton}>
         <MaterialIcons color="rgba(255,255,255,0.5)" name="fullscreen" size={24} />
       </Pressable>
