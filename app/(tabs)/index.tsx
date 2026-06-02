@@ -8,35 +8,56 @@ import {
   LIBRARY_CATEGORY_ORDER,
 } from '@/library/data/sounds';
 import { CategorySection } from '@/library/ui/components/CategorySection';
+import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 export default function LibraryRoute() {
+  const isDarkMode = useUIStore((state) => state.isDarkMode);
   const sections = LIBRARY_CATEGORY_ORDER.map((category) => ({
     category,
     label: LIBRARY_CATEGORY_LABELS[category],
     sounds: getSoundsByCategory(category),
   }));
+  const backgroundColor = isDarkMode ? '#0c0f15' : '#f8fafc';
+  const titleColor = isDarkMode ? '#ffffff' : '#0f172a';
+  const subtitleColor = isDarkMode ? '#94a3b8' : '#64748b';
+  const profileButtonColor = isDarkMode ? '#181b22' : '#ffffff';
+  const profileButtonBorderColor = isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)';
+  const profileIconColor = isDarkMode ? '#cbd5e1' : '#475569';
+  const searchBarColor = isDarkMode ? 'rgba(255,255,255,0.05)' : '#ffffff';
+  const searchBorderColor = isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)';
+  const searchTextColor = isDarkMode ? '#64748b' : '#94a3b8';
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safeArea}>
+    <SafeAreaView edges={['top']} style={[styles.safeArea, { backgroundColor }]}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <View>
-            <Text style={styles.title}>Library</Text>
-            <Text style={styles.subtitle}>Find your instant calm</Text>
+            <Text style={[styles.title, { color: titleColor }]}>Library</Text>
+            <Text style={[styles.subtitle, { color: subtitleColor }]}>Find your instant calm</Text>
           </View>
 
-          <View style={styles.profileButton}>
-            <Ionicons color="#cbd5e1" name="person" size={20} />
+          <View
+            style={[
+              styles.profileButton,
+              { backgroundColor: profileButtonColor, borderColor: profileButtonBorderColor },
+            ]}
+          >
+            <Ionicons color={profileIconColor} name="person" size={20} />
           </View>
         </View>
 
-        <View style={styles.searchBar}>
-          <MaterialIcons color="#64748b" name="search" size={22} />
+        <View
+          style={[
+            styles.searchBar,
+            { backgroundColor: searchBarColor, borderColor: searchBorderColor },
+          ]}
+        >
+          <MaterialIcons color={searchTextColor} name="search" size={22} />
           <TextInput
             editable={false}
             placeholder="Search sounds..."
-            placeholderTextColor="#64748b"
-            style={styles.searchInput}
+            placeholderTextColor={searchTextColor}
+            style={[styles.searchInput, { color: searchTextColor }]}
             value=""
           />
         </View>
@@ -46,7 +67,7 @@ export default function LibraryRoute() {
             key={section.category}
             label={section.label}
             sounds={section.sounds}
-            titleColor="#ffffff"
+            titleColor={titleColor}
           />
         ))}
       </ScrollView>
