@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useEffect, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useAuth } from '@/context/AuthContext';
 import { useFavoritesStore } from '@/favorites/domain/stores/favoritesStore';
@@ -37,7 +38,12 @@ const asyncStorageSnapshotStorage = {
 
 export function useFavoritesSync(): void {
   const { isLoading, user } = useAuth();
-  const favorites = useFavoritesStore((state) => state.favorites);
+  const { favorites, hasHydrated } = useFavoritesStore(
+    useShallow((state) => ({
+      favorites: state.favorites,
+      hasHydrated: state._hasHydrated,
+    })),
+  );
   const controllerRef = useRef<FavoritesSyncController | null>(null);
 
   if (!controllerRef.current) {
@@ -50,14 +56,18 @@ export function useFavoritesSync(): void {
   }
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || !hasHydrated) {
       return;
     }
 
     void controllerRef.current?.handleUserChange(user?.uid ?? null);
-  }, [isLoading, user?.uid]);
+  }, [hasHydrated, isLoading, user?.uid]);
 
   useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     void controllerRef.current?.handleFavoritesChange(favorites);
-  }, [favorites]);
+  }, [favorites, hasHydrated]);
 }

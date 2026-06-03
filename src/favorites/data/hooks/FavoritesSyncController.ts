@@ -1,10 +1,10 @@
 import type { Favorite } from '../../domain/types';
-import type { FavoritesService } from '../services/FavoritesService';
 
-type FavoritesSyncService = Pick<
-  typeof FavoritesService,
-  'getFavorites' | 'setFavorites' | 'migrateLocalToCloud'
->;
+type FavoritesSyncService = {
+  getFavorites: (uid: string) => Promise<Favorite[]>;
+  setFavorites: (uid: string, favorites: Favorite[]) => Promise<void>;
+  migrateLocalToCloud: (uid: string, localFavorites: Favorite[]) => Promise<Favorite[]>;
+};
 
 type SnapshotStorage = {
   loadSnapshot: () => Promise<Favorite[] | null>;
