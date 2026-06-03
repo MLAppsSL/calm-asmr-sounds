@@ -64,6 +64,33 @@ The app SHALL provide a modal auth screen with email and password inputs, a sign
 - **THEN** the screen shows a human-readable error message
 - **AND** it does not render the raw Firebase error text directly to the user
 
+### Requirement: Settings exposes optional account entry and session controls
+
+The app SHALL render an Account section at the bottom of Settings that reflects the current shared auth state, it SHALL open the existing auth modal when a signed-out user chooses to sign in, and it SHALL expose sign-out controls when a user is authenticated. This UI SHALL consume only the shared `useAuth` contract backed by Firebase Auth, and it SHALL not import provider SDK APIs directly into the screen.
+
+#### Scenario: Signed-out settings shows a sign-in entry point
+
+- **WHEN** the Settings screen renders while `useAuth().user` is `null`
+- **THEN** the Account section shows a row inviting the user to sign in to sync favorites
+- **AND** activating that row opens the existing `/auth` modal flow
+
+#### Scenario: Signed-in settings shows the active account and sign-out action
+
+- **WHEN** the Settings screen renders while `useAuth().user` is present
+- **THEN** the Account section shows the signed-in email address
+- **AND** it shows a sign-out action wired to the shared auth provider
+
+#### Scenario: Sign-out immediately restores the signed-out settings state
+
+- **WHEN** an authenticated user activates the sign-out control and the shared auth state becomes signed out
+- **THEN** the Settings screen returns to the signed-out Account row without requiring an app restart or manual refresh
+
+#### Scenario: Settings stays behind the shared auth abstraction
+
+- **WHEN** the Settings auth surface is implemented for this change
+- **THEN** it reads auth presence, `user.email`, and sign-out behavior from the shared `useAuth` contract
+- **AND** it does not import Firebase Auth SDK APIs directly into `app/(tabs)/settings.tsx`
+
 ### Requirement: Authentication remains optional for current app features
 
 The app SHALL continue to render and allow access to existing non-sync product surfaces when no authenticated user is present.

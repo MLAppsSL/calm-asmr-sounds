@@ -1,8 +1,18 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import {
+  Alert,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  View,
+} from 'react-native';
 
+import { useAuth } from '@/context/AuthContext';
 import { useAudioStore } from '@/shared/domain/stores/audioStore';
 import {
   TIMER_DURATION_OPTIONS,
@@ -12,6 +22,7 @@ import {
 import { useUIStore } from '@/shared/domain/stores/uiStore';
 
 export default function SettingsRoute() {
+  const { user, signOut } = useAuth();
   const hasHydrated = useUIStore((state) => state._hasHydrated);
   const isDarkMode = useUIStore((state) => state.isDarkMode);
   const toggleDarkMode = useUIStore((state) => state.toggleDarkMode);
@@ -37,8 +48,18 @@ export default function SettingsRoute() {
   const segmentedActiveColor = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(15,23,42,0.08)';
   const segmentedTextColor = isDarkMode ? 'rgba(255,255,255,0.4)' : 'rgba(15,23,42,0.54)';
   const titleColor = isDarkMode ? 'rgba(255,255,255,0.9)' : '#111827';
+  const destructiveColor = isDarkMode ? '#fda4af' : '#be123c';
 
   const timerDurationMs = timerDurationMsFromSeconds(defaultTimerDuration);
+  const accountEmail = user?.email?.trim() || 'Signed in';
+
+  const handleSignOut = async () => {
+    const result = await signOut();
+
+    if (result.error) {
+      Alert.alert('Sign out failed', result.error);
+    }
+  };
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
@@ -235,6 +256,72 @@ export default function SettingsRoute() {
             <MaterialIcons color={mutedChevronColor} name="chevron-right" size={24} />
           </Pressable>
         </View>
+
+        <View style={styles.section}>
+          <Text style={[styles.sectionLabel, { color: sectionLabelColor }]}>Account</Text>
+          <View
+            style={[
+              styles.groupCard,
+              { backgroundColor: cardBackgroundColor, borderColor: cardBorderColor },
+            ]}
+          >
+            {user ? (
+              <>
+                <View style={styles.row}>
+                  <View style={styles.rowInfo}>
+                    <View style={[styles.rowIcon, { backgroundColor: iconSurfaceColor }]}>
+                      <Ionicons color="#a78bfa" name="cloud-done-outline" size={22} />
+                    </View>
+                    <View style={styles.rowTextGroup}>
+                      <Text style={[styles.rowTitle, { color: titleColor }]}>Signed in</Text>
+                      <Text style={[styles.rowSubtitle, { color: helperTextColor }]}>
+                        {accountEmail}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.divider} />
+
+                <Pressable
+                  onPress={() => {
+                    void handleSignOut();
+                  }}
+                  style={styles.rowAction}
+                >
+                  <View style={styles.rowInfo}>
+                    <View style={[styles.rowIconMuted, { backgroundColor: iconSurfaceColor }]}>
+                      <MaterialIcons color={destructiveColor} name="logout" size={20} />
+                    </View>
+                    <Text style={[styles.rowTitle, { color: destructiveColor }]}>Sign Out</Text>
+                  </View>
+                </Pressable>
+              </>
+            ) : (
+              <Pressable
+                onPress={() => {
+                  router.push('/auth');
+                }}
+                style={styles.rowAction}
+              >
+                <View style={styles.rowInfo}>
+                  <View style={[styles.rowIconMuted, { backgroundColor: iconSurfaceColor }]}>
+                    <Ionicons color="#a78bfa" name="person-circle-outline" size={20} />
+                  </View>
+                  <View style={styles.rowTextGroup}>
+                    <Text style={[styles.rowTitle, { color: titleColor }]}>
+                      Sign In to Sync Favorites
+                    </Text>
+                    <Text style={[styles.rowSubtitle, { color: helperTextColor }]}>
+                      Use your email to keep favorites across devices.
+                    </Text>
+                  </View>
+                </View>
+                <MaterialIcons color={mutedChevronColor} name="chevron-right" size={24} />
+              </Pressable>
+            )}
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -329,6 +416,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 16,
   },
+  rowTextGroup: {
+    flexShrink: 1,
+    gap: 4,
+  },
   rowIcon: {
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.05)',
@@ -348,6 +439,10 @@ const styles = StyleSheet.create({
   rowTitle: {
     fontSize: 15,
     fontWeight: '500',
+  },
+  rowSubtitle: {
+    fontSize: 13,
+    lineHeight: 18,
   },
   divider: {
     backgroundColor: 'rgba(255,255,255,0.06)',
