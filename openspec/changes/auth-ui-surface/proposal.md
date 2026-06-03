@@ -1,6 +1,6 @@
 ## Why
 
-Phase 5 already establishes optional email authentication and cloud favorites sync, but the current app shell does not surface those capabilities where users naturally look for them. This change adds the missing product entry points so users can discover sync, sign in from Settings, and understand when favorites are cloud-backed without disrupting anonymous usage.
+Phase 5 already establishes optional email authentication and cloud favorites sync through the shared Firebase Auth context and Firestore-backed favorites sync flow, but the current app shell does not surface those capabilities where users naturally look for them. This change adds the missing product entry points so users can discover sync, sign in from Settings, and understand when favorites are cloud-backed without disrupting anonymous usage.
 
 ## What Changes
 
@@ -17,12 +17,13 @@ None.
 
 ### Modified Capabilities
 
-- `optional-email-auth`: Extend auth requirements to cover the Settings-based sign-in and sign-out surface and immediate signed-in or signed-out UI updates.
-- `firebase-favorites-sync`: Extend sync requirements to cover Favorites-screen discoverability cues for signed-out and signed-in states.
+- `optional-email-auth`: Extend the existing Firebase-backed auth requirements to cover the Settings-based sign-in and sign-out surface and immediate signed-in or signed-out UI updates.
+- `firebase-favorites-sync`: Extend the existing Firestore-backed favorites sync requirements to cover Favorites-screen discoverability cues for signed-out and signed-in states.
 
 ## Impact
 
 - Affected code: `app/(tabs)/settings.tsx`, `app/(tabs)/favorites.tsx`
 - Related shared modules: `src/context/AuthContext.tsx`, `app/auth.tsx`
+- Technology note: this change reuses the existing Firebase Auth and Firestore-backed Phase 5 foundation; any older Supabase wording in prior planning artifacts is not part of this change's contract.
 - User-facing behavior: Settings becomes the primary auth entry point; Favorites shows sync discoverability and state cues.
 - No API or storage contract changes are expected.

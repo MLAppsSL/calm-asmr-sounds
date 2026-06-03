@@ -2,7 +2,7 @@
 
 ### Requirement: Favorites surfaces sync discoverability and synced state
 
-The app SHALL make cloud sync discoverable from the Favorites screen when the user is signed out, and it SHALL show a subtle synced-state indicator in the Favorites header when the user is signed in.
+The app SHALL make the existing Firestore-backed cloud sync discoverable from the Favorites screen when the user is signed out, and it SHALL show a subtle synced-state indicator in the Favorites header when the user is signed in.
 
 #### Scenario: Signed-out favorites shows a sync nudge
 

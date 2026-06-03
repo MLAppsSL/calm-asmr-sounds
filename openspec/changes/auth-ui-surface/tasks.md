@@ -12,3 +12,4 @@
 
 - [ ] 3.1 Run `npx tsc --noEmit` and fix any type issues introduced by the auth-aware UI additions.
 - [ ] 3.2 Verify the auth-aware UI wiring in `settings.tsx` and `favorites.tsx`, including `/auth` navigation, sign-out behavior, and preservation of existing favorites interactions.
+- [ ] 3.3 Manually verify the Firebase-backed auth state transitions on a device or simulator: signed-out Settings and Favorites surfaces, sign-in via `/auth`, signed-in cloud indicator state, immediate sign-out reversion, and unchanged favorites behavior across those transitions.
