@@ -1,28 +1,23 @@
 ## ADDED Requirements
 
-### Requirement: Supabase auth sessions persist across app restarts
+### Requirement: Firebase auth sessions persist across app restarts
 
-The app SHALL initialize Supabase auth with React Native-compatible persistent session storage in `src/lib/supabase.ts`, it SHALL export the configured client as `supabase`, and an authenticated user session SHALL survive app restarts and be restored without re-entering credentials.
+The app SHALL use the shared Firebase Auth client from `src/lib/firebase.ts`, it SHALL expose a named `auth` export for Phase 5 auth consumers, and an authenticated user session SHALL survive app restarts and be restored without re-entering credentials.
 
 #### Scenario: Persisted session is restored on cold start
 
 - **WHEN** a user has previously authenticated successfully and reopens the app later
-- **THEN** the Supabase client restores the persisted session from device storage
+- **THEN** Firebase Auth restores the persisted session from native device storage
 - **AND** the app can recover the authenticated user without forcing a new sign-in
 
-#### Scenario: React Native auth configuration avoids browser-only behavior
+#### Scenario: Shared Firebase auth export remains stable for later Phase 5 work
 
-- **WHEN** a developer reviews the shared Supabase client configuration for auth
-- **THEN** the client uses AsyncStorage-backed persistence and disables URL-based session detection that is not applicable to React Native
-
-#### Scenario: Shared client export remains stable for later Phase 5 work
-
-- **WHEN** later auth or favorites-sync modules import the shared Supabase client
-- **THEN** they can import a named `supabase` export from `src/lib/supabase.ts`
+- **WHEN** later auth or favorites-sync modules import the shared Firebase client
+- **THEN** they can import the named `auth` export from `src/lib/firebase.ts`
 
 ### Requirement: Global auth state is exposed through a shared provider
 
-The app SHALL provide a shared auth context in `src/context/AuthContext.tsx`, it SHALL export `AuthProvider` and `useAuth`, it SHALL expose `user`, `isLoading`, `signIn`, `signUp`, and `signOut`, and it SHALL update that state from Supabase auth lifecycle events with proper subscription cleanup.
+The app SHALL provide a shared auth context in `src/context/AuthContext.tsx`, it SHALL export `AuthProvider` and `useAuth`, it SHALL expose `user`, `isLoading`, `signIn`, `signUp`, and `signOut`, and it SHALL update that state from Firebase Auth lifecycle events with proper subscription cleanup.
 
 #### Scenario: Initial auth state resolves through the provider
 
@@ -32,7 +27,7 @@ The app SHALL provide a shared auth context in `src/context/AuthContext.tsx`, it
 
 #### Scenario: Auth lifecycle updates shared state
 
-- **WHEN** Supabase emits a sign-in, sign-out, or token-refresh auth state event
+- **WHEN** Firebase Auth emits an auth state change event through `onAuthStateChanged`
 - **THEN** the provider updates the shared user state to reflect the latest session
 
 #### Scenario: Shared auth exports remain stable for later Phase 5 work
@@ -56,7 +51,7 @@ The root app startup SHALL keep splash gating active until both onboarding resto
 
 ### Requirement: Modal auth flow supports sign in and sign up without raw backend errors
 
-The app SHALL provide a modal auth screen with email and password inputs, a sign-in or sign-up mode toggle, and human-readable error messaging instead of raw Supabase error strings.
+The app SHALL provide a modal auth screen with email and password inputs, a sign-in or sign-up mode toggle, and human-readable error messaging instead of raw Firebase error strings.
 
 #### Scenario: User signs in or signs up from the modal
 
@@ -67,7 +62,7 @@ The app SHALL provide a modal auth screen with email and password inputs, a sign
 
 - **WHEN** the auth provider returns a known failure for the submitted credentials
 - **THEN** the screen shows a human-readable error message
-- **AND** it does not render the raw Supabase error text directly to the user
+- **AND** it does not render the raw Firebase error text directly to the user
 
 ### Requirement: Authentication remains optional for current app features
 
