@@ -16,9 +16,13 @@ const SOUNDS_BY_ID = new Map(SOUNDS.map((sound) => [sound.id, sound]));
 
 export default function FavoritesRoute() {
   const { user } = useAuth();
-  const sortedFavorites = useFavoritesStore((state) => state.getSortedFavorites());
+  const favorites = useFavoritesStore((state) => state.favorites);
   const hasHydrated = useFavoritesStore((state) => state._hasHydrated);
   const isDarkMode = useUIStore((state) => state.isDarkMode);
+  const sortedFavorites = useMemo(
+    () => [...favorites].sort((left, right) => right.addedAt - left.addedAt),
+    [favorites],
+  );
   const favoriteSounds = useMemo(
     () =>
       sortedFavorites.reduce<LibrarySound[]>((sounds, favorite) => {
