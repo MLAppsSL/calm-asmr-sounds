@@ -82,14 +82,6 @@ function mapAuthError(error: unknown) {
   return 'Unable to complete that request right now. Please try again.';
 }
 
-async function getCurrentUser() {
-  if (!isFirebaseConfigured()) {
-    return null;
-  }
-
-  return auth().currentUser;
-}
-
 export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,18 +95,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
         isMounted = false;
       };
     }
-
-    void getCurrentUser()
-      .then((nextUser) => {
-        if (isMounted) {
-          setUser(nextUser);
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      });
 
     const unsubscribe = auth().onAuthStateChanged((nextUser) => {
       if (!isMounted) {
