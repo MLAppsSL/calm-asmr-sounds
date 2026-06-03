@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useMemo } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useAuth } from '@/context/AuthContext';
 import { EmptyFavoritesState } from '@/favorites/ui/components/EmptyFavoritesState';
@@ -16,8 +17,12 @@ const SOUNDS_BY_ID = new Map(SOUNDS.map((sound) => [sound.id, sound]));
 
 export default function FavoritesRoute() {
   const { user } = useAuth();
-  const favorites = useFavoritesStore((state) => state.favorites);
-  const hasHydrated = useFavoritesStore((state) => state._hasHydrated);
+  const { favorites, hasHydrated } = useFavoritesStore(
+    useShallow((state) => ({
+      favorites: state.favorites,
+      hasHydrated: state._hasHydrated,
+    })),
+  );
   const isDarkMode = useUIStore((state) => state.isDarkMode);
   const sortedFavorites = useMemo(
     () => [...favorites].sort((left, right) => right.addedAt - left.addedAt),
